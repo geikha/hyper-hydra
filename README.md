@@ -6,15 +6,15 @@ Simple yet useful extensions for [Hydra](https://github.com/ojack/hydra).
 
 | extension            | description                            | url         |
 |----------------------|----------------------------------------|-------------|
-| hydra-glsl           | code glsl on the fly inside Hydra code | coming soon |
-| hydra-blending-modes | simple blending modes to add to Hydra  | coming soon |
+| hydra-glsl           | code glsl on the fly inside Hydra code | https://hydra-extensions.glitch.me/hydra-glsl.js |
+| hydra-blending-modes | simple blending modes to add to Hydra  | https://hydra-extensions.glitch.me/hydra-blending-modes.js |
 
 ## How to use
 
 You'll have use [hydra's external scripts functionality](https://github.com/ojack/hydra#loading-external-scripts) as such:
 
 ```javascript
-await loadScript("https://hydra-antlia-2-0.glitch.me/antlia-shapes.js")
+await loadScript("https://hydra-extensions.glitch.me/hydra-glsl.js")
 
 //...code
 ```
