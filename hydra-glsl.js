@@ -10,7 +10,6 @@ window.glslExtension = {
 		.fill("i")
 		.map((x, i) => ({ name: x + i, type: "float", default: 1 })),
 	nodeCount: 0,
-	prefix: "vec2 uv = _st; vec2 st = _st;\n",
 	checkCode: function (code) {
 		code = code.trim();
 		lines = code.split(";");
