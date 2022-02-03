@@ -29,7 +29,10 @@ glsl('vec4(sin(((_st.x*54.)+time*2.)*vec3(0.1,0.1,0.101)),1.0)')
 
 ## Arguments
 
-Each function comes with 10 predefined inputs called `i0`,`i1`,`i2`...`i9`. All of which are defaulted to `1`. You can used either these 10 arguments or define your own by sending them as Arrays like ['name',value].
+Each function comes with 10 predefined inputs called `i0`,`i1`,`i2`...`i9`. All of which are defaulted to `1`. You can use either these 10 arguments or define your own by sending them as arrays in the form of `['name',value]`. 
+
+#### Important:
+All inputs are `float` as of now.
 
 ### Example:
 
