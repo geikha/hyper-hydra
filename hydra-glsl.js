@@ -1,3 +1,8 @@
+//hydra-gsls
+//code glsl on the fly inside Hydra code
+//by RITCHSE
+//docs: https://github.com/ritchse/hydra-extensions/blob/main/doc/hydra-glsl.md
+
 gS = osc().constructor.prototype
 
 window.glslExtension = {
