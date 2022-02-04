@@ -30,7 +30,7 @@ window.glslExtension = {
 	},
 	getObjAndArgs: function (type, args) {
 		inputArray = false;
-		if (args[0] instanceof Array) {
+		if (args[0] instanceof Array && args[0][0].constructor === String) {
 			inputArray = this.inputArray().map((x, i) => {
 				x.name = args[i] ? args[i][0] : x.name;
 				return x;
