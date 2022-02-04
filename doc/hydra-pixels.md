@@ -1,6 +1,6 @@
 # hydra-pixels
 ---
-This extension add's a functionality to each Hydra output that allows you to read the content of the pixels displayed.
+This extension adds a functionality to each Hydra output that allows you to read the content of the pixels displayed.
 
 ## Example:
 
@@ -61,7 +61,7 @@ Any of the mentioned functions will return an array (actually, a Uint8Array) wit
 
 ### Making Hydra react to pixels
 
-If you want Hydra to react to pixels you can't simply `osc().rotate(()=>o0.read()[0]).out()`, this will create a feedback between framebuffers or something like that (it throws and error and doesn't do what it's expected, that's the important bit innit?). In order to retrieve values every frame you have to first assign them to a variable in Hydra's `update` function. This is a function that runs every time a frame is processed, similar to p5's `draw`. The [example](#example) above shows this in action in the following bit:
+If you want Hydra to react to pixels you can't simply `osc().rotate(()=>o0.read()[0]).out()`, this will create a feedback between framebuffers or something like that (it throws an error and doesn't do what it's expected, that's the important bit innit?). In order to retrieve values every frame you have to first assign them to a variable in Hydra's `update` function. This is a function that runs every time a frame is processed, similar to p5's `draw`. The [example](#example) above shows this in action in the following bit:
 
 ```js
 update = ()=> {
@@ -69,7 +69,7 @@ update = ()=> {
 }
 ```
 
-Now you can use `pixel` and use it in your Hydra code.
+Now you can use `pixel` in your Hydra code.
 
 ### Warning
 
