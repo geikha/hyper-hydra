@@ -27,7 +27,7 @@ src(o0)
 render(o1)
 
 update = ()=> {
-  pixel = o0.read(innerWidth/2,innerHeight/2) // center of the screen
+  pixel = o0.read(width/2,height/2) // center of the screen
 }
 ```
 [open in hydra](https://hydra.ojack.xyz/?sketch_id=EOQUdowhyZmbRJIj)
