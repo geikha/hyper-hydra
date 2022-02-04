@@ -13,8 +13,11 @@ window.glslExtension = {
 	checkCode: function (code) {
 		code = code.trim();
 		lines = code.split(";");
-		if (!lines.at(-1)) lines.pop();
 		ll = lines.length - 1;
+		if (!lines[ll]) { 
+			lines.pop(); 
+			ll--; 
+		}
 		lines[ll] = lines[ll].trim();
 		lines[ll] =
 			"\n" +
