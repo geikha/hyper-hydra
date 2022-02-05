@@ -8,6 +8,7 @@ Simple yet useful extensions for [Hydra](https://github.com/ojack/hydra).
 |----------------------|----------------------------------------|-------------|
 | hydra-glsl           | code glsl on the fly inside Hydra code | https://hydra-extensions.glitch.me/hydra-glsl.js |
 | hydra-pixels         | read pixels from each hydra output     | https://hydra-extensions.glitch.me/hydra-pixels.js |
+| hydra-abbreviations  | shorthands for all the functions       | https://hydra-extensions.glitch.me/hydra-abbreviations.js |
 | hydra-blending-modes | simple blending modes to add to Hydra  | https://hydra-extensions.glitch.me/hydra-blending-modes.js |
 
 ## How to use
