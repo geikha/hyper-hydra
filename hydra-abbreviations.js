@@ -117,3 +117,137 @@ window.gd = gradient
 window.s = solid
 window.sl = solid
 window.o = osc
+
+// abbreviator
+// TODO: refactor this mess:
+
+window.Abbreviator = {
+    abbreviations: {
+        functions: {
+            'blend': 'bl',
+            'bright': 'br',
+            'color': 'c',
+            'colorama': 'cm',
+            'contrast': 'ct',
+            'diff': 'df',
+            'invert': 'inv',
+            'kaleid': 'k',
+            'layer': 'l',
+            'luma': 'lm',
+            'mask': 'msk',
+            'modulate': 'm',
+            'modulateHue': 'mH',
+            'modulateKaleid': 'mK',
+            'modulatePixelate': 'mP',
+            'modulateRepeat': 'mRp',
+            'modulateRepeatX': 'mRpX',
+            'modulateRepeatY': 'mRpY',
+            'modulateRotate': 'mR',
+            'modulateScale': 'mS',
+            'modulateScrollX': 'mX',
+            'modulateScrollY': 'mY',
+            'mult': 'mlt',
+            'pixelate': 'p',
+            'posterize': 'ps',
+            'repeat': 'rp',
+            'repeatX': 'rpX',
+            'repeatY': 'rpY',
+            'rotate': 'rt',
+            'saturate': 'st',
+            'scale': 'sc',
+            'scroll': 'xy',
+            'scrollX': 'x',
+            'scrollY': 'y',
+            'shift': 'sh',
+            'sub': 'sb',
+            'sum': 'sm',
+            'thresh': 'th'
+        },
+        sources: {
+            'noise': 'ns',
+            'voronoi': 'vr',
+            'shape': 'sh',
+            'gradient': 'grd',
+            'solid': 'sl',
+        }
+    }, // here comes some ugly code:
+    getKeyFromValue(object,value) {
+        return Object.keys(object).find(key => object[key] === value);
+    },
+    checkAndUnabbreviateSource(match, offset, string) {
+        k = match.replace('(','')
+        replace = Abbreviator.getKeyFromValue(Abbreviator.abbreviations.sources,k) + '('
+        if (offset == 0)
+            return replace
+        pch = string[offset - 1]
+        if ("\n\t;( ".includes(pch))
+            return replace
+        else
+            return match
+    },
+    checkAndUnabbreviateFunction(match, offset, string) {
+        k = match.replace('(','').replace('.','')
+        replace = '.' + Abbreviator.getKeyFromValue(Abbreviator.abbreviations.functions,k) +'('
+        if (offset == 0)
+            return match
+        pch = string[offset - 1]
+        if ("\n\t )".includes(pch))
+            return replace
+        else
+            return match
+    },
+    checkAndAbbreviateSource(match, offset, string) {
+        k = match.replace('(','')
+        replace = Abbreviator.abbreviations.sources[k] + '('
+        if (offset == 0)
+            return replace
+        pch = string[offset - 1]
+        if ("\n\t;( ".includes(pch))
+            return replace
+        else
+            return match
+    },
+    checkAndAbbreviateFunction(match, offset, string) {
+        k = match.replace('(','').replace('.','')
+        replace = '.' + Abbreviator.abbreviations.functions[k] +'('
+        if (offset == 0)
+            return match
+        pch = string[offset - 1]
+        if ("\n\t )".includes(pch))
+            return replace
+        else
+            return match
+    },
+    removeSpacing(code){
+        return code.replaceAll(' ','').replaceAll('\n','').replaceAll('\t','')
+    },
+    abbreviate(code,noSpacing=false) {
+        Object.keys(Abbreviator.abbreviations.functions)
+            .forEach((k) => {
+                code = code.replaceAll('.' + k + '(', Abbreviator.checkAndAbbreviateFunction)
+            })
+        Object.keys(Abbreviator.abbreviations.sources)
+            .forEach((k) => {
+                code = code.replaceAll(k + "(", Abbreviator.checkAndAbbreviateSource)
+            })
+        code = noSpacing ? Abbreviator.removeSpacing(code) : code
+        console.log(code)
+        return code
+    },
+    unabbreviate(code) {
+        Object.keys(Abbreviator.abbreviations.sources)
+            .forEach((k) => {
+                k = Abbreviator.abbreviations.sources[k]
+                code = code.replaceAll(k + "(", Abbreviator.checkAndUnabbreviateSource)
+            })
+        Object.keys(Abbreviator.abbreviations.functions)
+            .forEach((k) => {
+                k = Abbreviator.abbreviations.functions[k]
+                code = code.replaceAll('.' + k + '(', Abbreviator.checkAndUnabbreviateFunction)
+            })
+        console.log(code)
+        return code
+    }
+}
+window.abbreviate = Abbreviator.abbreviate.bind(Abbreviator)
+window.unabbreviate =Abbreviator.unabbreviate.bind(Abbreviator)
