@@ -8,7 +8,7 @@ window.Output = o0.constructor.prototype
 
 Output.read = function (x = 0, y = 0, w = 1, h = 1) {
     return regl.read({
-        framebuffer: this.fbos[0],
+        framebuffer: this.fbos[this.pingPongIndex],
         x: x,
         y: y,
         width: w,
@@ -17,7 +17,7 @@ Output.read = function (x = 0, y = 0, w = 1, h = 1) {
 }
 Output.readAll = function () {
     return regl.read({
-        framebuffer: this.fbos[0],
+        framebuffer: this.fbos[this.pingPongIndex],
         x: 0,
         y: 0,
         width: window.width,
