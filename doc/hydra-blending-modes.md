@@ -9,7 +9,7 @@ See all available blending modes by evaluating:
 > console.log(blendmodes_list)
 ```
 
-```json
+```js
 {
   0: "darken",
   1: "multiply",
