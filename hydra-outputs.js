@@ -33,7 +33,7 @@ oP.setClamp = function () {
 oP.setMirror = function () {
   this.setFbos({ wrapS: "mirror", wrapT: "mirror" });
 };
-oS = { outputs: choo.state.hydra.hydra.o };
+window.oS = { outputs: choo.state.hydra.hydra.o };
 oS.setNearest = function () {
   this.outputs.forEach((x) => x.setNearest());
 };
