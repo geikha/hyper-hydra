@@ -1,3 +1,7 @@
+await import("https://cdn.jsdelivr.net/gh/ritchse/hydra-extensions/hydra-outputs.js");
+
+oS.setClamp();
+
 [
   {
     name: "prev",
