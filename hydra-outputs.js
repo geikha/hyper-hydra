@@ -1,20 +1,11 @@
 oP = o0.constructor.prototype;
-oP.fboSettings = [
-  {
-    mag: "nearest",
-    min: "nearest",
-    width: width,
-    height: height,
-    format: "rgba",
-  },
-  {
-    mag: "nearest",
-    min: "nearest",
-    width: width,
-    height: height,
-    format: "rgba",
-  },
-];
+oP.fboSettings = Array(2).fill({
+  mag: "nearest",
+  min: "nearest",
+  width: width,
+  height: height,
+  format: "rgba",
+});
 oP.setFbos = function (fbo0, fbo1) {
   var colors = fbo1 ? [fbo0, fbo1] : [fbo0, fbo0];
   this.fboSettings = colors.map((x, i) => {

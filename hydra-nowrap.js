@@ -1,6 +1,18 @@
-await import("https://cdn.jsdelivr.net/gh/ritchse/hydra-extensions/hydra-outputs.js");
-
-oS.setClamp();
+const fboSettings = Array(2).fill({
+  mag: "nearest",
+  min: "nearest",
+  width: width,
+  height: height,
+  format: "rgba",
+});
+choo.state.hydra.hydra.o.forEach((output) => {
+  output.fbos = fboSettings.map((x) =>
+    output.regl.framebuffer({
+      color: output.regl.texture(x),
+      depthStencil: false,
+    })
+  );
+});
 
 [
   {
@@ -116,4 +128,4 @@ oS.setClamp();
     ],
     glsl: ` _st.y += _c0.r*scrollY + time*speed; return _st;`,
   },
-].forEach((x)=>setFunction(x));
+].forEach((x) => setFunction(x));
