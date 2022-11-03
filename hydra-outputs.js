@@ -24,13 +24,13 @@ oP.setNearest = function () {
 oP.setLinear = function () {
   this.setFbos({ mag: "linear", min: "linear" });
 };
-o0.setWrap = function () {
+oP.setWrap = function () {
   this.setFbos({ wrapS: "wrap", wrapT: "wrap" });
 };
-o0.setClamp = function () {
+oP.setClamp = function () {
   this.setFbos({ wrapS: "clamp", wrapT: "clamp" });
 };
-o0.setMirror = function () {
+oP.setMirror = function () {
   this.setFbos({ wrapS: "mirror", wrapT: "mirror" });
 };
 oS = { outputs: choo.state.hydra.hydra.o };
