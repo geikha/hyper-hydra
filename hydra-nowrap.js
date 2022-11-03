@@ -3,7 +3,9 @@ const fboSettings = Array(2).fill({
   min: "nearest",
   width: width,
   height: height,
-  format: "rgba",
+  wrapS: 'clamp',
+  wrapT: 'clamp',
+  format: "rgba"
 });
 choo.state.hydra.hydra.o.forEach((output) => {
   output.fbos = fboSettings.map((x) =>
