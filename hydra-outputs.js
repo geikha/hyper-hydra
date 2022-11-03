@@ -1,4 +1,4 @@
-oP = o0.constructor.prototype;
+window.oP = o0.constructor.prototype;
 oP.fboSettings = Array(2).fill({
   mag: "nearest",
   min: "nearest",

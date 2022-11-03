@@ -1,4 +1,4 @@
-canvas = document.querySelector("canvas.bg-black")
+window.canvas = document.querySelector("canvas.bg-black")
 
 canvas.setLinear = function(){ this.style.imageRendering = "auto" }
 canvas.setNearest = function(){ this.style.imageRendering = "pixelated" }
