@@ -25,7 +25,7 @@ oP.setLinear = function () {
   this.setFbos({ mag: "linear", min: "linear" });
 };
 oP.setWrap = function () {
-  this.setFbos({ wrapS: "wrap", wrapT: "wrap" });
+  this.setFbos({ wrapS: "repeat", wrapT: "repeat" });
 };
 oP.setClamp = function () {
   this.setFbos({ wrapS: "clamp", wrapT: "clamp" });
