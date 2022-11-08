@@ -3,7 +3,7 @@
 //by RITCHSE
 //docs: https://github.com/ritchse/hydra-extensions/blob/main/doc/hydra-glsl.md
 
-gS = osc().constructor.prototype
+window.gS = osc().constructor.prototype
 
 window.glslExtension = {
 	inputArray: ()=> new Array(10)
