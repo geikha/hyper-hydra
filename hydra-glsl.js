@@ -13,8 +13,8 @@ window.glslExtension = {
   nodeCount: 0,
   checkCode: function (code) {
     code = code.trim();
-    lines = code.split(";");
-    ll = lines.length - 1;
+    let lines = code.split(";");
+    let ll = lines.length - 1;
     if (!lines[ll]) {
       lines.pop();
       ll--;
