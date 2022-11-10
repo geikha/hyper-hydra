@@ -72,6 +72,11 @@ window.glslExtension = {
     setFunction(obj);
     return gS[obj.name].bind(self)(...args);
   },
+  glslHsv: function (self, code, ...args) {
+    code = "vec3 hsv = _rgbToHsv(c0.rgb);\n" + code;
+    code = code + "\nreturn vec4(_hsvToRgb(hsv),c0.a);";
+    return this.glslColor(self, code, ...args);
+  },
   glslCoord: function (self, code, ...args) {
     let prefix = [
       !code.includes("vec2 uv") ? "vec2 uv = _st;\n" : "",
@@ -122,12 +127,17 @@ window.glsl = glslExtension.glslSource.bind(glslExtension);
 gS.glslColor = function (code, ...args) {
   return glslExtension.glslColor(this, code, ...args);
 };
+gS.glslHsv = function (code, ...args) {
+  return glslExtension.glslHsv(this, code, ...args);
+}
 gS.glslCoord = function (code, ...args) {
   return glslExtension.glslCoord(this, code, ...args);
 };
 gS.glslCombine = function (code, texture, ...args) {
   return glslExtension.glslCombine(this, code, texture, ...args);
 };
+gS.glslBlend = gS.glslCombine;
 gS.glslCombineCoord = function (code, texture, ...args) {
   return glslExtension.glslCombineCoord(this, code, texture, ...args);
 };
+gS.glslModulate = gS.glslCombineCoord;
