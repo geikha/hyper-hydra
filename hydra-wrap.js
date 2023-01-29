@@ -1,5 +1,25 @@
 // prereq
 
+//reset fbos. make sure they use clamp
+const fboSettings = Array(2).fill({
+    mag: "nearest",
+    min: "nearest",
+    width: width,
+    height: height,
+    wrapS: 'clamp',
+    wrapT: 'clamp',
+    format: "rgba"
+  });
+  choo.state.hydra.hydra.o.forEach((output) => {
+    output.fbos = fboSettings.map((x) =>
+      output.regl.framebuffer({
+        color: output.regl.texture(x),
+        depthStencil: false,
+      })
+    );
+  });
+  
+
 // set all coord functions to no-wrap
 [
   {
