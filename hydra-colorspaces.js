@@ -6,6 +6,15 @@ gS.rgb = gS.color;
 window.rgb = window.solid;
 window.rgba = window.solid;
 
+gS.rgb_r = gS.r;
+gS.rgba_r = gS.r;
+gS.rgb_g = gS.g;
+gS.rgba_g = gS.g;
+gS.rgb_b = gS.b;
+gS.rgba_b = gS.b;
+gS.rgb_a = gS.a;
+gS.rgba_a = gS.a;
+
 window.hcs = {};
 
 hcs.colorscapes = [
