@@ -151,26 +151,23 @@ hcs.generateColorOffsetFunction = function (colorspace) {
 };
 
 hcs.generateSolidFunction = function (colorspace) {
-  const name = colorspace.name;
+  const name = colorspace.name + "_solid";
   const type = "src";
-  let inputs = colorspace.elems.concat("alpha");
-  inputs = inputs.map((el) => ({
+  const elems = colorspace.elems.concat("alpha");
+  const inputs = elems.map((el) => ({
     type: "float",
     name: "in_" + el,
     default: 0,
   }));
-  const declarations = colorspace.elems
-    .map((el) => "float " + el + ";\n")
-    .join("");
-  const assignments = colorspace.elems
-    .map((el) => el + " = in_" + el + ";\n")
-    .join("");
+  const declarations = elems.map((el) => "float " + el + ";\n").join("");
+  const assignments = elems.map((el) => el + " = in_" + el + ";\n").join("");
   const glsl =
     "float _r; float _g; float _b; float _a;" +
     declarations +
     assignments +
     colorspace.from +
-    "return vec4(_r,_g,_b,_a);";
+    "return vec4(_r,_g,_b,alpha);";
+  inputs.at(-1).default = 1;
   return { name: name, type: type, inputs: inputs, glsl: glsl };
 };
 
