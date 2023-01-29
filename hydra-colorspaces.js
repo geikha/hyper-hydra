@@ -1,23 +1,14 @@
 window.gS = osc().constructor.prototype;
 
-gS.rgba = gS.color;
-gS.rgb = gS.color;
-
-window.rgb = window.solid;
-window.rgba = window.solid;
-
-gS.rgb_r = gS.r;
-gS.rgba_r = gS.r;
-gS.rgb_g = gS.g;
-gS.rgba_g = gS.g;
-gS.rgb_b = gS.b;
-gS.rgba_b = gS.b;
-gS.rgb_a = gS.a;
-gS.rgba_a = gS.a;
-
 window.hcs = {};
 
-hcs.colorscapes = [
+hcs.colorspaces = [
+  {
+    name: "rgb",
+    elems: ["r", "g", "b"],
+    to: "r = _r; g = _g; b = _b; alpha = _a;",
+    from: "_r = r; _g = g; _b = b;",
+  },
   {
     name: "cmyk",
     elems: ["c", "m", "y", "k"],
@@ -98,153 +89,266 @@ hcs.colorscapes = [
   },
 ];
 
-hcs.generateColorFunction = function (colorspace) {
-  const name = colorspace.name;
-  const type = "color";
-  let inputs = colorspace.elems.concat("alpha");
-  inputs = inputs.map((el) => ({
-    type: "float",
-    name: "in_" + el,
-    default: 1,
-  }));
-  const declarations = colorspace.elems
-    .map((el) => "float " + el + ";\n")
+hcs.generateInputAssignment = function (elems, format) {
+  return elems
+    .map((el) => format.replaceAll("#el", el).replaceAll("#in", "in_" + el))
     .join("");
-  const multiplications = colorspace.elems
-    .map((el) => el + " *= in_" + el + ";\n")
-    .join("");
-  const glsl =
-    "float _r = _c0.r; float _g = _c0.g; float _b = _c0.b; float _a = _c0.a;" +
-    declarations +
-    colorspace.to +
-    multiplications +
-    colorspace.from +
-    "_a *= in_alpha;" +
-    "return vec4(_r,_g,_b,_a);";
-  return { name: name, type: type, inputs: inputs, glsl: glsl };
 };
 
-hcs.generateColorOffsetFunction = function (colorspace) {
-  const name = colorspace.name + "_";
-  const type = "color";
-  let inputs = colorspace.elems.concat("alpha");
-  inputs = inputs.map((el) => ({
-    type: "float",
-    name: "in_" + el,
-    default: 0,
-  }));
-  const declarations = colorspace.elems
-    .map((el) => "float " + el + ";\n")
-    .join("");
-  const multiplications = colorspace.elems
-    .map((el) => el + " += in_" + el + ";\n")
-    .join("");
-  const glsl =
-    "float _r = _c0.r; float _g = _c0.g; float _b = _c0.b; float _a = _c0.a;" +
-    declarations +
-    colorspace.to +
-    multiplications +
-    colorspace.from +
-    "_a *= in_alpha;" +
-    "return vec4(_r,_g,_b,_a);";
-  inputs.at(-1).default = 1;
-  return { name: name, type: type, inputs: inputs, glsl: glsl };
+hcs.generateDeclarations = function (elems, type = "float") {
+  return elems.map((el) => type + " " + el + ";\n").join("");
 };
 
-hcs.generateSolidFunction = function (colorspace) {
-  const name = colorspace.name + "_solid";
-  const type = "src";
+hcs.generateFunction = function ({
+  colorspace,
+  sufix,
+  type,
+  assignmentFormat,
+  inputDefault,
+  alphaDefault = 1,
+}) {
+  const name = colorspace.name + (sufix ? "_" + sufix : "");
+
+  const hasColorInput = ["color", "combine"].includes(type);
+
   const elems = colorspace.elems.concat("alpha");
+
   const inputs = elems.map((el) => ({
     type: "float",
     name: "in_" + el,
-    default: 0,
+    default: inputDefault,
   }));
-  const declarations = elems.map((el) => "float " + el + ";\n").join("");
-  const assignments = elems.map((el) => el + " = in_" + el + ";\n").join("");
+  inputs.at(-1).default = alphaDefault;
+
+  const rgbaDeclarations = hcs.generateDeclarations(["_r", "_g", "_b", "_a"]);
+  const rgbaAssignments = hasColorInput
+    ? "_r = _c0.r; _g = _c0.g; _b = _c0.b; _a = _c0.a;"
+    : "";
+
+  const elemDeclarations = hcs.generateDeclarations(elems);
+  const to = hasColorInput ? colorspace.to : "";
+  const elemAssignments = hcs.generateInputAssignment(elems, assignmentFormat);
+  const from = colorspace.from;
+
+  const returner = "_a = alpha; return vec4(_r,_g,_b,_a);";
+
   const glsl =
-    "float _r; float _g; float _b; float _a;" +
-    declarations +
-    assignments +
-    colorspace.from +
-    "return vec4(_r,_g,_b,alpha);";
-  inputs.at(-1).default = 1;
+    rgbaDeclarations +
+    rgbaAssignments +
+    elemDeclarations +
+    to +
+    elemAssignments +
+    from +
+    returner;
+
   return { name: name, type: type, inputs: inputs, glsl: glsl };
 };
 
-hcs.generateElementFunctions = function (colorspace) {
-  return colorspace.elems.map((el) => {
-    const name = colorspace.name + "_" + el;
-    const type = "color";
-    const inputs = [];
-    const declarations = colorspace.elems
-      .map((_el) => "float " + _el + ";\n")
-      .join("");
-    const glsl =
-      "float _r = _c0.r; float _g = _c0.g; float _b = _c0.b; float _a = _c0.a;" +
-      declarations +
-      colorspace.to +
-      ("return vec4(vec3(" + el + "),1.0);");
-    return { name: name, type: type, inputs: inputs, glsl: glsl };
+hcs.generateColorFunction = (cs) =>
+  hcs.generateFunction({
+    colorspace: cs,
+    sufix: "color",
+    type: "color",
+    assignmentFormat: "#el *= #in;",
+    inputDefault: 1,
+    alphaDefault: 1,
   });
+hcs.generateOffsetFunction = (cs) =>
+  hcs.generateFunction({
+    colorspace: cs,
+    sufix: "offset",
+    type: "color",
+    assignmentFormat: "#el += #in;",
+    inputDefault: 0,
+    alphaDefault: 0,
+  });
+hcs.generateSolidFunction = (cs) =>
+  hcs.generateFunction({
+    colorspace: cs,
+    sufix: "solid",
+    type: "src",
+    assignmentFormat: "#el = #in;",
+    inputDefault: 0,
+    alphaDefault: 1,
+  });
+
+hcs.generateElementFunction = function (colorspace, elem) {
+  const name = colorspace.name + "_" + elem;
+
+  const type = "color";
+
+  const rgbaDeclarations = hcs.generateDeclarations(["_r", "_g", "_b", "_a"]);
+  const rgbaAssignments = "_r = _c0.r; _g = _c0.g; _b = _c0.b; _a = _c0.a;";
+
+  const elemDeclarations = hcs.generateDeclarations(colorspace.elems);
+  const to = colorspace.to;
+
+  const returner = "return vec4(vec3(" + elem + "),1.0);";
+
+  const glsl =
+    rgbaDeclarations + rgbaAssignments + elemDeclarations + to + returner;
+
+  return { name: name, type: type, inputs: [], glsl: glsl };
 };
 
-hcs.generateSetElementFunctions = function (colorspace) {
-  return colorspace.elems.map((el) => {
-    const name = colorspace.name + "_" + el + "_set";
-    const type = "color";
-    const inputs = [{ type: "float", name: "in_" + el, default: 1 }];
-    const declarations = colorspace.elems
-      .map((_el) => "float " + _el + ";\n")
-      .join("");
-    const glsl =
-      "float _r = _c0.r; float _g = _c0.g; float _b = _c0.b; float _a = _c0.a;" +
-      declarations +
-      colorspace.to +
-      (el + " = in_" + el + ";") +
-      colorspace.from +
-      "return vec4(_r,_g,_b,_a);";
-    const obj = { name: name, type: type, inputs: inputs, glsl: glsl };
-    const obj2 = Object.assign({}, obj);
-    obj2.inputs = Array.from(obj.inputs);
-    obj2.name = obj2.name.replace("set", "");
-    return [obj, obj2];
-  });
+hcs.generateElementFunctions = (cs) =>
+  cs.elems.map((elem) => hcs.generateElementFunction(cs, elem));
+
+hcs.generateSetElementFunction = function ({
+  colorspace,
+  elem,
+  sufix,
+  assignmentFormat = "#el = #in;",
+  inputDefault = 1,
+}) {
+  const name = colorspace.name + "_" + elem + "_" + sufix;
+
+  const type = "color";
+
+  const inputs = [{ type: "float", name: "in_" + elem, default: inputDefault }];
+
+  const rgbaDeclarations = hcs.generateDeclarations(["_r", "_g", "_b", "_a"]);
+  const rgbaAssignments = "_r = _c0.r; _g = _c0.g; _b = _c0.b; _a = _c0.a;";
+
+  const elemDeclarations = hcs.generateDeclarations(colorspace.elems);
+  const to = colorspace.to;
+  const elemAssignment = hcs.generateInputAssignment([elem], "#el = #in;");
+  const from = colorspace.from;
+
+  const returner = "return vec4(_r,_g,_b,_a);";
+
+  const glsl =
+    rgbaDeclarations +
+    rgbaAssignments +
+    elemDeclarations +
+    to +
+    elemAssignment +
+    from +
+    returner;
+
+  return { name: name, type: type, inputs: inputs, glsl: glsl };
 };
 
-hcs.generateSwapElementFunctions = function (colorspace) {
-  return colorspace.elems.map((el) => {
-    const name = colorspace.name + "_" + el + "_from";
-    const type = "combine";
-    const inputs = [{ type: "float", name: "_amt", default: 1 }];
-    const declarations = colorspace.elems
-      .map((_el) => "float " + _el + ";\n")
-      .join("");
-    const glsl =
-      "float _r = _c0.r; float _g = _c0.g; float _b = _c0.b; float _a = _c0.a;" +
-      declarations +
-      colorspace.to +
-      (el + " = mix(" + el + ",_c1.r,_amt);") +
-      colorspace.from +
-      "return vec4(_r,_g,_b,_a);";
-    const obj = { name: name, type: type, inputs: inputs, glsl: glsl };
-    return obj;
-  });
+hcs.generateSetElementFunctions = (cs) =>
+  cs.elems.map((elem) =>
+    hcs.generateSetElementFunction({
+      colorspace: cs,
+      elem,
+      sufix: "set",
+      assignmentFormat: "#el = #in;",
+    })
+  );
+
+hcs.generateOffsetElementFunctions = (cs) =>
+  cs.elems.map((elem) =>
+    hcs.generateSetElementFunction({
+      colorspace: cs,
+      elem,
+      sufix: "offset",
+      assignmentFormat: "#el += #in;",
+      inputDefault: 1,
+    })
+  );
+
+hcs.generateCombineElementFunction = function ({
+  colorspace,
+  elem,
+  sufix,
+  assignmentFormat = "#el = _c1.r;",
+  inputDefault = 1,
+}) {
+  const name = colorspace.name + "_" + elem + "_" + sufix;
+
+  const type = "combine";
+
+  const inputs = [{ type: "float", name: "_amt", default: inputDefault }];
+
+  const rgbaDeclarations = hcs.generateDeclarations(["_r", "_g", "_b", "_a"]);
+  const rgbaAssignments = "_r = _c0.r; _g = _c0.g; _b = _c0.b; _a = _c0.a;";
+
+  const elemDeclarations = hcs.generateDeclarations(colorspace.elems);
+  const to = colorspace.to;
+  const elemAssignment = hcs.generateInputAssignment([elem], assignmentFormat);
+  const from = colorspace.from;
+
+  const returner = "return vec4(_r,_g,_b,_a);";
+
+  const glsl =
+    rgbaDeclarations +
+    rgbaAssignments +
+    elemDeclarations +
+    to +
+    elemAssignment +
+    from +
+    returner;
+
+  return { name: name, type: type, inputs: inputs, glsl: glsl };
 };
 
-hcs.update = function () {
+hcs.generateSetElementFromFunctions = (cs) =>
+  cs.elems.map((elem) =>
+    hcs.generateCombineElementFunction({
+      colorspace: cs,
+      elem,
+      sufix: "from",
+      assignmentFormat: "#el = mix(#el,_c1.r,_amt);",
+      inputDefault: 1,
+    })
+  );
+
+hcs.generateOffsetElementFromFunctions = (cs) =>
+  cs.elems.map((elem) =>
+    hcs.generateCombineElementFunction({
+      colorspace: cs,
+      elem,
+      sufix: "offset_from",
+      assignmentFormat: "#el += _c1.r*_amt;",
+      inputDefault: 0.5,
+    })
+  );
+
+hcs.updateFunctions = function () {
   []
     .concat(
-      hcs.colorscapes.map(hcs.generateColorFunction),
-      hcs.colorscapes.map(hcs.generateColorOffsetFunction),
-      hcs.colorscapes.map(hcs.generateSolidFunction),
-      hcs.colorscapes.map(hcs.generateElementFunctions),
-      hcs.colorscapes.map(hcs.generateSetElementFunctions),
-      hcs.colorscapes.map(hcs.generateSwapElementFunctions)
+      hcs.colorspaces.map(hcs.generateColorFunction),
+      hcs.colorspaces.map(hcs.generateOffsetFunction),
+      hcs.colorspaces.map(hcs.generateSolidFunction),
+      hcs.colorspaces.map(hcs.generateElementFunctions),
+      hcs.colorspaces.map(hcs.generateSetElementFunctions),
+      hcs.colorspaces.map(hcs.generateOffsetElementFunctions),
+      hcs.colorspaces.map(hcs.generateSetElementFromFunctions),
+      hcs.colorspaces.map(hcs.generateOffsetElementFromFunctions)
     )
     .flat(99)
     .filter((x) => x)
     .forEach((x) => setFunction(x));
+};
+
+hcs.update = function () {
+  hcs.updateFunctions();
+  hcs.colorspaces.forEach((cs) => {
+    let getterDefinition =
+      "Object.defineProperty(gS, '#cs', { configurable: true, get: function() {" +
+      "const func = this.#cs_color.bind(this);";
+    getterDefinition +=
+      "const props = {" +
+      "color: this.#cs_color.bind(this)," +
+      "offset: this.#cs_offset.bind(this),";
+    cs.elems.forEach((elem) => {
+      getterDefinition +=
+        "#elem: this.#cs_#elem.bind(this)," +
+        "#elemSet: this.#cs_#elem_set.bind(this)," +
+        "#elemOffset: this.#cs_#elem_offset.bind(this)," +
+        "#elemFrom: this.#cs_#elem_from.bind(this)," +
+        "#elemOffsetFrom: this.#cs_#elem_offset_from.bind(this),";
+      getterDefinition = getterDefinition.replaceAll("#elem", elem);
+    });
+    getterDefinition += "};";
+    getterDefinition += "Object.assign(func,props);" + "return func; }, });";
+    getterDefinition += "window.#cs = window.#cs_solid;";
+    getterDefinition = getterDefinition.replaceAll("#cs", cs.name);
+    window.eval(getterDefinition);
+  });
 };
 
 hcs.update();
