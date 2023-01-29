@@ -206,7 +206,11 @@ hcs.generateSetElementFunctions = function (colorspace) {
       (el + " = in_" + el + ";") +
       colorspace.from +
       "return vec4(_r,_g,_b,_a);";
-    return { name: name, type: type, inputs: inputs, glsl: glsl };
+    const obj = { name: name, type: type, inputs: inputs, glsl: glsl };
+    const obj2 = Object.assign({}, obj);
+    obj2.inputs = Array.from(obj.inputs);
+    obj2.name = obj2.name.replace("set", "");
+    return [obj, obj2];
   });
 };
 
@@ -225,7 +229,8 @@ hcs.generateSwapElementFunctions = function (colorspace) {
       (el + " = mix(" + el + ",_luminance(_c1.rgb),_amt);") +
       colorspace.from +
       "return vec4(_r,_g,_b,_a);";
-    return { name: name, type: type, inputs: inputs, glsl: glsl };
+    const obj = { name: name, type: type, inputs: inputs, glsl: glsl };
+    return obj;
   });
 };
 
@@ -239,7 +244,8 @@ hcs.update = function () {
       hcs.colorscapes.map(hcs.generateSetElementFunctions),
       hcs.colorscapes.map(hcs.generateSwapElementFunctions)
     )
-    .flat(1)
+    .flat(99)
+    .filter((x) => x)
     .forEach((x) => setFunction(x));
 };
 
