@@ -147,6 +147,7 @@ hcs.generateColorOffsetFunction = function (colorspace) {
     colorspace.from +
     "_a *= in_alpha;" +
     "return vec4(_r,_g,_b,_a);";
+  inputs.at(-1).default = 1;
   return { name: name, type: type, inputs: inputs, glsl: glsl };
 };
 
@@ -223,7 +224,7 @@ hcs.generateSwapElementFunctions = function (colorspace) {
       "float _r = _c0.r; float _g = _c0.g; float _b = _c0.b; float _a = _c0.a;" +
       declarations +
       colorspace.to +
-      (el + " = mix(" + el + ",_luminance(_c1.rgb),_amt);") +
+      (el + " = mix(" + el + ",_c1.r,_amt);") +
       colorspace.from +
       "return vec4(_r,_g,_b,_a);";
     const obj = { name: name, type: type, inputs: inputs, glsl: glsl };
