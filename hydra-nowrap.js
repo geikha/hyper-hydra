@@ -131,3 +131,5 @@ choo.state.hydra.hydra.o.forEach((output) => {
     glsl: ` _st.y += _c0.r*scrollY + time*speed; return _st;`,
   },
 ].forEach((x) => setFunction(x));
+
+console.log("hydra-nowrap is deprecated, I recomment using hydra-wrap and setting the wrapping to nowrap")
