@@ -2,23 +2,22 @@
 
 //reset fbos. make sure they use clamp
 const fboSettings = Array(2).fill({
-    mag: "nearest",
-    min: "nearest",
-    width: width,
-    height: height,
-    wrapS: 'clamp',
-    wrapT: 'clamp',
-    format: "rgba"
-  });
-  choo.state.hydra.hydra.o.forEach((output) => {
-    output.fbos = fboSettings.map((x) =>
-      output.regl.framebuffer({
-        color: output.regl.texture(x),
-        depthStencil: false,
-      })
-    );
-  });
-  
+  mag: "nearest",
+  min: "nearest",
+  width: width,
+  height: height,
+  wrapS: "clamp",
+  wrapT: "clamp",
+  format: "rgba",
+});
+choo.state.hydra.hydra.o.forEach((output) => {
+  output.fbos = fboSettings.map((x) =>
+    output.regl.framebuffer({
+      color: output.regl.texture(x),
+      depthStencil: false,
+    })
+  );
+});
 
 // set all coord functions to no-wrap
 [
@@ -203,11 +202,10 @@ hwrap.setMirror = function () {
     .forEach((x) => setFunction(x));
 };
 
-
 hwrap.setCustom = function (wrapper = "_st") {
-    hwrap.void = false;
-    hwrap.currentWrapper = wrapper;
-    hwrap.generateFunctionListFromWrapper(wrapper).forEach((x) => setFunction(x));
+  hwrap.void = false;
+  hwrap.currentWrapper = wrapper;
+  hwrap.generateFunctionListFromWrapper(wrapper).forEach((x) => setFunction(x));
 };
 
 // setVoid should only be called after setting a wrapping mode
