@@ -131,7 +131,7 @@ hcs.generateColorOffsetFunction = function (colorspace) {
   inputs = inputs.map((el) => ({
     type: "float",
     name: "in_" + el,
-    default: 1,
+    default: 0,
   }));
   const declarations = colorspace.elems
     .map((el) => "float " + el + ";\n")
@@ -186,21 +186,59 @@ hcs.generateElementFunctions = function (colorspace) {
       "float _r = _c0.r; float _g = _c0.g; float _b = _c0.b; float _a = _c0.a;" +
       declarations +
       colorspace.to +
-      "return vec4(vec3(" +
-      el +
-      "),1.0);";
+      ("return vec4(vec3(" + el + "),1.0);");
+    return { name: name, type: type, inputs: inputs, glsl: glsl };
+  });
+};
+
+hcs.generateSetElementFunctions = function (colorspace) {
+  return colorspace.elems.map((el) => {
+    const name = colorspace.name + "_" + el + "_set";
+    const type = "color";
+    const inputs = [{ type: "float", name: "in_" + el, default: 1 }];
+    const declarations = colorspace.elems
+      .map((_el) => "float " + _el + ";\n")
+      .join("");
+    const glsl =
+      "float _r = _c0.r; float _g = _c0.g; float _b = _c0.b; float _a = _c0.a;" +
+      declarations +
+      colorspace.to +
+      (el + " = in_" + el + ";") +
+      colorspace.from +
+      "return vec4(_r,_g,_b,_a);";
+    return { name: name, type: type, inputs: inputs, glsl: glsl };
+  });
+};
+
+hcs.generateSwapElementFunctions = function (colorspace) {
+  return colorspace.elems.map((el) => {
+    const name = colorspace.name + "_" + el + "_from";
+    const type = "combine";
+    const inputs = [{ type: "float", name: "_amt", default: 1 }];
+    const declarations = colorspace.elems
+      .map((_el) => "float " + _el + ";\n")
+      .join("");
+    const glsl =
+      "float _r = _c0.r; float _g = _c0.g; float _b = _c0.b; float _a = _c0.a;" +
+      declarations +
+      colorspace.to +
+      (el + " = mix(" + el + ",_luminance(_c1.rgb),_amt);") +
+      colorspace.from +
+      "return vec4(_r,_g,_b,_a);";
     return { name: name, type: type, inputs: inputs, glsl: glsl };
   });
 };
 
 hcs.update = function () {
-  hcs.colorscapes.map(hcs.generateColorFunction).forEach((x) => setFunction(x));
-  hcs.colorscapes
-    .map(hcs.generateColorOffsetFunction)
-    .forEach((x) => setFunction(x));
-  hcs.colorscapes.map(hcs.generateSolidFunction).forEach((x) => setFunction(x));
-  hcs.colorscapes
-    .map(hcs.generateElementFunctions)
+  []
+    .concat(
+      hcs.colorscapes.map(hcs.generateColorFunction),
+      hcs.colorscapes.map(hcs.generateColorOffsetFunction),
+      hcs.colorscapes.map(hcs.generateSolidFunction),
+      hcs.colorscapes.map(hcs.generateElementFunctions),
+      hcs.colorscapes.map(hcs.generateSetElementFunctions),
+      hcs.colorscapes.map(hcs.generateSwapElementFunctions)
+    )
     .flat(1)
     .forEach((x) => setFunction(x));
 };
