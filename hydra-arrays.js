@@ -22,6 +22,9 @@ Array.prototype.div = function (arr) {
 Array.prototype.mult = function (arr) {
   return harrays.newMethod(this, (x, y) => x * y)(arr);
 };
+Array.prototype.mod = function (arr) {
+  return harrays.newMethod(this, (x, y) => x % y)(arr);
+};
 
 Array.prototype.shuffle = function () {
   return this.sort(() => Math.random() - 0.5);
@@ -38,3 +41,13 @@ Array.prototype.rotate = function (n) {
   return this;
 };
 Array.prototype.rot = Array.prototype.rotate;
+
+Array.random = function (l = 10, min = 0, max = 1) {
+  return Array.from({ length: l }, () => Math.random() * (max - min + 1) + min);
+};
+Array.range = function (start, end, step = 1) {
+  return start >= end ? [start] : [start, ...range(start + step, end)];
+};
+Array.run = function (end = 10, step = 1) {
+  return Array.range(0, end, step);
+};
