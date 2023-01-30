@@ -1,5 +1,5 @@
 # hydra-glsl
----
+
 This hack/extension allows you to use glsl code almost directly inside Hydra. It adds 5 functions, 1 according to each type of glsl-function in hydra.
 
 ## Example:
@@ -18,7 +18,7 @@ glsl('vec4(sin(((_st.x*54.)+time*2.)*vec3(0.1,0.102,0.101)),1.0)')
 
 ## Functions:
 
-| function                 | arguments after code       | corresponding type | glsl arguments : aliases          |
+| function                 | arguments after code | corresponding type | glsl arguments : aliases      |
 |--------------------------|------------------|--------------------|-----------------------------------|
 | glsl()                   | ...args          | 'src'              | _st : st, uv, xy                  |
 | osc().glslColor()        | ...args          | 'color'            | _c0 : c0, color                   |
@@ -27,6 +27,14 @@ glsl('vec4(sin(((_st.x*54.)+time*2.)*vec3(0.1,0.102,0.101)),1.0)')
 | osc().glslCombineCoord() | texture, ...args | 'combineCoord'     | _st : st, uv, xy; _c0: c0, color  |
 
 *Note that `osc()` is merely an example*
+
+### Extra functions
+
+| function                 | arguments after code | corresponding type | description |
+|--------------------------|------------------|--------------------|-----------------------------------|
+| osc().glslHsv()          | ...args          | 'color'            | Converts to and from HSV. With your code being placed in between. Pre-defines the HSV converted values as a `vec3 hsv`|
+
+---
 
 ## Arguments
 
@@ -51,6 +59,8 @@ glsl('vec4(sin(uv.x*i0+(time*i1*vec3(i2,i2*2.,i2*3.))),1.0)',16,2,.3)
 	.out()
 ```
 
+---
+
 ## About the code (and lazy code)
 
 * You can straight up use any of the aliases mentioned above.
@@ -61,6 +71,8 @@ glsl('vec4(sin(uv.x*i0+(time*i1*vec3(i2,i2*2.,i2*3.))),1.0)',16,2,.3)
     * You can still omit the return keyword.
 * You can write your own `c0`s, `st`s or any other variables named like alises mentioned above. The script checks if you defined any variables named like that before assigning the alises.
 * You cannot use aliases as names of custom arguments
+
+---
 
 ## Tip
 

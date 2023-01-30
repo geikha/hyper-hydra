@@ -1,5 +1,5 @@
 # hydra-glsl
----
+
 Este hack/extensión te permite codear GLSL casi que directamente adentro de Hydra. Añade 5 functiones, 1 por cada tipo de glsl-function que hay en Hydra
 
 ## Ejemplo:
@@ -28,6 +28,14 @@ glsl('vec4(sin(((_st.x*54.)+time*2.)*vec3(0.1,0.102,0.101)),1.0)')
 
 *Nótese que `osc()` es meramente un ejemplo*
 
+### Extra functions
+
+| función                 | argumentos dsps del código | tipo correspondiente | descripción |
+|--------------------------|------------------|--------------------|-----------------------------------|
+| osc().glslHsv()          | ...args          | 'color'            | Convierte los colores de c0 a HSV. Podés acceder y modificar estos valores desde un `vec3 hsv` |
+
+---
+
 ## Argumentos
 
 Cada función trae con sigo 10 argumentos predeterminados con nombres `i0`,`i1`,`i2`...`i9`. Todos estos se inicializan con el valor por default de `1`. Podés usar estos 10 argumentos o definir los tuyos al mandar cada argumento en un array con un formate de `['nombre',valor]`. 
@@ -51,6 +59,8 @@ glsl('vec4(sin(uv.x*i0+(time*i1*vec3(i2,i2*2.,i2*3.))),1.0)',16,2,.3)
 	.out()
 ```
 
+---
+
 ## Sobre el codigo (y el lazy code)
 
 * Podés usar de una cualquiera de los aliases descritos arriba.
@@ -61,6 +71,8 @@ glsl('vec4(sin(uv.x*i0+(time*i1*vec3(i2,i2*2.,i2*3.))),1.0)',16,2,.3)
     * Podés aún así omitir la palabra return.
 * Podés escribir tus propias `c0`s, `st`s o cualquier otra variable llamada como alguna de los aliases de arriba. El script se fija que no hayas instanciado ninguna variable llamada así antes de definir los aliases.
 * No podes usar el mismo nombre de un alias como el nombre de un argumento
+
+---
 
 ## Tip
 
