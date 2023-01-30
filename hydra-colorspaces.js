@@ -90,9 +90,18 @@ hcs.colorspaces = [
 ];
 
 hcs.generateInputAssignment = function (elems, format) {
-  return elems
-    .map((el) => format.replaceAll("#el", el).replaceAll("#in", "in_" + el))
-    .join("");
+  return format
+    ? elems
+        .map((el) => format.replaceAll("#el", el).replaceAll("#in", "in_" + el))
+        .join("")
+    : "";
+};
+
+hcs.generateDirectAssignment = function (elems, tofrom) {
+  const rgba = ["_r", "_g", "_b", "_a"];
+  return tofrom == "to"
+    ? elems.map((el, i) => rgba[i] + " = " + el + ";").join("")
+    : elems.map((el, i) => el + " = " + rgba[i] + ";").join("");
 };
 
 hcs.generateDeclarations = function (elems, type = "float") {
@@ -106,6 +115,7 @@ hcs.generateFunction = function ({
   assignmentFormat,
   inputDefault,
   alphaDefault = 1,
+  tofrom,
 }) {
   const name = colorspace.name + (sufix ? "_" + sufix : "");
 
@@ -113,12 +123,14 @@ hcs.generateFunction = function ({
 
   const elems = colorspace.elems.concat("alpha");
 
-  const inputs = elems.map((el) => ({
-    type: "float",
-    name: "in_" + el,
-    default: inputDefault,
-  }));
-  inputs.at(-1).default = alphaDefault;
+  const inputs = assignmentFormat
+    ? elems.map((el) => ({
+        type: "float",
+        name: "in_" + el,
+        default: inputDefault,
+      }))
+    : [];
+  inputs.length ? (inputs.at(-1).default = alphaDefault) : null;
 
   const rgbaDeclarations = hcs.generateDeclarations(["_r", "_g", "_b", "_a"]);
   const rgbaAssignments = hasColorInput
@@ -126,9 +138,11 @@ hcs.generateFunction = function ({
     : "";
 
   const elemDeclarations = hcs.generateDeclarations(elems);
-  const to = hasColorInput ? colorspace.to : "";
-  const elemAssignments = hcs.generateInputAssignment(elems, assignmentFormat);
-  const from = colorspace.from;
+  const to = hasColorInput || tofrom == "to" ? colorspace.to : "";
+  const elemAssignments = assignmentFormat
+    ? hcs.generateInputAssignment(elems, assignmentFormat)
+    : hcs.generateDirectAssignment(elems, tofrom);
+  const from = tofrom && tofrom == "from" ? colorspace.from : "";
 
   const returner = "_a = alpha; return vec4(_r,_g,_b,_a);";
 
@@ -170,6 +184,26 @@ hcs.generateSolidFunction = (cs) =>
     assignmentFormat: "#el = #in;",
     inputDefault: 0,
     alphaDefault: 1,
+  });
+hcs.generateToFunction = (cs) =>
+  hcs.generateFunction({
+    colorspace: cs,
+    sufix: "to",
+    type: "color",
+    assignmentFormat: undefined,
+    inputDefault: 0,
+    alphaDefault: 1,
+    tofrom: "to",
+  });
+hcs.generateFromFunction = (cs) =>
+  hcs.generateFunction({
+    colorspace: cs,
+    sufix: "from",
+    type: "color",
+    assignmentFormat: undefined,
+    inputDefault: 0,
+    alphaDefault: 1,
+    tofrom: "from",
   });
 
 hcs.generateElementFunction = function (colorspace, elem) {
@@ -313,6 +347,8 @@ hcs.updateFunctions = function () {
       hcs.colorspaces.map(hcs.generateColorFunction),
       hcs.colorspaces.map(hcs.generateOffsetFunction),
       hcs.colorspaces.map(hcs.generateSolidFunction),
+      hcs.colorspaces.map(hcs.generateToFunction),
+      hcs.colorspaces.map(hcs.generateFromFunction),
       hcs.colorspaces.map(hcs.generateElementFunctions),
       hcs.colorspaces.map(hcs.generateSetElementFunctions),
       hcs.colorspaces.map(hcs.generateOffsetElementFunctions),
@@ -333,7 +369,9 @@ hcs.update = function () {
     getterDefinition +=
       "const props = {" +
       "color: this.#cs_color.bind(this)," +
-      "offset: this.#cs_offset.bind(this),";
+      "offset: this.#cs_offset.bind(this)," +
+      "to: this.#cs_to.bind(this)," +
+      "from: this.#cs_from.bind(this),";
     cs.elems.forEach((elem) => {
       getterDefinition +=
         "#elem: this.#cs_#elem.bind(this)," +
