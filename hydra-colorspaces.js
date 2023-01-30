@@ -89,6 +89,8 @@ hcs.colorspaces = [
   },
 ];
 
+// utils
+
 hcs.generateInputAssignment = function (elems, format) {
   return format
     ? elems
@@ -107,6 +109,8 @@ hcs.generateDirectAssignment = function (elems, tofrom) {
 hcs.generateDeclarations = function (elems, type = "float") {
   return elems.map((el) => type + " " + el + ";\n").join("");
 };
+
+// functions that use all elems
 
 hcs.generateFunction = function ({
   colorspace,
@@ -138,7 +142,8 @@ hcs.generateFunction = function ({
     ? "_r = _c0.r; _g = _c0.g; _b = _c0.b; _a = _c0.a;"
     : "";
 
-  const elemDeclarations = hcs.generateDeclarations(elems);
+  const elemDeclarations =
+    hcs.generateDeclarations(elems) + (isRgb ? "" : "alpha = _a;");
   const to = hasColorInput || tofrom == "to" ? colorspace.to : "";
   const elemAssignments = assignmentFormat
     ? hcs.generateInputAssignment(elems, assignmentFormat)
@@ -206,6 +211,17 @@ hcs.generateFromFunction = (cs) =>
     alphaDefault: 1,
     tofrom: "from",
   });
+hcs.generateInvertFunction = (cs) =>
+  hcs.generateFunction({
+    colorspace: cs,
+    sufix: "invert",
+    type: "color",
+    assignmentFormat: "#el = mix(#el, 1.0 - #el, #in);",
+    inputDefault: 1,
+    alphaDefault: 0,
+  });
+
+// elem functions
 
 hcs.generateElementFunction = function (colorspace, elem) {
   const name = colorspace.name + "_" + elem;
@@ -273,7 +289,6 @@ hcs.generateSetElementFunctions = (cs) =>
       assignmentFormat: "#el = #in;",
     })
   );
-
 hcs.generateOffsetElementFunctions = (cs) =>
   cs.elems.map((elem) =>
     hcs.generateSetElementFunction({
@@ -281,6 +296,26 @@ hcs.generateOffsetElementFunctions = (cs) =>
       elem,
       sufix: "offset",
       assignmentFormat: "#el += #in;",
+      inputDefault: 1,
+    })
+  );
+hcs.generateMultElementFunctions = (cs) =>
+  cs.elems.map((elem) =>
+    hcs.generateSetElementFunction({
+      colorspace: cs,
+      elem,
+      sufix: "mult",
+      assignmentFormat: "#el *= #in;",
+      inputDefault: 1,
+    })
+  );
+hcs.generateInvertElementFunctions = (cs) =>
+  cs.elems.map((elem) =>
+    hcs.generateSetElementFunction({
+      colorspace: cs,
+      elem,
+      sufix: "invert",
+      assignmentFormat: "#el = mix(#el, 1.0 - #el, #in);",
       inputDefault: 1,
     })
   );
@@ -330,7 +365,6 @@ hcs.generateSetElementFromFunctions = (cs) =>
       inputDefault: 1,
     })
   );
-
 hcs.generateOffsetElementFromFunctions = (cs) =>
   cs.elems.map((elem) =>
     hcs.generateCombineElementFunction({
@@ -338,9 +372,21 @@ hcs.generateOffsetElementFromFunctions = (cs) =>
       elem,
       sufix: "offset_from",
       assignmentFormat: "#el += _c1.r*_amt;",
-      inputDefault: 0.5,
+      inputDefault: 1,
     })
   );
+hcs.generateMultElementFromFunctions = (cs) =>
+  cs.elems.map((elem) =>
+    hcs.generateCombineElementFunction({
+      colorspace: cs,
+      elem,
+      sufix: "mult_from",
+      assignmentFormat: "#el *= _c1.r*_amt;",
+      inputDefault: 1,
+    })
+  );
+
+// updaters
 
 hcs.updateFunctions = function () {
   []
@@ -350,11 +396,15 @@ hcs.updateFunctions = function () {
       hcs.colorspaces.map(hcs.generateSolidFunction),
       hcs.colorspaces.map(hcs.generateToFunction),
       hcs.colorspaces.map(hcs.generateFromFunction),
+      hcs.colorspaces.map(hcs.generateInvertFunction),
       hcs.colorspaces.map(hcs.generateElementFunctions),
       hcs.colorspaces.map(hcs.generateSetElementFunctions),
       hcs.colorspaces.map(hcs.generateOffsetElementFunctions),
+      hcs.colorspaces.map(hcs.generateMultElementFunctions),
+      hcs.colorspaces.map(hcs.generateInvertElementFunctions),
       hcs.colorspaces.map(hcs.generateSetElementFromFunctions),
-      hcs.colorspaces.map(hcs.generateOffsetElementFromFunctions)
+      hcs.colorspaces.map(hcs.generateOffsetElementFromFunctions),
+      hcs.colorspaces.map(hcs.generateMultElementFromFunctions)
     )
     .flat(99)
     .filter((x) => x)
@@ -372,14 +422,18 @@ hcs.update = function () {
       "color: this.#cs_color.bind(this)," +
       "offset: this.#cs_offset.bind(this)," +
       "to: this.#cs_to.bind(this)," +
-      "from: this.#cs_from.bind(this),";
+      "from: this.#cs_from.bind(this)," +
+      "invert: this.#cs_invert.bind(this),";
     cs.elems.forEach((elem) => {
       getterDefinition +=
         "#elem: this.#cs_#elem.bind(this)," +
         "#elemSet: this.#cs_#elem_set.bind(this)," +
         "#elemOffset: this.#cs_#elem_offset.bind(this)," +
+        "#elemMult: this.#cs_#elem_mult.bind(this)," +
+        "#elemInvert: this.#cs_#elem_invert.bind(this)," +
         "#elemFrom: this.#cs_#elem_from.bind(this)," +
-        "#elemOffsetFrom: this.#cs_#elem_offset_from.bind(this),";
+        "#elemOffsetFrom: this.#cs_#elem_offset_from.bind(this)," +
+        "#elemMultFrom: this.#cs_#elem_mult_from.bind(this),";
       getterDefinition = getterDefinition.replaceAll("#elem", elem);
     });
     getterDefinition += "};";
