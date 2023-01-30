@@ -4,9 +4,9 @@
 
 window.regl = o0.regl
 regl.attributes.preserveDrawingBuffer = true
-window.Output = o0.constructor.prototype
+window.oP = o0.constructor.prototype;
 
-Output.read = function (x = 0, y = 0, w = 1, h = 1) {
+oP.read = function (x = 0, y = 0, w = 1, h = 1) {
     return regl.read({
         framebuffer: this.fbos[this.pingPongIndex],
         x: x,
@@ -15,7 +15,7 @@ Output.read = function (x = 0, y = 0, w = 1, h = 1) {
         height: h
     })
 }
-Output.readAll = function () {
+oP.readAll = function () {
     return regl.read({
         framebuffer: this.fbos[this.pingPongIndex],
         x: 0,
