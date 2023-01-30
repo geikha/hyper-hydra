@@ -460,8 +460,29 @@ hcs.updateFunctions = function () {
     .forEach((x) => setFunction(x));
 };
 
+hcs.cloneGlslSource = function (_tex) {
+  const tex = Object.assign({}, _tex);
+  Object.setPrototypeOf(tex, gS);
+  tex.transforms = Array.from(_tex.transforms);
+  return tex;
+};
+
+hcs.updateWithFunctions = function () {
+  hcs.colorspaces.forEach((cs) => {
+    cs.elems.forEach((el) => {
+      gS[cs.name + "_" + el + "_" + "with"] = function (f) {
+        const tex = hcs.cloneGlslSource(this);
+        return this[cs.name + "_" + el + "_" + "from"](
+          f(tex)[cs.name + "_" + el]()
+        );
+      };
+    });
+  });
+};
+
 hcs.update = function () {
   hcs.updateFunctions();
+  hcs.updateWithFunctions();
   hcs.colorspaces.forEach((cs) => {
     let getterDefinition =
       "Object.defineProperty(gS, '#cs', { configurable: true, get: function() {" +
@@ -483,7 +504,8 @@ hcs.update = function () {
         "#elemFrom: this.#cs_#elem_from.bind(this)," +
         "#elemOffsetFrom: this.#cs_#elem_offset_from.bind(this)," +
         "#elemMultFrom: this.#cs_#elem_mult_from.bind(this)," +
-        "#elemKey: this.#cs_#elem_key.bind(this),";
+        "#elemKey: this.#cs_#elem_key.bind(this)," +
+        "#elemWith: this.#cs_#elem_with.bind(this),";
       getterDefinition = getterDefinition.replaceAll("#elem", elem);
     });
     getterDefinition += "};";
