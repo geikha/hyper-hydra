@@ -24,7 +24,7 @@ oP.setNearest = function () {
 oP.setLinear = function () {
   this.setFbos({ mag: "linear", min: "linear" });
 };
-oP.setWrap = function () {
+oP.setRepeat = function () {
   this.setFbos({ wrapS: "repeat", wrapT: "repeat" });
 };
 oP.setClamp = function () {
@@ -40,7 +40,7 @@ oS.setNearest = function () {
 oS.setLinear = function () {
   this.outputs.forEach((x) => x.setLinear());
 };
-oS.setWrap = function () {
+oS.setRepeat = function () {
   this.outputs.forEach((x) => x.setWrap());
 };
 oS.setClamp = function () {
