@@ -386,6 +386,54 @@ hcs.generateMultElementFromFunctions = (cs) =>
     })
   );
 
+// keying
+
+hcs.generateKeyingElementFunction = function ({ colorspace, elem }) {
+  const name = colorspace.name + "_" + elem + "_" + "key";
+
+  const type = "color";
+
+  const inputs = [
+    { type: "float", name: "_th0", default: 0.5 },
+    { type: "float", name: "_t0", default: 0.05 },
+    { type: "float", name: "_th1", default: 0 },
+    { type: "float", name: "_t1", default: 0 },
+  ];
+
+  const rgbaDeclarations = hcs.generateDeclarations(["_r", "_g", "_b", "_a"]);
+  const rgbaAssignments = "_r = _c0.r; _g = _c0.g; _b = _c0.b; _a = _c0.a;";
+
+  const elemDeclarations = hcs.generateDeclarations(colorspace.elems);
+  const to = colorspace.to;
+  const keying = (
+    "float _key = smoothstep(_th0-(_t0+0.0000001), _th0+(_t0+0.0000001), #elem);" +
+    "_th1 = 1.0 - _th1 + 0.0000001; _key *= smoothstep(_th1-(-_t1-0.0000001), _th1+(-_t1-0.0000001), #elem);" +
+    "_a *= _key;"
+  ).replaceAll("#elem", elem);
+  const from = colorspace.from;
+
+  const returner = "return vec4(_r,_g,_b,_a);";
+
+  const glsl =
+    rgbaDeclarations +
+    rgbaAssignments +
+    elemDeclarations +
+    to +
+    keying +
+    from +
+    returner;
+
+  return { name: name, type: type, inputs: inputs, glsl: glsl };
+};
+
+hcs.generateKeyingElementFunctions = (cs) =>
+  cs.elems.map((elem) =>
+    hcs.generateKeyingElementFunction({
+      colorspace: cs,
+      elem,
+    })
+  );
+
 // updaters
 
 hcs.updateFunctions = function () {
@@ -404,7 +452,8 @@ hcs.updateFunctions = function () {
       hcs.colorspaces.map(hcs.generateInvertElementFunctions),
       hcs.colorspaces.map(hcs.generateSetElementFromFunctions),
       hcs.colorspaces.map(hcs.generateOffsetElementFromFunctions),
-      hcs.colorspaces.map(hcs.generateMultElementFromFunctions)
+      hcs.colorspaces.map(hcs.generateMultElementFromFunctions),
+      hcs.colorspaces.map(hcs.generateKeyingElementFunctions)
     )
     .flat(99)
     .filter((x) => x)
@@ -433,7 +482,8 @@ hcs.update = function () {
         "#elemInvert: this.#cs_#elem_invert.bind(this)," +
         "#elemFrom: this.#cs_#elem_from.bind(this)," +
         "#elemOffsetFrom: this.#cs_#elem_offset_from.bind(this)," +
-        "#elemMultFrom: this.#cs_#elem_mult_from.bind(this),";
+        "#elemMultFrom: this.#cs_#elem_mult_from.bind(this)," +
+        "#elemKey: this.#cs_#elem_key.bind(this),";
       getterDefinition = getterDefinition.replaceAll("#elem", elem);
     });
     getterDefinition += "};";
