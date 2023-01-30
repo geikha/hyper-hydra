@@ -142,7 +142,7 @@ hcs.generateFunction = function ({
   const elemAssignments = assignmentFormat
     ? hcs.generateInputAssignment(elems, assignmentFormat)
     : hcs.generateDirectAssignment(elems, tofrom);
-  const from = tofrom && tofrom == "from" ? colorspace.from : "";
+  const from = !tofrom || tofrom == "from" ? colorspace.from : "";
 
   const returner = "_a = alpha; return vec4(_r,_g,_b,_a);";
 
