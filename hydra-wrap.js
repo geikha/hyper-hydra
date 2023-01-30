@@ -1,23 +1,37 @@
 // prereq
 
 //reset fbos. make sure they use clamp
-const fboSettings = Array(2).fill({
-  mag: "nearest",
-  min: "nearest",
-  width: width,
-  height: height,
-  wrapS: "clamp",
-  wrapT: "clamp",
-  format: "rgba",
-});
-choo.state.hydra.hydra.o.forEach((output) => {
-  output.fbos = fboSettings.map((x) =>
-    output.regl.framebuffer({
-      color: output.regl.texture(x),
+//code taken from hydra-outputs.js
+window.oP = o0.constructor.prototype;
+oP.fboSettings = oP.fboSettings
+  ? oP.fboSettings
+  : Array(2).fill({
+      mag: "nearest",
+      min: "nearest",
+      width: width,
+      height: height,
+      format: "rgba",
+    });
+oP.setFbos = function (fbo0, fbo1) {
+  var colors = fbo1 ? [fbo0, fbo1] : [fbo0, fbo0];
+  this.fboSettings = colors.map((x, i) => {
+    return { ...this.fboSettings[i], width: width, height: height, ...x };
+  });
+  this.fbos = this.fboSettings.map((x) =>
+    this.regl.framebuffer({
+      color: this.regl.texture(x),
       depthStencil: false,
     })
   );
-});
+};
+window.oS = { outputs: choo.state.hydra.hydra.o };
+oP.setClamp = function () {
+  this.setFbos({ wrapS: "clamp", wrapT: "clamp" });
+};
+oS.setClamp = function () {
+  this.outputs.forEach((x) => x.setClamp());
+};
+oS.setClamp();
 
 // set all coord functions to no-wrap
 [
