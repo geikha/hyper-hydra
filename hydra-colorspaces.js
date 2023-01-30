@@ -5,9 +5,9 @@ window.hcs = {};
 hcs.colorspaces = [
   {
     name: "rgb",
-    elems: ["r", "g", "b"],
-    to: "r = _r; g = _g; b = _b; alpha = _a;",
-    from: "_r = r; _g = g; _b = b;",
+    elems: ["r", "g", "b", "a"],
+    to: "r = _r; g = _g; b = _b; a = _a;",
+    from: "_r = r; _g = g; _b = b; _a = a;",
   },
   {
     name: "cmyk",
@@ -121,7 +121,8 @@ hcs.generateFunction = function ({
 
   const hasColorInput = ["color", "combine"].includes(type);
 
-  const elems = colorspace.elems.concat("alpha");
+  const isRgb = "rgba".includes(colorspace.name);
+  const elems = isRgb ? colorspace.elems : colorspace.elems.concat("alpha");
 
   const inputs = assignmentFormat
     ? elems.map((el) => ({
@@ -144,7 +145,7 @@ hcs.generateFunction = function ({
     : hcs.generateDirectAssignment(elems, tofrom);
   const from = !tofrom || tofrom == "from" ? colorspace.from : "";
 
-  const returner = "_a = alpha; return vec4(_r,_g,_b,_a);";
+  const returner = (isRgb ? "" : "_a = alpha;") + "return vec4(_r,_g,_b,_a);";
 
   const glsl =
     rgbaDeclarations +
@@ -246,7 +247,7 @@ hcs.generateSetElementFunction = function ({
 
   const elemDeclarations = hcs.generateDeclarations(colorspace.elems);
   const to = colorspace.to;
-  const elemAssignment = hcs.generateInputAssignment([elem], "#el = #in;");
+  const elemAssignment = hcs.generateInputAssignment([elem], assignmentFormat);
   const from = colorspace.from;
 
   const returner = "return vec4(_r,_g,_b,_a);";
