@@ -35,8 +35,9 @@ Some functions add alpha as a last argument after the elements of the colorspace
 * Example: `hsv(()=>time,1,1).out()`
 * Alias: `cs_solid()`
 
-
 These functions will act similarly to Hydra's `solid()` function, letting you write a particular color in the given colorspace and filling the screen with it.
+
+---
 
 ### Multiply elements
 
@@ -52,6 +53,8 @@ These functions will act similarly to Hydra's `.color()` function, allowing you 
 * Example: `gradient().hsl.sMult(.8).out()`
 * Alias: `.cs_el_mult()`
 
+---
+
 ### Offset elements
 
 **`.cs.offset( el = 0, alpha = 0 )`**
@@ -65,6 +68,8 @@ Offset an element by a given amount. Basically adds the number you give it to th
 **`.cs.elOffset()`**
 * Example: `osc().yiq.qOffset(.2).out()`
 * Alias: `.cs_el_offset()`
+
+---
 
 ### Invert elements
 
@@ -80,8 +85,9 @@ Invert an element by a given amount. The argument sets interpolation between the
 * Example: `osc(5,.1,2).yiq.qInvert().out()`
 * Alias: `.cs_el_invert()`
 
-### Converting to a given colorspace
+---
 
+### Converting to a given colorspace
 
 **`.cs.to()`**
 * Example: `gradient().cmyk.to().out()`
@@ -97,6 +103,8 @@ Converts the color values of the texture which calls the method to the given col
 
 Let's you convert back to RGBA, or interpret any color values as if they were from the given colorspace.
 
+---
+
 ## Other element specific functions
 
 ### Retrieving an element
@@ -107,6 +115,8 @@ Let's you convert back to RGBA, or interpret any color values as if they were fr
 
 These functions will work in the same way as Hydra's `r()`, `b()`, `g()`, and `a()` functions. They will simply replicate the given element's value in all channels except alpha and return an opaque image.
 
+---
+
 ### Setting an element
 
 **`cs.elSet( value = 1 )`**
@@ -114,6 +124,8 @@ These functions will work in the same way as Hydra's `r()`, `b()`, `g()`, and `a
 * Alias: `.cs_el_set()`
 
 Allows you to set the given element to a fixed value for all pixels. Shown in the example being used to set the saturation of a texture.
+
+---
 
 ### Modulating an element by a given texture
 
@@ -143,6 +155,8 @@ Will multiply the given element's value by the given texture. The texture's valu
 
 Will add the texture to the given value. The texture's value will be multiplied by the `amt` parameter.
 
+---
+
 ### Keying by a given element
 
 **`cs.elKey( topThreshold = 0.5 , topTolerance = 0.05 , bottomThreshold = 0 , bottomTolerance = 0 )`**
@@ -152,6 +166,8 @@ Will add the texture to the given value. The texture's value will be multiplied 
 Similar to Hydra's `luma()`, but instead of keying by luminance, you can key by any element. THese functions will turn transparent any pixel where the given element isn't between the top threshold and the bottom threshold.
 
 **Note:** These functions work with straight alpha, so you might not see changes directly on screen unless you layer it over something else. Similarly to how `osc().color(1,1,1,0).out()` still appears on screen even though it should be completely transparent. If you are someone familiar with straight and premultiplied alpha, you might be interested to join the discussion in [this issue](https://github.com/hydra-synth/hydra-synth/issues/109) I've opened on the hydra-synth repo.
+
+---
 
 ### Applying a transform to a given element
 
