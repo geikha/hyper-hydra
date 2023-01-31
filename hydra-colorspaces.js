@@ -94,8 +94,8 @@ hcs.colorspaces = [
 hcs.generateInputAssignment = function (elems, format) {
   return format
     ? elems
-        .map((el) => format.replaceAll("#el", el).replaceAll("#in", "in_" + el))
-        .join("")
+      .map((el) => format.replaceAll("#el", el).replaceAll("#in", "in_" + el))
+      .join("")
     : "";
 };
 
@@ -130,10 +130,10 @@ hcs.generateFunction = function ({
 
   const inputs = assignmentFormat
     ? elems.map((el) => ({
-        type: "float",
-        name: "in_" + el,
-        default: inputDefault,
-      }))
+      type: "float",
+      name: "in_" + el,
+      default: inputDefault,
+    }))
     : [];
   inputs.length ? (inputs.at(-1).default = alphaDefault) : null;
 
@@ -400,6 +400,7 @@ hcs.generateKeyingElementFunction = function ({ colorspace, elem }) {
     { type: "float", name: "_t1", default: 0 },
   ];
 
+  const isRgb = "rgba".includes(colorspace.name);
   const rgbaDeclarations = hcs.generateDeclarations(["_r", "_g", "_b", "_a"]);
   const rgbaAssignments = "_r = _c0.r; _g = _c0.g; _b = _c0.b; _a = _c0.a;";
 
@@ -408,7 +409,8 @@ hcs.generateKeyingElementFunction = function ({ colorspace, elem }) {
   const keying = (
     "float _key = smoothstep(_th0-(_t0+0.0000001), _th0+(_t0+0.0000001), #elem);" +
     "_th1 = 1.0 - _th1 + 0.0000001; _key *= smoothstep(_th1-(-_t1-0.0000001), _th1+(-_t1-0.0000001), #elem);" +
-    "_a *= _key;"
+    (isRgb ? "a" : "_a") +
+    " *= _key;"
   ).replaceAll("#elem", elem);
   const from = colorspace.from;
 
