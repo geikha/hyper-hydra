@@ -37,7 +37,7 @@ hcs.colorspaces = [
     `,
   },
   {
-    name: "hsl",
+    name: "hsl", //TODO: change me
     elems: ["h", "s", "l"],
     to: `
         float cMin = min( _r, min( _g, _b ) );
