@@ -1,10 +1,11 @@
-hydra-blending-modes
----
+# hydra-blending-modes
+
 Very simple but useful blending modes for Hydra. They all lack an intensity argument as of now.
-Taken from [hydra-blocky](https://github.com/samarthgulati/hydra-blockly/). 
+Taken from [hydra-blocky](https://github.com/samarthgulati/hydra-blockly/).
 Specifically [this file](https://github.com/samarthgulati/hydra-blockly/blob/master/image-editing-glsl-functions.js).
 
-See all available blending modes by evaluating: 
+See all available blending modes by evaluating:
+
 ```js
 > console.log(blendmodes_list)
 ```

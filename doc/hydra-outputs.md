@@ -9,23 +9,23 @@ o0.setNearest()
 o1.setLinear()
 
 src(o0)
-	.layer(osc(30,.2,1).mask(shape(4,.1,0)))
-	.scale(1.01).rotate(.01)
-	.out(o0)
+ .layer(osc(30,.2,1).mask(shape(4,.1,0)))
+ .scale(1.01).rotate(.01)
+ .out(o0)
 
 src(o1)
-	.layer(osc(30,.2,1).mask(shape(4,.1,0)))
-	.scale(1.01).rotate(.01)
-	.out(o1)
+ .layer(osc(30,.2,1).mask(shape(4,.1,0)))
+ .scale(1.01).rotate(.01)
+ .out(o1)
 
 src(o0)
-	.layer(src(o1).mask(shape(1,0,0).rotate(Math.PI/2)))
-	.out(o2)
+ .layer(src(o1).mask(shape(1,0,0).rotate(Math.PI/2)))
+ .out(o2)
 
 render(o2)
 ```
-[Open in Hydra!](https://hydra.ojack.xyz/?code=YXdhaXQlMjBsb2FkU2NyaXB0KCUyMmh0dHBzJTNBJTJGJTJGaHlkcmEtZXh0ZW5zaW9ucy5nbGl0Y2gubWUlMkZoeWRyYS1vdXRwdXRzLmpzJTIyKSUwQSUwQW8wLnNldE5lYXJlc3QoKSUwQW8xLnNldExpbmVhcigpJTBBJTBBc3JjKG8wKSUwQSUwOS5sYXllcihvc2MoMzAlMkMuMiUyQzEpLm1hc2soc2hhcGUoNCUyQy4xJTJDMCkpKSUwQSUwOS5zY2FsZSgxLjAxKS5yb3RhdGUoLjAxKSUwQSUwOS5vdXQobzApJTBBJTBBc3JjKG8xKSUwQSUwOS5sYXllcihvc2MoMzAlMkMuMiUyQzEpLm1hc2soc2hhcGUoNCUyQy4xJTJDMCkpKSUwQSUwOS5zY2FsZSgxLjAxKS5yb3RhdGUoLjAxKSUwQSUwOS5vdXQobzEpJTBBJTBBc3JjKG8wKSUwQSUwOS5sYXllcihzcmMobzEpLm1hc2soc2hhcGUoMSUyQzAlMkMwKS5yb3RhdGUoTWF0aC5QSSUyRjIpKSklMEElMDkub3V0KG8yKSUwQSUwQXJlbmRlcihvMik%3D)
 
+[Open in Hydra!](https://hydra.ojack.xyz/?code=YXdhaXQlMjBsb2FkU2NyaXB0KCUyMmh0dHBzJTNBJTJGJTJGaHlkcmEtZXh0ZW5zaW9ucy5nbGl0Y2gubWUlMkZoeWRyYS1vdXRwdXRzLmpzJTIyKSUwQSUwQW8wLnNldE5lYXJlc3QoKSUwQW8xLnNldExpbmVhcigpJTBBJTBBc3JjKG8wKSUwQSUwOS5sYXllcihvc2MoMzAlMkMuMiUyQzEpLm1hc2soc2hhcGUoNCUyQy4xJTJDMCkpKSUwQSUwOS5zY2FsZSgxLjAxKS5yb3RhdGUoLjAxKSUwQSUwOS5vdXQobzApJTBBJTBBc3JjKG8xKSUwQSUwOS5sYXllcihvc2MoMzAlMkMuMiUyQzEpLm1hc2soc2hhcGUoNCUyQy4xJTJDMCkpKSUwQSUwOS5zY2FsZSgxLjAxKS5yb3RhdGUoLjAxKSUwQSUwOS5vdXQobzEpJTBBJTBBc3JjKG8wKSUwQSUwOS5sYXllcihzcmMobzEpLm1hc2soc2hhcGUoMSUyQzAlMkMwKS5yb3RhdGUoTWF0aC5QSSUyRjIpKSklMEElMDkub3V0KG8yKSUwQSUwQXJlbmRlcihvMik%3D)
 
 ---
 
@@ -43,7 +43,6 @@ This extensions extends the `Output` prototype, so it adds methods to all output
 
 * Remember you can change all outputs at the same time as such: `oS.setLinear()`
 * You may want to use setFbos to set different interpolation methods for `mag` and `min`. For example: `oS.setFbos({ mag: 'linear', min: 'nearest' })`
-
 
 #### Wrapping methods
 

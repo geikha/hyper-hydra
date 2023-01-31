@@ -1,28 +1,29 @@
 # hydra-pixels
+
 ---
 This extension adds a functionality to each Hydra output that allows you to read the content of the pixels displayed.
 
-## Example:
+## Example
 
 ```js
 osc(40,.09,1.5)
-	.diff(osc(20).luma())
+ .diff(osc(20).luma())
 .out()
 
 oct = ()=> shape(8,.3).diff(shape(8,.28)).luma()
 src(o0)
-	.layer(
-  		oct()
-         	.color(1,0,0)
-         	.scale(()=>1+(pixel[0]/255))
+ .layer(
+    oct()
+          .color(1,0,0)
+          .scale(()=>1+(pixel[0]/255))
     )
-  	.layer(
-  		oct()
-         	.color(0,0,1)
-         	.scale(()=>1+(pixel[2]/255))
+   .layer(
+    oct()
+          .color(0,0,1)
+          .scale(()=>1+(pixel[2]/255))
     )
-	.layer(src(o0).scale(128).mask(shape(4,.03,0)))
-	.out(o1)
+ .layer(src(o0).scale(128).mask(shape(4,.03,0)))
+ .out(o1)
 
 render(o1)
 
@@ -30,6 +31,7 @@ update = ()=> {
   pixel = o0.read(width/2,height/2) // center of the screen
 }
 ```
+
 [open in hydra](https://hydra.ojack.xyz/?sketch_id=EOQUdowhyZmbRJIj)
 
 ---
