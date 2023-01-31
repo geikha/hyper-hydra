@@ -89,7 +89,13 @@ hcs.colorspaces = [
 hcs.generateInputAssignment = function (elems, format) {
   return format
     ? elems
-      .map((el) => format.replaceAll("#el", el).replaceAll("#in", "in_" + el))
+      .map((el) => {
+        let assign = format;
+        if ("yuvalpha,yiqalpha".includes(elems.join("")) && "uviq".includes(el) && assign.includes("1.0 - #el")) {
+          assign = assign.replaceAll("1.0 - #el", "0.0 - #el");
+        } // TODO: find a better solution for this patch on inversion
+        return assign.replaceAll("#el", el).replaceAll("#in", "in_" + el);
+      })
       .join("")
     : "";
 };
