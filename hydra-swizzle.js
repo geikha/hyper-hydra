@@ -53,7 +53,7 @@ fourComponents.forEach(swizzle => {
     });
     definePropertyFromMethod(name, swizzle);
 });
-Array.from("rgbxyz").forEach(elem => {
+Array.from("rgbaxyzw").forEach(elem => {
     const name = "_swizzle_" + elem;
     setFunction({
         name,
