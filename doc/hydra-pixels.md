@@ -75,4 +75,4 @@ Now you can use `pixel` in your Hydra code.
 
 ### Warning
 
-Sending `read` values bigger than the width or height of the canvas as xy positions, or exceding the canvas when sending values for the width and height of the area to read, can crash Hydra entirely.
+Sending `read` values bigger than the width or height of the canvas as xy positions, or exceeding the canvas when sending values for the width and height of the area to read, can crash Hydra entirely.

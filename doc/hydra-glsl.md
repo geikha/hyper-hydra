@@ -54,7 +54,7 @@ glsl('vec4(sin(uv.x*i0+(time*i1*vec3(i2,i2*2.,i2*3.))),1.0)',16,2,.3)
  .out()
 ```
 
-You can even send arguments as functions in tipical Hydra manner:
+You can even send arguments as functions in typical Hydra manner:
 
 ```js
 glsl('vec4(sin(uv.x*i0+(time*i1*vec3(i2,i2*2.,i2*3.))),1.0)',16,2,.3)
@@ -72,7 +72,7 @@ glsl('vec4(sin(uv.x*i0+(time*i1*vec3(i2,i2*2.,i2*3.))),1.0)',16,2,.3)
 * You can use multiline code.
   * You can only omit the semicolon in the last line.
   * You can still omit the return keyword.
-* You can write your own `c0`s, `st`s or any other variables named like alises mentioned above. The script checks if you defined any variables named like that before assigning the alises.
+* You can write your own `c0`s, `st`s or any other variables named like aliases mentioned above. The script checks if you defined any variables named like that before assigning the aliases.
 * You cannot use aliases as names of custom arguments
 
 ---

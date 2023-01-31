@@ -15,7 +15,7 @@ The hydra-colorspaces extension adds lots of functions to work with color in man
 
 ## Syntax
 
-This extensions automatically defines functions for the different colorspaces, so listing them all wouldn't make sense. Instead of naming each colorspace, for the purpose of this documentation, I'll be generically refering to all color spaces as `cs`, and to **any** of their elements as `el`. For example, instead of `.cmyk.cOffset()`, which offsets the Cyan element in the CMYK colorspace, I'll write `.cs.elOffset()`.
+This extensions automatically defines functions for the different colorspaces, so listing them all wouldn't make sense. Instead of naming each colorspace, for the purpose of this documentation, I'll be generically referring to all color spaces as `cs`, and to **any** of their elements as `el`. For example, instead of `.cmyk.cOffset()`, which offsets the Cyan element in the CMYK colorspace, I'll write `.cs.elOffset()`.
 
 ### Arguments
 
@@ -135,7 +135,7 @@ Will set the value of the element to the value in the given texture. The `amt` a
 
 Will multiply the given element's value by the given texture. The texture's value will be multiplied by the `amt` parameter.
 
-#### Offseting by a given texture
+#### Offsetting by a given texture
 
 **`cs.elOffsetFrom( texture, amt = 1 )`**
 * Example: `gradient().hsl.hOffsetFrom(noise(1,2),.2).out()`
