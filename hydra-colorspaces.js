@@ -121,7 +121,7 @@ hcs.generateFunction = function ({
   const hasColorInput = ["color", "combine"].includes(type);
 
   const isRgb = "rgba".includes(colorspace.name);
-  const elems = isRgb ? colorspace.elems : colorspace.elems.concat("alpha");
+  const elems = isRgb || tofrom ? colorspace.elems : colorspace.elems.concat("alpha");
 
   const inputs = assignmentFormat
     ? elems.map((el) => ({
@@ -138,14 +138,14 @@ hcs.generateFunction = function ({
     : "";
 
   const elemDeclarations =
-    hcs.generateDeclarations(elems) + (isRgb ? "" : "alpha = _a;");
+    hcs.generateDeclarations(elems) + (isRgb || tofrom ? "" : "alpha = _a;");
   const to = hasColorInput || tofrom == "to" ? colorspace.to : "";
   const elemAssignments = assignmentFormat
     ? hcs.generateInputAssignment(elems, assignmentFormat)
     : hcs.generateDirectAssignment(elems, tofrom);
   const from = !tofrom || tofrom == "from" ? colorspace.from : "";
 
-  const returner = (isRgb ? "" : "_a = alpha;") + "return vec4(_r,_g,_b,_a);";
+  const returner = (isRgb || tofrom ? "" : "_a = alpha;") + "return vec4(_r,_g,_b,_a);";
 
   const glsl =
     rgbaDeclarations +
