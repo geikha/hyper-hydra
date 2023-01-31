@@ -1,40 +1,42 @@
 window.harrays = {};
 
-harrays.newMethod = (self, f) => {
-  return (arr) => {
-    if (Array.isArray(arr)) {
-      for (let i = 0; i < self.length; i++)
-        if (arr[i]) self[i] = f(self[i], arr[i]);
-    } else for (let i = 0; i < self.length; i++) self[i] = f(self[i], arr);
+harrays.newMethod = function (self, f) {
+  return function (arr) {
+    let i;
+    for (i = 0; i < self.length; i++) {
+      if (Array.isArray(arr)) {
+        self[i] = arr[i] ? f(self[i], arr[i]) : self[i];
+      } else {
+        self[i] = f(self[i], arr);
+      }
+    }
     return self;
   };
 };
 
-Array.prototype.add = function (arr) {
-  return harrays.newMethod(this, (x, y) => x + y)(arr);
-};
-Array.prototype.sub = function (arr) {
-  return harrays.newMethod(this, (x, y) => x - y)(arr);
-};
-Array.prototype.div = function (arr) {
-  return harrays.newMethod(this, (x, y) => x / y)(arr);
-};
-Array.prototype.mult = function (arr) {
-  return harrays.newMethod(this, (x, y) => x * y)(arr);
-};
-Array.prototype.mod = function (arr) {
-  return harrays.newMethod(this, (x, y) => x % y)(arr);
-};
+// operators
 
+const operators = {
+  add: (x, y) => x + y,
+  sub: (x, y) => x - y,
+  div: (x, y) => x / y,
+  mult: (x, y) => x * y,
+  mod: (x, y) => x % y
+}
+Object.entries(operators).forEach(function ([op, f]) {
+  Array.prototype[op] = function (arr) {
+    return harrays.newMethod(this, f)(arr)
+  }
+})
+
+// methods
 Array.prototype.shuffle = function () {
   return this.sort(() => Math.random() - 0.5);
 };
-
 Array.prototype.zfill = function (amt, z = 0) {
   for (let i = 0; i < amt; i++) this.push(z);
   return this;
 };
-
 Array.prototype.rotate = function (n) {
   const len = this.length;
   this.push(...this.splice(0, ((-n % len) + len) % len));
@@ -42,6 +44,7 @@ Array.prototype.rotate = function (n) {
 };
 Array.prototype.rot = Array.prototype.rotate;
 
+// generators
 Array.random = function (l = 10, min = 0, max = 1) {
   return Array.from({ length: l }, () => Math.random() * (max - min + 1) + min);
 };
