@@ -39,7 +39,7 @@ threeComponents.forEach(swizzle => {
         name,
         type: 'color',
         inputs: [],
-        glsl: `return vec4(_c0.${swizzle},_c0.a);`
+        glsl: `return _c0.${swizzle}a;`
     });
     definePropertyFromMethod(name, swizzle);
 });
@@ -59,7 +59,7 @@ Array.from("rgbaxyzw").forEach(elem => {
         name,
         type: 'color',
         inputs: [],
-        glsl: `return vec4(vec3(_c0.${elem}),_c0.a);`
+        glsl: `return _c0.${elem+elem+elem}a;`
     });
     definePropertyFromMethod(name, elem);
 });
