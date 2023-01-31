@@ -37,25 +37,20 @@ hcs.colorspaces = [
     `,
   },
   {
-    name: "hsl", //TODO: change me
+    name: "hsl",
     elems: ["h", "s", "l"],
     to: `
-        float cMin = min( _r, min( _g, _b ) );
-        float cMax = max( _r, max( _g, _b ) );
-        l = ( cMax + cMin ) / 2.0;
-        if ( cMax > cMin ) {
-            float cDelta = cMax - cMin;
-            s = l < .0 ? cDelta / ( cMax + cMin ) : cDelta / ( 2.0 - ( cMax + cMin ) );
-            if ( _r == cMax ) { h = ( _g - _b ) / cDelta;
-            } else if ( _g == cMax ) { h = 2.0 + ( _b - _r ) / cDelta;
-            } else { h = 4.0 + ( _r - _g ) / cDelta; }
-            if (h < 0.0) { h += 6.0; }
-            h = h / 6.0;
-        }
+        vec3 _hsv = _rgbToHsv(vec3(_r,_g,_b));
+        h = _hsv.x; 
+        l = _hsv.z*(1.0-(_hsv.y*0.5));
+        s = (_hsv.z-l)/(min(l,1.0-l));
+        s *= step(-l,-0.000001)*step(l,0.999999);
     `,
     from: `
-        vec3 _rgb = clamp( abs(mod(h*6.0+vec3(0.0,4.0,2.0),6.0)-3.0)-1.0, 0.0, 1.0 );
-        _rgb = l + s * (_rgb-0.5)*(1.0-abs(2.0*l-1.0));
+        _hsv.x = h; 
+        _hsv.z = l + (s*min(l,1.0-l)); 
+        _hsv.y = 2.0*(1.0-(l/_hsv.z))*step(-_hsv.z,-0.000001);
+        vec3 _rgb = _hsvToRgb(_hsv);
         _r = _rgb.r; _g = _rgb.g; _b = _rgb.b;
     `,
   },
