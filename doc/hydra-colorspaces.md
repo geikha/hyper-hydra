@@ -13,6 +13,31 @@ The hydra-colorspaces extension adds lots of functions to work with color in man
 | yuv             | y,u,v    | Luminance, Blue difference, Red difference | [0;1] [-0.5;+0.5] [-0.5;+0.5] | Color model used in PAL systems
 | yiq             | y,i,q    | Luminance, In-phase, Quadrature | [0;1] [-0.5;+0.5] [-0.5;+0.5] | Color model used in NTSC systems
 
+## List of functions
+
+Here are all the functions written for quick reference, exemplified using the `hsv` colorspace and the `h` element, however these apply to any colorspace and any element within it:
+
+```js
+// solid
+hsv(1,0.5,1,1).out()
+// color
+gradient().hsv(1,0.5,1).out()
+gradient().hsv.offset(.5,0,-.2).out()
+gradient().hsv.invert(1,0,1).out()
+gradient().hsv.to().out()
+gradient().hsv.from().out()
+// element specific
+gradient().hsv.h().out()
+gradient().hsv.hMult(2).out()
+gradient().hsv.hOffset(.2).out()
+gradient().hsv.hSet(0.3).out()
+gradient().hsv.hFrom(osc()).out()
+gradient().hsv.hMultFrom(osc(),1.5).out()
+gradient().hsv.hOffsetFrom(noise(),0.2).out()
+gradient().hsv.hKey(0.2).out()
+gradient().hsv.hWith(x=>x.pixelate()).out()
+```
+
 ## Syntax
 
 This extensions automatically defines functions for the different colorspaces, so listing them all wouldn't make sense. Instead of naming each colorspace, for the purpose of this documentation, I'll be generically referring to all color spaces as `cs`, and to **any** of their elements as `el`. For example, instead of `.cmyk.cOffset()`, which offsets the Cyan element in the CMYK colorspace, I'll write `.cs.elOffset()`.
