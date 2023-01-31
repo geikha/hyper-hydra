@@ -5,7 +5,7 @@
 
 window.gS = osc().constructor.prototype;
 
-window.glslExtension = {
+window._glslExtension = {
   inputArray: () =>
     new Array(10)
       .fill("i")
@@ -40,7 +40,7 @@ window.glslExtension = {
       args = args.map((x) => x[1]);
     }
     let obj = {
-      name: "glsl_ext_NODE_" + this.nodeCount,
+      name: "_glsl_ext_NODE_" + this.nodeCount,
       type: type,
       inputs: inputArray || this.inputArray(),
     };
@@ -123,21 +123,21 @@ window.glslExtension = {
   },
 };
 
-window.glsl = glslExtension.glslSource.bind(glslExtension);
+window.glsl = _glslExtension.glslSource.bind(_glslExtension);
 gS.glslColor = function (code, ...args) {
-  return glslExtension.glslColor(this, code, ...args);
+  return _glslExtension.glslColor(this, code, ...args);
 };
 gS.glslHsv = function (code, ...args) {
-  return glslExtension.glslHsv(this, code, ...args);
+  return _glslExtension.glslHsv(this, code, ...args);
 }
 gS.glslCoord = function (code, ...args) {
-  return glslExtension.glslCoord(this, code, ...args);
+  return _glslExtension.glslCoord(this, code, ...args);
 };
 gS.glslCombine = function (code, texture, ...args) {
-  return glslExtension.glslCombine(this, code, texture, ...args);
+  return _glslExtension.glslCombine(this, code, texture, ...args);
 };
 gS.glslBlend = gS.glslCombine;
 gS.glslCombineCoord = function (code, texture, ...args) {
-  return glslExtension.glslCombineCoord(this, code, texture, ...args);
+  return _glslExtension.glslCombineCoord(this, code, texture, ...args);
 };
 gS.glslModulate = gS.glslCombineCoord;
