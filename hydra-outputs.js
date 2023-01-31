@@ -19,7 +19,7 @@ oP.setFbos = function (fbo0, fbo1) {
   );
 };
 oP.setNearest = function () {
-  this.setFbos({});
+  this.setFbos({ mag: "nearest", min: "nearest" });
 };
 oP.setLinear = function () {
   this.setFbos({ mag: "linear", min: "linear" });
