@@ -105,19 +105,9 @@ setFunction({
 });
 wrapColorCombine("mult", "_mult_single", "_mult");
 
-setFunction({
-    name: "amp",
-    type: "color",
-    inputs: [{ name: "amp", type: "float", default: 1 }],
-    glsl: `return _c0 * amp;`,
-});
-gS.amplitude = gS.amplitude;
-setFunction({
-    name: "offset",
-    type: "color",
-    inputs: [{ name: "offset", type: "float", default: 0 }],
-    glsl: `return _c0 + offset;`,
-});
+gS.amp = gS._mult_single;
+gS.amplitude = gS.amp;
+gS.offset = gS._add_single;
 gS.off = gS.offset;
 
 setFunction({
