@@ -183,7 +183,7 @@ hwrap.generateFunctionListFromWrapper = function (wrapper) {
 hwrap.wrappers = {
   wrap: "fract(_st)",
   nowrap: "_st",
-  mirror: "(0.31830988618*asin(-sin(3.14159265359*_st+1.5707963268))+0.5)",
+  mirror: "-abs(fract(x/2.0)*2.0-1.0)+1.0",
 };
 
 hwrap.currentWrapper = hwrap.wrappers.wrap;
