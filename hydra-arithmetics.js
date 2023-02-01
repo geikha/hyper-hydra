@@ -110,16 +110,6 @@ gS.amplitude = gS.amp;
 gS.offset = gS._add_single;
 gS.off = gS.offset;
 
-setFunction({
-    name: "_clamp",
-    type: "color",
-    inputs: [
-        { name: "_min", type: "float", default: 0 },
-        { name: "_max", type: "float", default: 1 },
-    ],
-    glsl: `return clamp(_c0, _min, _max);`,
-});
-gS.clamp = gS._clamp;
 
 setFunction({
     name: "bipolar",
@@ -152,3 +142,13 @@ setFunction({
     ],
     glsl: `return ((_c0  + 1.0) * 0.5) * (_max - _min) + _min;`,
 });
+setFunction({
+    name: "_clamp",
+    type: "color",
+    inputs: [
+        { name: "_min", type: "float", default: 0 },
+        { name: "_max", type: "float", default: 1 },
+    ],
+    glsl: `return clamp(_c0, _min, _max);`,
+});
+gS.clamp = gS._clamp;
