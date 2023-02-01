@@ -5,10 +5,15 @@
     {
       type: 'float',
       name: 'pos',
-      default: 0.5,
+      default: 0,
+    },
+    {
+      type: 'float',
+      name: 'coverage',
+      default: 1,
     }
   ],
-  glsl: `_st.x = 0.0-abs(_st.x-pos)+0.5; return _st;`
+  glsl: `_st.x = (0.0-abs(fract(_st.x/coverage)-(1.0-0.5-pos))+0.5-pos)*coverage; return _st;`
 },
 {
   name: 'mirrorY',
@@ -17,10 +22,15 @@
     {
       type: 'float',
       name: 'pos',
-      default: 0.5,
+      default: 0,
+    },
+    {
+      type: 'float',
+      name: 'coverage',
+      default: 1,
     }
   ],
-  glsl: `_st.y = 0.0-abs(_st.y-pos)+0.5; return _st;`
+  glsl: `_st.y = (0.0-abs(fract(_st.y/coverage)-(1.0-0.5-pos))+0.5-pos)*coverage; return _st;`
 },
 {
   name: 'mirrorX2',
@@ -29,10 +39,15 @@
     {
       type: 'float',
       name: 'pos',
-      default: 0.5,
+      default: 0,
+    },
+    {
+      type: 'float',
+      name: 'coverage',
+      default: 1,
     }
   ],
-  glsl: `_st.y = abs(_st.y-pos)+0.5; return _st;`
+  glsl: `_st.x = (abs(fract(_st.x/coverage)-(1.0-0.5-pos))+0.5-pos)*coverage; return _st;`
 },
 {
   name: 'mirrorY2',
@@ -41,10 +56,21 @@
     {
       type: 'float',
       name: 'pos',
-      default: 0.5,
+      default: 0,
+    },
+    {
+      type: 'float',
+      name: 'coverage',
+      default: 1,
     }
   ],
-  glsl: `_st.y = abs(_st.y-pos)+0.5; return _st;`
+  glsl: `_st.y = (0.0-abs(fract(_st.y/coverage)-(1.0-0.5-pos))+0.5-pos)*coverage; return _st;`
+},
+{
+  name: 'mirrorWrap',
+  type: 'coord',
+  inputs: [],
+  glsl: `return -abs(fract(_st/2.0)*2.0-1.0)+1.0;`
 },
 {
   name: 'inversion',
