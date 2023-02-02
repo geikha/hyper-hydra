@@ -3,6 +3,8 @@
 // https://www.w3.org/TR/compositing-1
 // https://raw.githubusercontent.com/samarthgulati/hydra-blockly/master/image-editing-glsl-functions.js
 
+console.log("hydra-blending-modes is deprecated, I recomment using hydra-blend instead")
+
 var blendmodes_glsl_fns = [
   // vec3 darken( vec3 s, vec3 d )
   // {
