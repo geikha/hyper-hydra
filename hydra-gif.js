@@ -578,7 +578,7 @@ if (!window._updateChain) {
 
 window.hS = s0.constructor.prototype;
 
-hS.initGif = function (url) {
+hS.initGif = function (url,params) {
     const self = this;
     self.gifCanvas = document.createElement("canvas");
     self.gifCtx = self.gifCanvas.getContext("2d");
@@ -602,6 +602,6 @@ hS.initGif = function (url) {
                 //console.log(e);
             }
         };
-        self.init({ src: self.gifCanvas });
+        self.init({ src: self.gifCanvas },params);
     };
 };
