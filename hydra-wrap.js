@@ -132,11 +132,11 @@ oS.setClamp();
   },
 ].forEach((x) => setFunction(x));
 
-// hwrap
+// hydraWrap
 
-window.hwrap = {};
+window.hydraWrap = {};
 
-hwrap.defaultList = [
+hydraWrap.defaultList = [
   {
     name: "prev",
     type: "src",
@@ -169,65 +169,65 @@ hwrap.defaultList = [
   },
 ];
 
-hwrap.void = false;
+hydraWrap.void = false;
 
-hwrap.generateFunctionListFromWrapper = function (wrapper) {
-  return Array.from(hwrap.defaultList).map((_f) => {
+hydraWrap.generateFunctionListFromWrapper = function (wrapper) {
+  return Array.from(hydraWrap.defaultList).map((_f) => {
     let f = Object.assign({}, _f);
     f.glsl = f.glsl.replace("wrap(_st)", wrapper);
-    f.glsl = hwrap.void ? f.glsl.replaceAll("//c0", "c0") : f.glsl;
+    f.glsl = hydraWrap.void ? f.glsl.replaceAll("//c0", "c0") : f.glsl;
     return f;
   });
 };
 
-hwrap.wrappers = {
+hydraWrap.wrappers = {
   wrap: "fract(_st)",
   nowrap: "_st",
   mirror: "-abs(fract(_st/2.0)*2.0-1.0)+1.0",
 };
 
-hwrap.currentWrapper = hwrap.wrappers.wrap;
+hydraWrap.currentWrapper = hydraWrap.wrappers.wrap;
 
-hwrap.setWrap = function () {
-  hwrap.void = false;
-  hwrap.currentWrapper = hwrap.wrappers.wrap;
-  hwrap
-    .generateFunctionListFromWrapper(hwrap.wrappers.wrap)
+hydraWrap.setWrap = function () {
+  hydraWrap.void = false;
+  hydraWrap.currentWrapper = hydraWrap.wrappers.wrap;
+  hydraWrap
+    .generateFunctionListFromWrapper(hydraWrap.wrappers.wrap)
     .forEach((x) => setFunction(x));
 };
 
-hwrap.setRepeat = hwrap.setWrap;
+hydraWrap.setRepeat = hydraWrap.setWrap;
 
-hwrap.setNoWrap = function () {
-  hwrap.void = false;
-  hwrap.currentWrapper = hwrap.wrappers.nowrap;
-  hwrap
-    .generateFunctionListFromWrapper(hwrap.wrappers.nowrap)
+hydraWrap.setNoWrap = function () {
+  hydraWrap.void = false;
+  hydraWrap.currentWrapper = hydraWrap.wrappers.nowrap;
+  hydraWrap
+    .generateFunctionListFromWrapper(hydraWrap.wrappers.nowrap)
     .forEach((x) => setFunction(x));
 };
 
-hwrap.setClamp = hwrap.setNoWrap;
+hydraWrap.setClamp = hydraWrap.setNoWrap;
 
-hwrap.setMirror = function () {
-  hwrap.void = false;
-  hwrap.currentWrapper = hwrap.wrappers.mirror;
-  hwrap
-    .generateFunctionListFromWrapper(hwrap.wrappers.mirror)
+hydraWrap.setMirror = function () {
+  hydraWrap.void = false;
+  hydraWrap.currentWrapper = hydraWrap.wrappers.mirror;
+  hydraWrap
+    .generateFunctionListFromWrapper(hydraWrap.wrappers.mirror)
     .forEach((x) => setFunction(x));
 };
 
-hwrap.setCustom = function (wrapper = "_st") {
-  hwrap.void = false;
-  hwrap.currentWrapper = wrapper;
-  hwrap.generateFunctionListFromWrapper(wrapper).forEach((x) => setFunction(x));
+hydraWrap.setCustom = function (wrapper = "_st") {
+  hydraWrap.void = false;
+  hydraWrap.currentWrapper = wrapper;
+  hydraWrap.generateFunctionListFromWrapper(wrapper).forEach((x) => setFunction(x));
 };
 
 // setVoid should only be called after setting a wrapping mode
-hwrap.setVoid = function (to = true) {
-  hwrap.void = to;
-  hwrap
-    .generateFunctionListFromWrapper(hwrap.currentWrapper)
+hydraWrap.setVoid = function (to = true) {
+  hydraWrap.void = to;
+  hydraWrap
+    .generateFunctionListFromWrapper(hydraWrap.currentWrapper)
     .forEach((x) => setFunction(x));
 };
 
-hwrap.setWrap();
+hydraWrap.setWrap();
