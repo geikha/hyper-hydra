@@ -10,14 +10,14 @@ This extensions works by changing all coordinate functions (such as `scrollX`, `
 
 ## Functions
 
-You can access the different functions via the `hwrap` object.
+You can access the different functions via the `hydraWrap` object.
 
 | Method            | Description                                        |
 |-------------------|----------------------------------------------------|
-| hwrap.setWrap()   | Sets the wrapping on. This is the default.         |
-| hwrap.setNoWrap() | Disables wrapping. This means textures will clamp. |
-| hwrap.setMirror() | Sets the wrapping to mirror.                       |
-| hwrap.setVoid()   | Void does not actually change the wrapping method, but it means that **textures** won't render out of bounds coordinates instead of wrapping. |
+| hydraWrap.setWrap()   | Sets the wrapping on. This is the default.         |
+| hydraWrap.setNoWrap() | Disables wrapping. This means textures will clamp. |
+| hydraWrap.setMirror() | Sets the wrapping to mirror.                       |
+| hydraWrap.setVoid()   | Void does not actually change the wrapping method, but it means that **textures** won't render out of bounds coordinates instead of wrapping. |
 
 As mentioned above, this extensions also adds a new coordinate function named `wrap` which will set any generator to wrap. See the following example:
 

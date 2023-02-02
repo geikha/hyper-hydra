@@ -1,6 +1,6 @@
 # hydra-vec4
 
-Adds wrappers functions that allow you to construct vec4's like you would in GLSL.
+Adds wrapper functions that allow you to construct vec4's like you would in GLSL.
 
 ## Overview
 
