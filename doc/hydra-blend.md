@@ -6,6 +6,8 @@ A port of [glsl-blend](https://github.com/jamieowen/glsl-blend) to Hydra.
 
 This extension adds most of the blending modes that you see on raster image software to Hydra. You should use them with the following syntax: `tex.blendModeName(tex2, opacity)`, where tex and tex2 are any two Hydra textures and opacity is a number (or array or function as in regular Hydra).
 
+Please read the [disclaimer about alpha here below](#important)
+
 ## List of blending modes
 
 * darken
@@ -39,7 +41,9 @@ This extension adds most of the blending modes that you see on raster image soft
 
 ### Important
 
-This extension overwrites Hydra's `layer`, `luma` and `mask` in order for them to stricly use premultiplied alpha. This means that if something doesn't look as expected, it's probably because the textures you're using aren't premultiplied and in a range from 0.0 to 1.0. I could've handled this inside the blending modes but I didn't want to taker over your ability to purposefully glitch stuff. If something doesn't look as you expect it to look you can try to premultiply it by doing `tex.premultiply()` alias `tex.pm()`. It's a function I've added that will take care of any overloaded or mismatched values.
+This extension overwrites Hydra's `layer`, `luma` and `mask` in order for them to stricly use premultiplied alpha. This means that if something doesn't look as expected, it's probably because the textures you're using aren't premultiplied and in a range from 0.0 to 1.0. `noise` will surely give you problems as it ranges from -1 to 1.
+
+ I could've handled this inside the blending modes but I didn't want to taker over your ability to purposefully glitch stuff. If something doesn't look as you expect it to look you can try to premultiply it by doing `tex.premultiply()` alias `tex.pm()`. It's a function I've added that will take care of any overloaded or mismatched values.
 
 ### Note
 
