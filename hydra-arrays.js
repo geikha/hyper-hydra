@@ -48,8 +48,9 @@ harrays.newWrapOperator = function (self, f) {
 Array.prototype.shuffle = function () {
     return this.sort(() => Math.random() - 0.5);
 };
-Array.prototype.zfill = function (amt, z = 0) {
-    for (let i = 0; i < amt; i++) this.push(z);
+Array.prototype.zfill = function (l, z = 0) {
+    const _l = this.length;
+    for (let i = 0; i < l - _l; i++) this.push(z);
     return this;
 };
 Array.prototype.rotate = function (n) {
