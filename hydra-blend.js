@@ -115,8 +115,8 @@ setFunction({
     type: "color",
     inputs: [],
     glsl: ` 
-        float a = clamp(_c0.a,0.0,1.0);
-        return vec4(_c0.rgb*a,a);
+        _c0 = clamp(_c0,0.0,1.0);
+        return vec4(_c0.rgb*_c0.a,_c0.a);
         `,
 });
 
