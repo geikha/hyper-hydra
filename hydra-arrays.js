@@ -63,7 +63,7 @@ Array.prototype.rot = Array.prototype.rotate;
 Array.random = function (l = 10, min = 0, max = 1) {
     return Array.from(
         { length: l },
-        () => Math.random() * (max - min + 1) + min
+        () => Math.random() * (max - min) + min
     );
 };
 Array.range = function (start, end, step = 1) {
