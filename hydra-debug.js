@@ -42,6 +42,7 @@
     document.head.appendChild(script);
 }
 
+{
 function cleanCode(code) {
     return js_beautify(code).replace(/\n{2,}/gm, "\n\n") + "\n\n";
 }
@@ -136,3 +137,4 @@ gS.debug = function (output) {
     logHighlightedCode(this, output);
     return output ? this.out(output) : this;
 };
+}

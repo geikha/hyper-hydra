@@ -1,61 +1,64 @@
-const blendingFuncs = {
-    add2: "min(base+blend,1.0)",
-    average: "(base+blend)/2.0",
-    colorBurn: "(blend==0.0)?blend:max((1.0-((1.0-base)/blend)),0.0)",
-    colorDodge: "(blend==1.0)?blend:min(base/(1.0-blend),1.0)",
-    darken: "min(blend,base)",
-    difference: "abs(base-blend)",
-    divide: "min(base/(blend+0.00000001),1.0)",
-    exclusion: "base+blend-2.0*base*blend",
-    glow: "(base==1.0)?base:min(blend*blend/(1.0-base),1.0)",
-    hardLight: "blend<0.5?(2.0*blend*base):(1.0-2.0*(1.0-blend)*(1.0-base))",
-    hardMix:
-        "(((blend<0.5)?((blend==0.0)?(blend):max((1.0-((1.0-base)/(2.0*blend))),0.0)):(((2.0*(blend-0.5))==1.0)?(2.0*(blend-0.5)):min(base/(1.0-(2.0*(blend-0.5))),1.0)))<0.5)?0.0:1.0",
-    lighten: "max(blend,base)",
-    linearBurn: "max(base+blend-1.0,0.0)",
-    linearDodge: "min(base+blend,1.0)",
-    linearLight:
-        "blend<0.5?(max(base+(2.0*blend)-1.0,0.0)):min(base+(2.0*(blend-0.5)),1.0)",
-    multiply: "base*blend",
-    negation: "1.0-abs(1.0-base-blend)",
-    overlay: "base<0.5?(2.0*base*blend):(1.0-2.0*(1.0-base)*(1.0-blend))",
-    phoenix: "min(base,blend)-max(base,blend)+vec3(1.0)",
-    pinLight: "(blend<0.5)?min(base,2.0*blend):max(base,2.0*(blend-0.5))",
-    reflect: "(blend==1.0)?blend:min(base*base/(1.0-blend),1.0)",
-    screen: "1.0-((1.0-base)*(1.0-blend))",
-    softLight:
-        "(blend<0.5)?(2.0*base*blend+base*base*(1.0-2.0*blend)):(sqrt(base)*(2.0*blend-1.0)+2.0*base*(1.0-blend))",
-    subtract: "max(base+blend-1.0,0.0)",
-    vividLight:
-        "(blend<0.5)?((blend==0.0)?(blend):max((1.0-((1.0-base)/(2.0*blend))),0.0)):(((2.0*(blend-0.5))==1.0)?(2.0*(blend-0.5)):min(base/(1.0-(2.0*(blend-0.5))),1.0))",
-};
+{
+    const blendingFuncs = {
+        add2: "min(base+blend,1.0)",
+        average: "(base+blend)/2.0",
+        colorBurn: "(blend==0.0)?blend:max((1.0-((1.0-base)/blend)),0.0)",
+        colorDodge: "(blend==1.0)?blend:min(base/(1.0-blend),1.0)",
+        darken: "min(blend,base)",
+        difference: "abs(base-blend)",
+        divide: "min(base/(blend+0.00000001),1.0)",
+        exclusion: "base+blend-2.0*base*blend",
+        glow: "(base==1.0)?base:min(blend*blend/(1.0-base),1.0)",
+        hardLight:
+            "blend<0.5?(2.0*blend*base):(1.0-2.0*(1.0-blend)*(1.0-base))",
+        hardMix:
+            "(((blend<0.5)?((blend==0.0)?(blend):max((1.0-((1.0-base)/(2.0*blend))),0.0)):(((2.0*(blend-0.5))==1.0)?(2.0*(blend-0.5)):min(base/(1.0-(2.0*(blend-0.5))),1.0)))<0.5)?0.0:1.0",
+        lighten: "max(blend,base)",
+        linearBurn: "max(base+blend-1.0,0.0)",
+        linearDodge: "min(base+blend,1.0)",
+        linearLight:
+            "blend<0.5?(max(base+(2.0*blend)-1.0,0.0)):min(base+(2.0*(blend-0.5)),1.0)",
+        multiply: "base*blend",
+        negation: "1.0-abs(1.0-base-blend)",
+        overlay: "base<0.5?(2.0*base*blend):(1.0-2.0*(1.0-base)*(1.0-blend))",
+        phoenix: "min(base,blend)-max(base,blend)+vec3(1.0)",
+        pinLight: "(blend<0.5)?min(base,2.0*blend):max(base,2.0*(blend-0.5))",
+        reflect: "(blend==1.0)?blend:min(base*base/(1.0-blend),1.0)",
+        screen: "1.0-((1.0-base)*(1.0-blend))",
+        softLight:
+            "(blend<0.5)?(2.0*base*blend+base*base*(1.0-2.0*blend)):(sqrt(base)*(2.0*blend-1.0)+2.0*base*(1.0-blend))",
+        subtract: "max(base+blend-1.0,0.0)",
+        vividLight:
+            "(blend<0.5)?((blend==0.0)?(blend):max((1.0-((1.0-base)/(2.0*blend))),0.0)):(((2.0*(blend-0.5))==1.0)?(2.0*(blend-0.5)):min(base/(1.0-(2.0*(blend-0.5))),1.0))",
+    };
 
-Object.entries(blendingFuncs).forEach(([mode, def]) => {
-    let glsl =
-        "vec3 rgb;\n\n" +
-        //"_c0 = clamp(_c0, 0.0, 1.0);" +
-        //"_c1 = clamp(_c1, 0.0, 1.0);" +
-        ["r", "g", "b"].reduce((acc, elem) => {
-            return (
-                acc +
-                (`rgb.${elem} = ` +
-                    def
-                        .replaceAll("base", "_c0." + elem)
-                        .replaceAll("blend", "_c1." + elem) +
-                    ";\n\n")
-            );
-        }, "") +
-        "_c1.a *= amount;" +
-        "vec4 blended = vec4(mix(_c0.rgb, rgb, _c1.a), 1.0);" +
-        "vec4 over = _c1+(_c0*(1.0-_c1.a));" +
-        "return mix(blended, over, 1.0-_c0.a);";
-    setFunction({
-        name: mode,
-        type: "combine",
-        inputs: [{ name: "amount", type: "float", default: 1 }],
-        glsl,
+    Object.entries(blendingFuncs).forEach(([mode, def]) => {
+        let glsl =
+            "vec3 rgb;\n\n" +
+            //"_c0 = clamp(_c0, 0.0, 1.0);" +
+            //"_c1 = clamp(_c1, 0.0, 1.0);" +
+            ["r", "g", "b"].reduce((acc, elem) => {
+                return (
+                    acc +
+                    (`rgb.${elem} = ` +
+                        def
+                            .replaceAll("base", "_c0." + elem)
+                            .replaceAll("blend", "_c1." + elem) +
+                        ";\n\n")
+                );
+            }, "") +
+            "_c1.a *= amount;" +
+            "vec4 blended = vec4(mix(_c0.rgb, rgb, _c1.a), 1.0);" +
+            "vec4 over = _c1+(_c0*(1.0-_c1.a));" +
+            "return mix(blended, over, 1.0-_c0.a);";
+        setFunction({
+            name: mode,
+            type: "combine",
+            inputs: [{ name: "amount", type: "float", default: 1 }],
+            glsl,
+        });
     });
-});
+}
 
 setFunction({
     name: "layer",
