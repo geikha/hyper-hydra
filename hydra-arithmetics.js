@@ -15,6 +15,7 @@ function wrapColorCombine(name, color, combine) {
     };
 }
 
+{
 const noInputs = (
     "abs,sign,fract," +
     "sin,cos,tan,asin,acos,atan," +
@@ -30,7 +31,9 @@ noInputs.forEach((name) => {
     });
     gS[name] = gS["_" + name];
 });
+}
 
+{
 const singleArgument = "mod,min,max,step".split(",");
 
 singleArgument.forEach((name) => {
@@ -48,6 +51,7 @@ singleArgument.forEach((name) => {
     });
     wrapColorCombine(name, "_" + name + "_single", "_" + name);
 });
+}
 
 setFunction({
     name: "_div",
@@ -67,7 +71,7 @@ setFunction({
     name: "_add",
     type: "combine",
     inputs: [{ type: "float", name: "amount", default: 1 }],
-    glsl: `return _c0 + _c1;`,
+    glsl: `return _c0 + (_c1*amount);`,
 });
 setFunction({
     name: "_add_single",
@@ -81,7 +85,7 @@ setFunction({
     name: "_sub",
     type: "combine",
     inputs: [{ type: "float", name: "amount", default: 1 }],
-    glsl: `return _c0 - _c1;`,
+    glsl: `return _c0 - (_c1*amount);`,
 });
 setFunction({
     name: "_sub_single",
