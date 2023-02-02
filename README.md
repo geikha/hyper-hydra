@@ -123,6 +123,42 @@ osc().rotate().debug(o0)
 
 ---
 
+### hydra-fractals
+
+Adds some functions that when feedbacked are useful for creating fractals. Thanks to [Kali](https://www.shadertoy.com/user/Kali) for the idea.
+
+[docs](./doc/hydra-fractals.md) / [url](https://hydra-extensions.glitch.me/hydra-fractals.js)
+
+```js
+src(o0)
+	.scale(.75)
+	.add(noise(2,1),.4)
+	.invert()
+	.inversion()
+	.mirrorX2()
+	.blend(o0,.3)
+	.out()
+```
+[open in hydra](https://hydra.ojack.xyz/?code=YXdhaXQlMjBsb2FkU2NyaXB0KCUyMmh0dHBzJTNBJTJGJTJGaHlkcmEtZXh0ZW5zaW9ucy5nbGl0Y2gubWUlMkZoeWRyYS1mcmFjdGFscy5qcyUyMiklMEFhd2FpdCUyMGxvYWRTY3JpcHQoJTIyaHR0cHMlM0ElMkYlMkZoeWRyYS1leHRlbnNpb25zLmdsaXRjaC5tZSUyRmh5ZHJhLW91dHB1dHMuanMlMjIpJTBBJTBBb1Muc2V0TGluZWFyKCklMEElMEFzcmMobzApJTBBJTA5LnNjYWxlKC43NSklMEElMDkuYWRkKG5vaXNlKDIlMkMxKSUyQy40KSUwQSUwOS5pbnZlcnQoKSUwQSUwOS5pbnZlcnNpb24oKSUwQSUwOS5taXJyb3JYMigpJTBBJTA5LmJsZW5kKG8wJTJDLjMpJTBBJTA5Lm91dCgp)
+
+---
+
+### hydra-gif
+
+Let's you load `.gif` files into Hydra.
+
+[docs](./doc/hydra-gif.md) / [url](https://hydra-extensions.glitch.me/hydra-gif.js)
+
+```js
+s0.initGif('https://i.giphy.com/media/kZqbBT64ECtjy/giphy.gif')
+
+src(s0)
+	.out()
+```
+[open in hydra](https://hydra.ojack.xyz/?code=YXdhaXQlMjBsb2FkU2NyaXB0KCUyMmh0dHBzJTNBJTJGJTJGaHlkcmEtZXh0ZW5zaW9ucy5nbGl0Y2gubWUlMkZoeWRyYS1naWYuanMlMjIpJTBBJTBBczAuaW5pdEdpZignaHR0cHMlM0ElMkYlMkZpLmdpcGh5LmNvbSUyRm1lZGlhJTJGa1pxYkJUNjRFQ3RqeSUyRmdpcGh5LmdpZicpJTBBJTBBc3JjKHMwKSUwQSUwOS5vdXQoKQ%3D%3D)
+
+---
+
 ### hydra-glsl
 
 Write GLSL code directly in your patches.
