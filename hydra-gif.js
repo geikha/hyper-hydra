@@ -575,7 +575,7 @@ if (!window._updateChain) {
 
 window.hS = s0.constructor.prototype;
 
-hS.initGif = function (url,params) {
+hS.initGif = function (url,delay,params) {
     const self = this;
     self.gifCanvas = document.createElement("canvas");
     self.gifCtx = self.gifCanvas.getContext("2d");
@@ -584,7 +584,7 @@ hS.initGif = function (url,params) {
     self.gif.load(url);
 
     self.gif.onloadall = () => {
-        self.gif.delay = self.gif.frames[0].delay;
+        self.gif.delay = delay ? delay : self.gif.frames[0].delay;
         self.gifCanvas.width = self.gif.width;
         self.gifCanvas.height = self.gif.height;
         window._updateChain[1 + Number(this.label.substring(1))] = () => {
