@@ -22,14 +22,15 @@
                 _h = window.h?.regl ? window.h : _h;
                 _h = window.H?.regl ? window.H : _h;
                 _h = window.hy?.regl ? window.hy : _h;
-                return h;
+                return _h;
         }
     };
     window._hydra = getHydra();
+    window._hydraScope = _hydra.sandbox.makeGlobal ? window : _hydra;
 }
 
 {
-    window.oP = _hydra.o[0].constructor.prototype;
+    const oP = _hydra.o[0].constructor.prototype;
 
     const regl = _hydra.o[0].regl;
     regl.attributes.preserveDrawingBuffer = true;

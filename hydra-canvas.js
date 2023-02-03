@@ -18,29 +18,30 @@
                 _h = window.h?.regl ? window.h : _h;
                 _h = window.H?.regl ? window.H : _h;
                 _h = window.hy?.regl ? window.hy : _h;
-                return h;
+                return _h;
         }
     };
     window._hydra = getHydra();
+    window._hydraScope = _hydra.sandbox.makeGlobal ? window : _hydra;
 }
 
-window.canvas = window._hydra.canvas;
+_hydraScope.canvas = window._hydra.canvas;
 
-canvas.setLinear = function () {
+_hydraScope.canvas.setLinear = function () {
     this.style.imageRendering = "auto";
 };
-canvas.setNearest = function () {
+_hydraScope.canvas.setNearest = function () {
     this.style.imageRendering = "pixelated";
 };
-canvas.setFullscreen = function (full = true) {
+_hydraScope.canvas.setFullscreen = function (full = true) {
     const set = full ? "100%" : "";
     this.style.width = set;
     this.style.height = set;
 };
-canvas.setAlign = function (align = "right") {
+_hydraScope.canvas.setAlign = function (align = "right") {
     this.parentElement.style["text-align"] = align;
 };
-canvas.setRelativeSize = function (ratio) {
+_hydraScope.canvas.setRelativeSize = function (ratio) {
     this.style.width = "" + width * ratio + "px";
     this.style.height = "" + height * ratio + "px";
 };

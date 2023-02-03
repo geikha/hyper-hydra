@@ -1,158 +1,186 @@
-window.gS = osc().constructor.prototype;
-
-function wrapColorCombine(name, color, combine) {
-    gS[name] = function (arg, ...args) {
-        isArgument =
-            typeof arg == "number" ||
-            typeof arg == "function" ||
-            typeof arg == "string" ||
-            arg.constructor.name == "Array";
-        return isArgument
-            ? this[color](arg)
-            : args.length
-            ? this[combine](arg, ...args)
-            : this[combine](arg);
+{
+    const getHydra = function () {
+        const whereami = window.choo?.state?.hydra
+            ? "editor"
+            : window.atom?.packages
+            ? "atom"
+            : "idk";
+        switch (whereami) {
+            case "editor":
+                return choo.state.hydra.hydra;
+            case "atom":
+                return global.atom.packages.loadedPackages["atom-hydra"]
+                    .mainModule.main.hydra;
+            case "idk":
+                let _h = undefined;
+                _h = window._hydra?.regl ? window._hydra : _h;
+                _h = window.hydra?.regl ? window.hydra : _h;
+                _h = window.h?.regl ? window.h : _h;
+                _h = window.H?.regl ? window.H : _h;
+                _h = window.hy?.regl ? window.hy : _h;
+                return _h;
+        }
     };
+    window._hydra = getHydra();
+    window._hydraScope = _hydra.sandbox.makeGlobal ? window : _hydra;
 }
 
 {
-const noInputs = (
-    "abs,sign,fract," +
-    "sin,cos,tan,asin,acos,atan," +
-    "exp,log,exp2,log2,sqrt,inversesqrt"
-).split(",");
+    const gS = _hydraScope.osc().constructor.prototype;
 
-noInputs.forEach((name) => {
-    setFunction({
-        name: "_" + name,
-        type: "color",
-        inputs: [],
-        glsl: `return ${name}(_c0);`,
-    });
-    gS[name] = gS["_" + name];
-});
-}
+    function wrapColorCombine(name, color, combine) {
+        gS[name] = function (arg, ...args) {
+            isArgument =
+                typeof arg == "number" ||
+                typeof arg == "function" ||
+                typeof arg == "string" ||
+                arg.constructor.name == "Array";
+            return isArgument
+                ? this[color](arg)
+                : args.length
+                ? this[combine](arg, ...args)
+                : this[combine](arg);
+        };
+    }
 
-{
-const singleArgument = "mod,min,max,step".split(",");
+    {
+        const noInputs = (
+            "abs,sign,fract," +
+            "sin,cos,tan,asin,acos,atan," +
+            "exp,log,exp2,log2,sqrt,inversesqrt"
+        ).split(",");
 
-singleArgument.forEach((name) => {
-    setFunction({
-        name: "_" + name,
+        noInputs.forEach((name) => {
+            _hydra.synth.setFunction({
+                name: "_" + name,
+                type: "color",
+                inputs: [],
+                glsl: `return ${name}(_c0);`,
+            });
+            gS[name] = gS["_" + name];
+        });
+    }
+
+    {
+        const singleArgument = "mod,min,max,step".split(",");
+
+        singleArgument.forEach((name) => {
+            _hydra.synth.setFunction({
+                name: "_" + name,
+                type: "combine",
+                inputs: [],
+                glsl: `return ${name}(_c0,_c1);`,
+            });
+            _hydra.synth.setFunction({
+                name: "_" + name + "_single",
+                type: "color",
+                inputs: [{ name: "_in", type: "float", default: 1 }],
+                glsl: `return ${name}(_c0,_in);`,
+            });
+            wrapColorCombine(name, "_" + name + "_single", "_" + name);
+        });
+    }
+
+    _hydra.synth.setFunction({
+        name: "_div",
         type: "combine",
         inputs: [],
-        glsl: `return ${name}(_c0,_c1);`,
+        glsl: `return _c0 / _c1;`,
     });
-    setFunction({
-        name: "_" + name + "_single",
+    _hydra.synth.setFunction({
+        name: "_div_single",
         type: "color",
         inputs: [{ name: "_in", type: "float", default: 1 }],
-        glsl: `return ${name}(_c0,_in);`,
+        glsl: `return _c0 / _in;`,
     });
-    wrapColorCombine(name, "_" + name + "_single", "_" + name);
-});
+    wrapColorCombine("div", "_div_single", "_div");
+
+    _hydra.synth.setFunction({
+        name: "_add",
+        type: "combine",
+        inputs: [{ type: "float", name: "amount", default: 1 }],
+        glsl: `return _c0 + (_c1*amount);`,
+    });
+    _hydra.synth.setFunction({
+        name: "_add_single",
+        type: "color",
+        inputs: [{ name: "_in", type: "float", default: 1 }],
+        glsl: `return _c0 + _in;`,
+    });
+    wrapColorCombine("add", "_add_single", "_add");
+
+    _hydra.synth.setFunction({
+        name: "_sub",
+        type: "combine",
+        inputs: [{ type: "float", name: "amount", default: 1 }],
+        glsl: `return _c0 - (_c1*amount);`,
+    });
+    _hydra.synth.setFunction({
+        name: "_sub_single",
+        type: "color",
+        inputs: [{ name: "_in", type: "float", default: 1 }],
+        glsl: `return _c0 - _in;`,
+    });
+    wrapColorCombine("sub", "_sub_single", "_sub");
+
+    _hydra.synth.setFunction({
+        name: "_mult",
+        type: "combine",
+        inputs: [{ type: "float", name: "amount", default: 1 }],
+        glsl: `return _c0*(1.0-amount)+(_c0*_c1)*amount;`,
+    });
+    _hydra.synth.setFunction({
+        name: "_mult_single",
+        type: "color",
+        inputs: [{ name: "_in", type: "float", default: 1 }],
+        glsl: `return _c0 * _in;`,
+    });
+    wrapColorCombine("mult", "_mult_single", "_mult");
+
+    gS.amp = gS._mult_single;
+    gS.amplitude = gS.amp;
+    gS.offset = gS._add_single;
+    gS.off = gS.offset;
+
+    _hydra.synth.setFunction({
+        name: "bipolar",
+        type: "color",
+        inputs: [{ name: "amp", type: "float", default: 1 }],
+        glsl: `return ((_c0  * 2.0) - 1.0) * amp;`,
+    });
+    _hydra.synth.setFunction({
+        name: "unipolar",
+        type: "color",
+        inputs: [{ name: "amp", type: "float", default: 1 }],
+        glsl: `return ((_c0  + 1.0) * 0.5) * amp;`,
+    });
+
+    _hydra.synth.setFunction({
+        name: "range",
+        type: "color",
+        inputs: [
+            { name: "_min", type: "float", default: 0 },
+            { name: "_max", type: "float", default: 1 },
+        ],
+        glsl: `return _c0 * (_max - _min) + _min;`,
+    });
+    _hydra.synth.setFunction({
+        name: "birange",
+        type: "color",
+        inputs: [
+            { name: "_min", type: "float", default: 0 },
+            { name: "_max", type: "float", default: 1 },
+        ],
+        glsl: `return ((_c0  + 1.0) * 0.5) * (_max - _min) + _min;`,
+    });
+    _hydra.synth.setFunction({
+        name: "_clamp",
+        type: "color",
+        inputs: [
+            { name: "_min", type: "float", default: 0 },
+            { name: "_max", type: "float", default: 1 },
+        ],
+        glsl: `return clamp(_c0, _min, _max);`,
+    });
+    gS.clamp = gS._clamp;
 }
-
-setFunction({
-    name: "_div",
-    type: "combine",
-    inputs: [],
-    glsl: `return _c0 / _c1;`,
-});
-setFunction({
-    name: "_div_single",
-    type: "color",
-    inputs: [{ name: "_in", type: "float", default: 1 }],
-    glsl: `return _c0 / _in;`,
-});
-wrapColorCombine("div", "_div_single", "_div");
-
-setFunction({
-    name: "_add",
-    type: "combine",
-    inputs: [{ type: "float", name: "amount", default: 1 }],
-    glsl: `return _c0 + (_c1*amount);`,
-});
-setFunction({
-    name: "_add_single",
-    type: "color",
-    inputs: [{ name: "_in", type: "float", default: 1 }],
-    glsl: `return _c0 + _in;`,
-});
-wrapColorCombine("add", "_add_single", "_add");
-
-setFunction({
-    name: "_sub",
-    type: "combine",
-    inputs: [{ type: "float", name: "amount", default: 1 }],
-    glsl: `return _c0 - (_c1*amount);`,
-});
-setFunction({
-    name: "_sub_single",
-    type: "color",
-    inputs: [{ name: "_in", type: "float", default: 1 }],
-    glsl: `return _c0 - _in;`,
-});
-wrapColorCombine("sub", "_sub_single", "_sub");
-
-setFunction({
-    name: "_mult",
-    type: "combine",
-    inputs: [{ type: "float", name: "amount", default: 1 }],
-    glsl: `return _c0*(1.0-amount)+(_c0*_c1)*amount;`,
-});
-setFunction({
-    name: "_mult_single",
-    type: "color",
-    inputs: [{ name: "_in", type: "float", default: 1 }],
-    glsl: `return _c0 * _in;`,
-});
-wrapColorCombine("mult", "_mult_single", "_mult");
-
-gS.amp = gS._mult_single;
-gS.amplitude = gS.amp;
-gS.offset = gS._add_single;
-gS.off = gS.offset;
-
-
-setFunction({
-    name: "bipolar",
-    type: "color",
-    inputs: [{ name: "amp", type: "float", default: 1 }],
-    glsl: `return ((_c0  * 2.0) - 1.0) * amp;`,
-});
-setFunction({
-    name: "unipolar",
-    type: "color",
-    inputs: [{ name: "amp", type: "float", default: 1 }],
-    glsl: `return ((_c0  + 1.0) * 0.5) * amp;`,
-});
-
-setFunction({
-    name: "range",
-    type: "color",
-    inputs: [
-        { name: "_min", type: "float", default: 0 },
-        { name: "_max", type: "float", default: 1 },
-    ],
-    glsl: `return _c0 * (_max - _min) + _min;`,
-});
-setFunction({
-    name: "birange",
-    type: "color",
-    inputs: [
-        { name: "_min", type: "float", default: 0 },
-        { name: "_max", type: "float", default: 1 },
-    ],
-    glsl: `return ((_c0  + 1.0) * 0.5) * (_max - _min) + _min;`,
-});
-setFunction({
-    name: "_clamp",
-    type: "color",
-    inputs: [
-        { name: "_min", type: "float", default: 0 },
-        { name: "_max", type: "float", default: 1 },
-    ],
-    glsl: `return clamp(_c0, _min, _max);`,
-});
-gS.clamp = gS._clamp;

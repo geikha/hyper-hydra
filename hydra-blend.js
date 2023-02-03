@@ -1,4 +1,31 @@
 {
+    const getHydra = function () {
+        const whereami = window.choo?.state?.hydra
+            ? "editor"
+            : window.atom?.packages
+            ? "atom"
+            : "idk";
+        switch (whereami) {
+            case "editor":
+                return choo.state.hydra.hydra;
+            case "atom":
+                return global.atom.packages.loadedPackages["atom-hydra"]
+                    .mainModule.main.hydra;
+            case "idk":
+                let _h = undefined;
+                _h = window._hydra?.regl ? window._hydra : _h;
+                _h = window.hydra?.regl ? window.hydra : _h;
+                _h = window.h?.regl ? window.h : _h;
+                _h = window.H?.regl ? window.H : _h;
+                _h = window.hy?.regl ? window.hy : _h;
+                return _h;
+        }
+    };
+    window._hydra = getHydra();
+    window._hydraScope = _hydra.sandbox.makeGlobal ? window : _hydra;
+}
+
+{
     const blendingFuncs = {
         add2: "min(base+blend,1.0)",
         average: "(base+blend)/2.0",
@@ -51,7 +78,7 @@
             "vec4 blended = vec4(mix(_c0.rgb, rgb, _c1.a), 1.0);" +
             "vec4 over = _c1+(_c0*(1.0-_c1.a));" +
             "return mix(blended, over, 1.0-_c0.a);";
-        setFunction({
+        _hydra.synth.setFunction({
             name: mode,
             type: "combine",
             inputs: [{ name: "amount", type: "float", default: 1 }],
@@ -60,7 +87,7 @@
     });
 }
 
-setFunction({
+_hydra.synth.setFunction({
     name: "layer",
     type: "combine",
     inputs: [
@@ -76,7 +103,7 @@ setFunction({
         return _c1+(_c0*(1.0-_c1.a));
         `,
 });
-setFunction({
+_hydra.synth.setFunction({
     name: "mask",
     type: "combine",
     inputs: [],
@@ -85,7 +112,7 @@ setFunction({
         return vec4(_c0.rgb*a, _c0.a*a);
         `,
 });
-setFunction({
+_hydra.synth.setFunction({
     name: "luma",
     type: "color",
     inputs: [
@@ -105,7 +132,7 @@ setFunction({
         return vec4(_c0.rgb*a, a);
         `,
 });
-setFunction({
+_hydra.synth.setFunction({
     name: "clamp",
     type: "color",
     inputs: [],
@@ -113,7 +140,7 @@ setFunction({
         return clamp(_c0,0.0,1.0);
         `,
 });
-setFunction({
+_hydra.synth.setFunction({
     name: "premultiply",
     type: "color",
     inputs: [],
@@ -123,8 +150,10 @@ setFunction({
         `,
 });
 
-window.gS = osc().constructor.prototype;
+{
+    const gS = _hydraScope.osc().constructor.prototype;
 
-gS.pm = gS.premultiply;
+    gS.pm = gS.premultiply;
 
-gS.negate = gS.negation;
+    gS.negate = gS.negation;
+}

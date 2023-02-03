@@ -18,44 +18,55 @@
                 _h = window.h?.regl ? window.h : _h;
                 _h = window.H?.regl ? window.H : _h;
                 _h = window.hy?.regl ? window.hy : _h;
-                return h;
+                return _h;
         }
     };
     window._hydra = getHydra();
+    window._hydraScope = _hydra.sandbox.makeGlobal ? window : _hydra;
 }
 
 {
     const canvas = _hydra.canvas;
-    window.srcMask = function(tex){
-        return src(tex).mask(shape(4,1,0))
-    }
-    window.srcAbs = function (tex) {
-        if (!tex.src) return src(tex);
-        const w = () => tex.src.width;
-        const h = () => tex.src.height;
-        return src(tex).scale(
+    const scope = (_hydraScope.srcMask = function (tex) {
+        return _hydraScope.src(tex).mask(shape(4, 1, 0));
+    });
+    _hydraScope.srcAbs = function (tex) {
+        if (!tex.hasOwnProperty("src")) return src(tex);
+        const w = () => tex.src?.width || tex.src?.videoWidth || 0;
+        const h = () => tex.src?.height || tex.src?.videoHeight || 0;
+        return _hydraScope.src(tex).scale(
             1,
             () => w() / canvas.clientWidth,
             () => h() / canvas.clientHeight
         );
     };
-    window.srcAbsMask = function (tex) {
-        if (!tex.src) return src(tex);
-        const w = () => tex.src.width;
-        const h = () => tex.src.height;
-        return srcMask(tex).scale(
+    _hydraScope.srcAbsMask = function (tex) {
+        if (!tex.hasOwnProperty("src")) return src(tex);
+        const w = () => tex.src?.width || tex.src?.videoWidth || 0;
+        const h = () => tex.src?.height || tex.src?.videoHeight || 0;
+        return _hydraScope.srcMask(tex).scale(
             1,
             () => w() / canvas.clientWidth,
             () => h() / canvas.clientHeight
         );
     };
-    window.srcRel = function (tex) {
-        if (!tex.src) return src(tex);
-        const w = () => tex.src.width / tex.src.height;
-        const h = () => tex.src.height / tex.src.width;
+    _hydraScope.srcRel = function (tex) {
+        if (!tex.hasOwnProperty("src")) return src(tex);
+        const w = () =>
+            tex.src?.width
+                ? tex.src?.width / tex.src?.height
+                : tex.src?.videoWidth
+                ? tex.src?.videoWidth / tex.src?.videoHeight
+                : 0;
+        const h = () =>
+            tex.src?.height
+                ? tex.src?.height / tex.src?.width
+                : tex.src?.videoHeight
+                ? tex.src?.videoHeight / tex.src?.videoWidth
+                : 0;
         const cw = () => canvas.clientWidth / canvas.clientHeight;
         const ch = () => canvas.clientHeight / canvas.clientWidth;
-        return src(tex).scale(
+        return _hydraScope.src(tex).scale(
             1,
             () => {
                 _cw = cw();
@@ -69,13 +80,23 @@
             }
         );
     };
-    window.srcRelMask = function (tex) {
-        if (!tex.src) return src(tex);
-        const w = () => tex.src.width / tex.src.height;
-        const h = () => tex.src.height / tex.src.width;
+    _hydraScope.srcRelMask = function (tex) {
+        if (!tex.hasOwnProperty("src")) return src(tex);
+        const w = () =>
+            tex.src?.width
+                ? tex.src?.width / tex.src?.height
+                : tex.src?.videoWidth
+                ? tex.src?.videoWidth / tex.src?.videoHeight
+                : 0;
+        const h = () =>
+            tex.src?.height
+                ? tex.src?.height / tex.src?.width
+                : tex.src?.videoHeight
+                ? tex.src?.videoHeight / tex.src?.videoWidth
+                : 0;
         const cw = () => canvas.clientWidth / canvas.clientHeight;
         const ch = () => canvas.clientHeight / canvas.clientWidth;
-        return srcMask(tex).scale(
+        return _hydraScope.srcMask(tex).scale(
             1,
             () => {
                 _cw = cw();

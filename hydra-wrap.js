@@ -23,43 +23,48 @@
                 _h = window.h?.regl ? window.h : _h;
                 _h = window.H?.regl ? window.H : _h;
                 _h = window.hy?.regl ? window.hy : _h;
-                return h;
+                return _h;
         }
     };
     window._hydra = getHydra();
+    window._hydraScope = _hydra.sandbox.makeGlobal ? window : _hydra;
 }
 
-window.oP = _hydra.o[0].constructor.prototype;
-
-oP.fboSettings = oP.fboSettings
-    ? oP.fboSettings
-    : Array(2).fill({
-          mag: "nearest",
-          min: "nearest",
-          width: width,
-          height: height,
-          format: "rgba",
-      });
-oP.setFbos = function (fbo0, fbo1) {
-    var colors = fbo1 ? [fbo0, fbo1] : [fbo0, fbo0];
-    this.fboSettings = colors.map((x, i) => {
-        return { ...this.fboSettings[i], width: width, height: height, ...x };
+{
+    const oP = _hydra.o[0].constructor.prototype;
+    oP.fboSettings = Array(2).fill({
+        mag: "nearest",
+        min: "nearest",
+        width: width,
+        height: height,
+        format: "rgba",
     });
-    this.fbos = this.fboSettings.map((x) =>
-        this.regl.framebuffer({
-            color: this.regl.texture(x),
-            depthStencil: false,
-        })
-    );
-};
-window.oS = { outputs: choo.state.hydra.hydra.o };
-oP.setClamp = function () {
-    this.setFbos({ wrapS: "clamp", wrapT: "clamp" });
-};
-oS.setClamp = function () {
-    this.outputs.forEach((x) => x.setClamp());
-};
-oS.setClamp();
+    oP.setFbos = function (fbo0, fbo1) {
+        var colors = fbo1 ? [fbo0, fbo1] : [fbo0, fbo0];
+        this.fboSettings = colors.map((x, i) => {
+            return {
+                ...this.fboSettings[i],
+                width: width,
+                height: height,
+                ...x,
+            };
+        });
+        this.fbos = this.fboSettings.map((x) =>
+            this.regl.framebuffer({
+                color: this.regl.texture(x),
+                depthStencil: false,
+            })
+        );
+    };
+    oP.setClamp = function () {
+        this.setFbos({ wrapS: "clamp", wrapT: "clamp" });
+    };
+    _hydraScope.oS = { outputs: window._hydra.o };
+    _hydraScope.oS.setClamp = function () {
+        this.outputs.forEach((x) => x.setClamp());
+    };
+    _hydraScope.oS.setClamp();
+}
 
 // set all coord functions to no-wrap
 [
@@ -158,7 +163,7 @@ oS.setClamp();
         ],
         glsl: ` _st.y += _c0.r*scrollY + time*speed; return _st;`,
     },
-].forEach((x) => setFunction(x));
+].forEach((x) => _hydra.synth.setFunction(x));
 
 // hydraWrap
 
@@ -221,7 +226,7 @@ hydraWrap.setWrap = function () {
     hydraWrap.currentWrapper = hydraWrap.wrappers.wrap;
     hydraWrap
         .generateFunctionListFromWrapper(hydraWrap.wrappers.wrap)
-        .forEach((x) => setFunction(x));
+        .forEach((x) => _hydra.synth.setFunction(x));
 };
 
 hydraWrap.setRepeat = hydraWrap.setWrap;
@@ -231,7 +236,7 @@ hydraWrap.setNoWrap = function () {
     hydraWrap.currentWrapper = hydraWrap.wrappers.nowrap;
     hydraWrap
         .generateFunctionListFromWrapper(hydraWrap.wrappers.nowrap)
-        .forEach((x) => setFunction(x));
+        .forEach((x) => _hydra.synth.setFunction(x));
 };
 
 hydraWrap.setClamp = hydraWrap.setNoWrap;
@@ -241,7 +246,7 @@ hydraWrap.setMirror = function () {
     hydraWrap.currentWrapper = hydraWrap.wrappers.mirror;
     hydraWrap
         .generateFunctionListFromWrapper(hydraWrap.wrappers.mirror)
-        .forEach((x) => setFunction(x));
+        .forEach((x) => _hydra.synth.setFunction(x));
 };
 
 hydraWrap.setCustom = function (wrapper = "_st") {
@@ -249,7 +254,7 @@ hydraWrap.setCustom = function (wrapper = "_st") {
     hydraWrap.currentWrapper = wrapper;
     hydraWrap
         .generateFunctionListFromWrapper(wrapper)
-        .forEach((x) => setFunction(x));
+        .forEach((x) => _hydra.synth.setFunction(x));
 };
 
 // setVoid should only be called after setting a wrapping mode
@@ -257,7 +262,7 @@ hydraWrap.setVoid = function (to = true) {
     hydraWrap.void = to;
     hydraWrap
         .generateFunctionListFromWrapper(hydraWrap.currentWrapper)
-        .forEach((x) => setFunction(x));
+        .forEach((x) => _hydra.synth.setFunction(x));
 };
 
 hydraWrap.setWrap();

@@ -1,4 +1,32 @@
 {
+    const getHydra = function () {
+        const whereami = window.choo?.state?.hydra
+            ? "editor"
+            : window.atom?.packages
+            ? "atom"
+            : "idk";
+        switch (whereami) {
+            case "editor":
+                return choo.state.hydra.hydra;
+            case "atom":
+                return global.atom.packages.loadedPackages["atom-hydra"]
+                    .mainModule.main.hydra;
+            case "idk":
+                let _h = undefined;
+                _h = window._hydra?.regl ? window._hydra : _h;
+                _h = window.hydra?.regl ? window.hydra : _h;
+                _h = window.h?.regl ? window.h : _h;
+                _h = window.H?.regl ? window.H : _h;
+                _h = window.hy?.regl ? window.hy : _h;
+                return _h;
+        }
+    };
+    window._hydra = getHydra();
+    window._hydraScope = _hydra.sandbox.makeGlobal ? window : _hydra;
+}
+
+{
+    const gS = _hydraScope.osc().constructor.prototype;
     // https://stackoverflow.com/questions/34127294/
     function getSwizzles(coords) {
         function combinations(input, length, curstr) {
@@ -21,8 +49,6 @@
 
     const fourComponents = [].concat(getSwizzles("rgba"), getSwizzles("xyzw"));
 
-    window.gS = osc().constructor.prototype;
-
     function definePropertyFromMethod(method, newName = "") {
         newName = newName ? newName : method;
         Object.defineProperty(gS, newName, {
@@ -35,7 +61,7 @@
 
     threeComponents.forEach((swizzle) => {
         const name = "_" + swizzle;
-        setFunction({
+        _hydra.synth.setFunction({
             name,
             type: "color",
             inputs: [],
@@ -45,7 +71,7 @@
     });
     fourComponents.forEach((swizzle) => {
         const name = "_" + swizzle;
-        setFunction({
+        _hydra.synth.setFunction({
             name,
             type: "color",
             inputs: [],
@@ -55,7 +81,7 @@
     });
     Array.from("rgbaxyzw").forEach((elem) => {
         const name = "_swizzle_" + elem;
-        setFunction({
+        _hydra.synth.setFunction({
             name,
             type: "color",
             inputs: [],

@@ -3,9 +3,35 @@
 //by RITCHSE
 //docs: https://github.com/ritchse/hydra-extensions/blob/main/doc/hydra-glsl.md
 
-window.gS = osc().constructor.prototype;
+{
+    const getHydra = function () {
+        const whereami = window.choo?.state?.hydra
+            ? "editor"
+            : window.atom?.packages
+            ? "atom"
+            : "idk";
+        switch (whereami) {
+            case "editor":
+                return choo.state.hydra.hydra;
+            case "atom":
+                return global.atom.packages.loadedPackages["atom-hydra"]
+                    .mainModule.main.hydra;
+            case "idk":
+                let _h = undefined;
+                _h = window._hydra?.regl ? window._hydra : _h;
+                _h = window.hydra?.regl ? window.hydra : _h;
+                _h = window.h?.regl ? window.h : _h;
+                _h = window.H?.regl ? window.H : _h;
+                _h = window.hy?.regl ? window.hy : _h;
+                return _h;
+        }
+    };
+    window._hydra = getHydra();
+    window._hydraScope = _hydra.sandbox.makeGlobal ? window : _hydra;
+}
 
 {
+    const gS = _hydraScope.osc().constructor.prototype;
     const _glslExtension = {
         inputArray: () =>
             new Array(10)
@@ -58,7 +84,7 @@ window.gS = osc().constructor.prototype;
             let obj = data[0];
             args = data[1];
             obj.glsl = prefix + this.checkCode(code);
-            setFunction(obj);
+            _hydra.synth.setFunction(obj);
             return globalThis[obj.name](...args);
         },
         glslColor: function (self, code, ...args) {
@@ -70,7 +96,7 @@ window.gS = osc().constructor.prototype;
             let obj = data[0];
             args = data[1];
             obj.glsl = prefix + this.checkCode(code);
-            setFunction(obj);
+            _hydra.synth.setFunction(obj);
             return gS[obj.name].bind(self)(...args);
         },
         glslHsv: function (self, code, ...args) {
@@ -88,7 +114,7 @@ window.gS = osc().constructor.prototype;
             let obj = data[0];
             args = data[1];
             obj.glsl = prefix + this.checkCode(code);
-            setFunction(obj);
+            _hydra.synth.setFunction(obj);
             return gS[obj.name].bind(self)(...args);
         },
         glslCombine: function (self, code, texture, ...args) {
@@ -103,7 +129,7 @@ window.gS = osc().constructor.prototype;
             args = data[1];
             args.unshift(texture);
             obj.glsl = prefix + this.checkCode(code);
-            setFunction(obj);
+            _hydra.synth.setFunction(obj);
             return gS[obj.name].bind(self)(...args);
         },
         glslCombineCoord: function (self, code, texture, ...args) {
@@ -119,12 +145,12 @@ window.gS = osc().constructor.prototype;
             args = data[1];
             args.unshift(texture);
             obj.glsl = prefix + this.checkCode(code);
-            setFunction(obj);
+            _hydra.synth.setFunction(obj);
             return gS[obj.name].bind(self)(...args);
         },
     };
 
-    window.glsl = _glslExtension.glslSource.bind(_glslExtension);
+    _hydraScope.glsl = _glslExtension.glslSource.bind(_glslExtension);
     gS.glslColor = function (code, ...args) {
         return _glslExtension.glslColor(this, code, ...args);
     };

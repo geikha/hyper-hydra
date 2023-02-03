@@ -553,10 +553,11 @@ window.GIF = function () {
                 _h = window.h?.regl ? window.h : _h;
                 _h = window.H?.regl ? window.H : _h;
                 _h = window.hy?.regl ? window.hy : _h;
-                return h;
+                return _h;
         }
     };
     window._hydra = getHydra();
+    window._hydraScope = _hydra.sandbox.makeGlobal ? window : _hydra;
 }
 
 if (!window._updateChain) {
@@ -573,33 +574,35 @@ if (!window._updateChain) {
     });
 }
 
-window.hS = _hydra.s[0].constructor.prototype;
+{
+    const hS = _hydra.s[0].constructor.prototype;
 
-hS.initGif = function (url,delay,params) {
-    const self = this;
-    self.gifCanvas = document.createElement("canvas");
-    self.gifCtx = self.gifCanvas.getContext("2d");
+    hS.initGif = function (url, delay, params) {
+        const self = this;
+        self.gifCanvas = document.createElement("canvas");
+        self.gifCtx = self.gifCanvas.getContext("2d");
 
-    self.gif = new GIF();
-    self.gif.load(url);
+        self.gif = new GIF();
+        self.gif.load(url);
 
-    self.gif.onloadall = () => {
-        self.gif.delay = delay ? delay : self.gif.frames[0].delay;
-        self.gifCanvas.width = self.gif.width;
-        self.gifCanvas.height = self.gif.height;
-        window._updateChain[1 + Number(this.label.substring(1))] = () => {
-            try {
-                self.gifCtx.clearRect(
-                    0,
-                    0,
-                    self.gifCanvas.width,
-                    self.gifCanvas.height
-                );
-                self.gifCtx.drawImage(self.gif.image, 0, 0);
-            } catch (e) {
-                //console.log(e);
-            }
+        self.gif.onloadall = () => {
+            self.gif.delay = delay ? delay : self.gif.frames[0].delay;
+            self.gifCanvas.width = self.gif.width;
+            self.gifCanvas.height = self.gif.height;
+            window._updateChain[1 + Number(this.label.substring(1))] = () => {
+                try {
+                    self.gifCtx.clearRect(
+                        0,
+                        0,
+                        self.gifCanvas.width,
+                        self.gifCanvas.height
+                    );
+                    self.gifCtx.drawImage(self.gif.image, 0, 0);
+                } catch (e) {
+                    //console.log(e);
+                }
+            };
+            self.init({ src: self.gifCanvas }, params);
         };
-        self.init({ src: self.gifCanvas },params);
     };
-};
+}

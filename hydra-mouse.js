@@ -18,10 +18,11 @@
                 _h = window.h?.regl ? window.h : _h;
                 _h = window.H?.regl ? window.H : _h;
                 _h = window.hy?.regl ? window.hy : _h;
-                return h;
+                return _h;
         }
     };
     window._hydra = getHydra();
+    window._hydraScope = _hydra.sandbox.makeGlobal ? window : _hydra;
 }
 
 function Mouse(canvas) {
@@ -68,4 +69,4 @@ function Mouse(canvas) {
     window.addEventListener("pointermove", this.handlePointerMove);
 }
 
-window.mouse = new Mouse(window._hydra.canvas);
+_hydraScope.mouse = new Mouse(window._hydra.canvas);

@@ -1,4 +1,31 @@
-window.gS = osc().constructor.prototype;
+{
+    const getHydra = function () {
+        const whereami = window.choo?.state?.hydra
+            ? "editor"
+            : window.atom?.packages
+            ? "atom"
+            : "idk";
+        switch (whereami) {
+            case "editor":
+                return choo.state.hydra.hydra;
+            case "atom":
+                return global.atom.packages.loadedPackages["atom-hydra"]
+                    .mainModule.main.hydra;
+            case "idk":
+                let _h = undefined;
+                _h = window._hydra?.regl ? window._hydra : _h;
+                _h = window.hydra?.regl ? window.hydra : _h;
+                _h = window.h?.regl ? window.h : _h;
+                _h = window.H?.regl ? window.H : _h;
+                _h = window.hy?.regl ? window.hy : _h;
+                return _h;
+        }
+    };
+    window._hydra = getHydra();
+    window._hydraScope = _hydra.sandbox.makeGlobal ? window : _hydra;
+}
+
+window.gS = _hydraScope.osc().constructor.prototype;
 
 {
     const hcs = {};
@@ -514,7 +541,7 @@ window.gS = osc().constructor.prototype;
             )
             .flat(99)
             .filter((x) => x)
-            .forEach((x) => setFunction(x));
+            .forEach((x) => _hydra.synth.setFunction(x));
     };
 
     hcs.cloneGlslSource = function (_tex) {
@@ -568,7 +595,7 @@ window.gS = osc().constructor.prototype;
             getterDefinition += "};";
             getterDefinition +=
                 "Object.assign(func,props);" + "return func; }, });";
-            getterDefinition += "window.#cs = window.#cs_solid;";
+            getterDefinition += "_hydraScope.#cs = _hydraScope.#cs_solid;";
             getterDefinition = getterDefinition.replaceAll("#cs", cs.name);
             window.eval(getterDefinition);
         });
