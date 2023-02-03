@@ -135,7 +135,7 @@ Let's you convert back to RGBA, or interpret any color values as if they were fr
 
 ### Retrieving an element
 
-**`cs.el()`**
+**`.cs.el()`**
 * Example: `osc(40,.1,Math.PI/2).hsv.h().out()`
 * Alias: `.cs_el()`
 
@@ -145,7 +145,7 @@ These functions will work in the same way as Hydra's `r()`, `b()`, `g()`, and `a
 
 ### Setting an element
 
-**`cs.elSet( value = 1 )`**
+**`.cs.elSet( value = 1 )`**
 * Example: `osc(8,.1,2).hsv.sSet(.5).out()`
 * Alias: `.cs_el_set()`
 
@@ -159,7 +159,7 @@ Allows you to set the given element to a fixed value for all pixels. Shown in th
 
 #### Setting by a given texture
 
-**`cs.elFrom( texture , amt = 1 )`**
+**`.cs.elFrom( texture , amt = 1 )`**
 * Example: `rgb(1,0,0).hsl.sFrom(osc(9)).out()`
 * Alias: `.cs_el_from()`
 
@@ -167,7 +167,7 @@ Will set the value of the element to the value in the given texture. The `amt` a
 
 #### Multiplying by a given texture
 
-**`cs.elMultFrom( texture, amt = 1 )`**
+**`.cs.elMultFrom( texture, amt = 1 )`**
 * Example: `gradient().hsl.sMultFrom(osc(9)).out()`
 * Alias: `.cs_el_mult_from()`
 
@@ -175,7 +175,7 @@ Will multiply the given element's value by the given texture. The texture's valu
 
 #### Offsetting by a given texture
 
-**`cs.elOffsetFrom( texture, amt = 1 )`**
+**`.cs.elOffsetFrom( texture, amt = 1 )`**
 * Example: `gradient().hsl.hOffsetFrom(noise(1,2),.2).out()`
 * Alias: `.cs_el_mult_from()`
 
@@ -185,7 +185,7 @@ Will add the texture to the given value. The texture's value will be multiplied 
 
 ### Keying by a given element
 
-**`cs.elKey( topThreshold = 0.5 , topTolerance = 0.05 , bottomThreshold = 0 , bottomTolerance = 0 )`**
+**`.cs.elKey( topThreshold = 0.5 , topTolerance = 0.05 , bottomThreshold = 0 , bottomTolerance = 0 )`**
 * Example: `solid().layer(gradient(1).rgb.rKey(.5,0)).out()`
 * Alias: `.cs_el_key()`
 
@@ -197,7 +197,7 @@ Similar to Hydra's `luma()`, but instead of keying by luminance, you can key by 
 
 ### Applying a transform to a given element
 
-**`cs.elWith( f )`**
+**`.cs.elWith( f )`**
 * Example: `osc(10,.1,2).rotate().hsv.hWith(x=>x.pixelate(16,32)).out()`
 * Alias: `.cs_el_with()`
 
