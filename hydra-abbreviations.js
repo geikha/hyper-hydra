@@ -1,6 +1,6 @@
-//hydra-abbreviations
-//shorthands for all the funcs
-//by RITCHSE
+// hydra-abbreviations
+// diminutives for all the functions
+// by ritchse
 
 window.gS = osc().constructor.prototype;
 

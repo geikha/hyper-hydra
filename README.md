@@ -191,7 +191,7 @@ noise(1)
 
 ### hydra-outputs
 
-Change the properties of Hydra's output's framebuffers. Most importantly: try linear interpolation.
+Change the properties of Hydra's outputs' framebuffers. Most importantly: try linear interpolation.
 
 [docs](./doc/hydra-outputs.md) / [url](https://hydra-extensions.glitch.me/hydra-outputs.js)
 
