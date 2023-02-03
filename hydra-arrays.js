@@ -1,6 +1,6 @@
-window.harrays = {};
+window.hydraArrays = {};
 
-harrays.newOperator = function (self, f) {
+hydraArrays.newOperator = function (self, f) {
     return function (arr) {
         for (let i = 0; i < self.length; i++) {
             if (Array.isArray(arr)) {
@@ -12,7 +12,7 @@ harrays.newOperator = function (self, f) {
         return self;
     };
 };
-harrays.newWrapOperator = function (self, f) {
+hydraArrays.newWrapOperator = function (self, f) {
     return function (arr) {
         for (let i = 0; i < self.length; i++) {
             if (Array.isArray(arr)) {
@@ -36,10 +36,10 @@ harrays.newWrapOperator = function (self, f) {
     };
     Object.entries(operators).forEach(function ([op, f]) {
         Array.prototype[op] = function (arr) {
-            return harrays.newOperator(this, f)(arr);
+            return hydraArrays.newOperator(this, f)(arr);
         };
         Array.prototype[op + "Wrap"] = function (arr) {
-            return harrays.newWrapOperator(this, f)(arr);
+            return hydraArrays.newWrapOperator(this, f)(arr);
         };
     });
 }
