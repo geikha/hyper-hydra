@@ -573,7 +573,7 @@ if (!window._updateChain) {
     });
 }
 
-window.hS = s0.constructor.prototype;
+window.hS = _hydra.s[0].constructor.prototype;
 
 hS.initGif = function (url,delay,params) {
     const self = this;

@@ -112,6 +112,8 @@ gradient().rgb.aSet(0)
 
 ### hydra-debug
 
+**WARNING:** doesn't work in atom / pulsar
+
 Adds a `.debug()` function that allows you to easily read the fragment shader of your sketch and test changes in real time.
 
 [docs](./doc/hydra-debug.md) / [url](https://hydra-extensions.glitch.me/hydra-debug.js)
@@ -144,6 +146,8 @@ src(o0)
 ---
 
 ### hydra-gif
+
+**WARNING:** doesn't work on instance mode as of now
 
 Let's you load `.gif` files into Hydra.
 
