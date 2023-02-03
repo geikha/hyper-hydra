@@ -475,7 +475,6 @@ window.GIF = function () {
         }
     }
     function playing() {
-        var delay;
         var frame;
         if (gif.playSpeed === 0) {
             gif.pause();
@@ -491,15 +490,12 @@ window.GIF = function () {
                 if (frame < 0) {
                     frame = gif.frames.length - 1;
                 }
-                delay = (-gif.frames[frame].delay * 1) / gif.playSpeed;
             } else {
                 gif.currentFrame += 1;
                 gif.currentFrame %= gif.frames.length;
-                delay =
-                    (gif.frames[gif.currentFrame].delay * 1) / gif.playSpeed;
             }
             gif.image = gif.frames[gif.currentFrame].image;
-            timerID = setTimeout(playing, delay);
+            timerID = setTimeout(playing, gif.delay / gif.playSpeed);
         }
     }
     var gif = {
@@ -521,6 +517,7 @@ window.GIF = function () {
         currentFrame: 0, // current frame.
         frameCount: 0, // number of frames
         playSpeed: 1, // play speed 1 normal, 2 twice 0.5 half, -1 reverse etc...
+        delay: 100,
         lastFrame: null, // temp hold last frame loaded so you can display the gif as it loads
         image: null, // the current image at the currentFrame
         playOnLoad: true, // if true starts playback when loaded
@@ -587,6 +584,7 @@ hS.initGif = function (url,params) {
     self.gif.load(url);
 
     self.gif.onloadall = () => {
+        self.gif.delay = self.gif.frames[0].delay;
         self.gifCanvas.width = self.gif.width;
         self.gifCanvas.height = self.gif.height;
         window._updateChain[1 + Number(this.label.substring(1))] = () => {
