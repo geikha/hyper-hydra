@@ -27,8 +27,9 @@
         }
     };
     window._hydra = getHydra();
-    window.oP = _hydra.o[0].constructor.prototype;
 }
+
+window.oP = _hydra.o[0].constructor.prototype;
 
 oP.fboSettings = oP.fboSettings
     ? oP.fboSettings

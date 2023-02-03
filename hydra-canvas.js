@@ -22,8 +22,9 @@
         }
     };
     window._hydra = getHydra();
-    window.canvas = window._hydra.canvas;
 }
+
+window.canvas = window._hydra.canvas;
 
 canvas.setLinear = function () {
     this.style.imageRendering = "auto";
