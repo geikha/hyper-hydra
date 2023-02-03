@@ -233,7 +233,7 @@ update = ()=> {
 
 ### hydra-src
 
-Adds `srcAbs` and `srcRel` functions. `srcAbs` will act as `src()` but will show the source with its original width and height on screen. `scrRel` will act as `src()` but will mantain the source's aspect ratio. Works great with [hydra-wrap](#hydra-wrap).
+Adds `srcAbs` and `srcRel` functions. `srcAbs` will act as `src()` but will show the source with its original width and height on screen. `scrRel` will act as `src()` but will mantain the source's aspect ratio. Works great with [hydra-wrap](#hydra-wrap). There's also `srcMask`, `srcAbsMask` and `srcAbsMark` which will mask out the wrapping.
 
 [url](https://hydra-extensions.glitch.me/hydra-src.js)
 
