@@ -124,6 +124,7 @@ setFunction({
 });
 
 window.gS = osc().constructor.prototype;
+
 gS.pm = gS.premultiply;
 
 gS.negate = gS.negation;
