@@ -227,6 +227,24 @@ update = ()=> {
 
 ---
 
+### hydra-src
+
+Adds `srcAbs` and `srcRel` functions. `srcAbs` will act as `src()` but will show the source with its original width and height on screen. `scrRel` will act as `src()` but will mantain the source's aspect ratio. Works great with [hydra-wrap](#hydra-wrap).
+
+[url](https://hydra-extensions.glitch.me/hydra-src.js)
+
+```js
+src(o0)
+	.scale(1.01)
+  	.colorama(-.02).brightness(-.2)
+  	.blend(o0,.8)
+	.layer(srcAbs(s0).luma(.4,.1))
+	.out()
+```
+[open in hydra](https://hydra.ojack.xyz/?code=YXdhaXQlMjBsb2FkU2NyaXB0KCUyMmh0dHBzJTNBJTJGJTJGaHlkcmEtZXh0ZW5zaW9ucy5nbGl0Y2gubWUlMkZoeWRyYS1zcmMuanMlMjIpJTBBJTBBczAuaW5pdEltYWdlKCdodHRwcyUzQSUyRiUyRnVwbG9hZC53aWtpbWVkaWEub3JnJTJGd2lraXBlZGlhJTJGY29tbW9ucyUyRjIlMkYyNSUyRkh5ZHJhLUZvdG8uanBnJyklMEElMEFzcmMobzApJTBBJTA5LnNjYWxlKDEuMDEpJTBBJTIwJTIwJTA5LmNvbG9yYW1hKC0uMDIpLmJyaWdodG5lc3MoLS4yKSUwQSUyMCUyMCUwOS5ibGVuZChvMCUyQy44KSUwQSUwOS5sYXllcihzcmNBYnMoczApLmx1bWEoLjQlMkMuMSkpJTBBJTA5Lm91dCgp)
+
+---
+
 ### hydra-swizzle
 
 Replicates the swizzling functionality from GLSL.
