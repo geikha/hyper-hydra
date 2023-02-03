@@ -561,6 +561,7 @@ window.GIF = function () {
 }
 
 if (!window._updateChain) {
+    window.update = window.update || ((dt)=>{});
     window._updateChain = [() => window["update"]()];
     _hydra.sandbox.userProps = ["speed", "bpm", "fps"];
     _hydra.synth.update = (dt) => {
