@@ -2,6 +2,14 @@
 
 Extensions for [Hydra](https://github.com/ojack/hydra) focusing on usability.
 
+## How to load an extension
+
+You can load extensions into Hydra adding the following before your code:
+
+```
+await loadScript("https://hydra-extensions.glitch.me/hydra-glsl.js")
+```
+
 ## List of extensions
 
 Order is merely alphabetical
