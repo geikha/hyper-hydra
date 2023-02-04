@@ -183,4 +183,73 @@
         glsl: `return clamp(_c0, _min, _max);`,
     });
     gS.clamp = gS._clamp;
+
+    _hydra.synth.setFunction({
+        name: "x",
+        type: "src",
+        inputs: [
+            { name: "mult", type: "float", default: 1 },
+        ],
+        glsl: `return vec4(vec3(_st.x*mult),1.0);`,
+    });
+    _hydra.synth.setFunction({
+        name: "y",
+        type: "src",
+        inputs: [
+            { name: "mult", type: "float", default: 1 },
+        ],
+        glsl: `return vec4(vec3(_st.y*mult),1.0);`,
+    });
+    _hydra.synth.setFunction({
+        name: "length",
+        type: "src",
+        inputs: [
+            { name: "mult", type: "float", default: 1 },
+        ],
+        glsl: `return vec4(vec3(length(_st*mult)),1.0);`,
+    });
+    _hydra.synth.setFunction({
+        name: "distance",
+        type: "src",
+        inputs: [
+            { name: "px", type: "float", default: 0 },
+            { name: "py", type: "float", default: 0 },
+        ],
+        glsl: `return vec4(vec3(length(_st,vec2(px,py))),1.0);`,
+    });
+
+    _hydra.synth.setFunction({
+        name: "xCenter",
+        type: "src",
+        inputs: [
+            { name: "mult", type: "float", default: 1 },
+        ],
+        glsl: `return vec4(vec3((0.5-_st.x)*mult),1.0);`,
+    });
+    _hydra.synth.setFunction({
+        name: "yCenter",
+        type: "src",
+        inputs: [
+            { name: "mult", type: "float", default: 1 },
+        ],
+        glsl: `return vec4(vec3((0.5-_st.y)*mult),1.0);`,
+    });
+    _hydra.synth.setFunction({
+        name: "lengthCenter",
+        type: "src",
+        inputs: [
+            { name: "mult", type: "float", default: 1 },
+        ],
+        glsl: `return vec4(vec3(length((vec2(0.5)-_st)*mult)),1.0);`,
+    });
+    _hydra.synth.setFunction({
+        name: "distanceCenter",
+        type: "src",
+        inputs: [
+            { name: "px", type: "float", default: 0 },
+            { name: "py", type: "float", default: 0 },
+        ],
+        glsl: `return vec4(vec3(length(vec2(0.5)-_st,vec2(0.5)-vec2(px,py))),1.0);`,
+    });
+
 }
