@@ -318,4 +318,5 @@ src(o0)
 ## Also check:
 
 * [`extra-shaders-for-hydra`](https://gitlab.com/metagrowing/extra-shaders-for-hydra) : another really useful repo of hydra extensions made by Thomas Jourdan
+* [`hydra-midi`](https://github.com/arnoson/hydra-midi) : a super complete midi extension for hydra, made by Arnno Schlipf.
 * [`hydra-antlia`](https://github.com/ritchse/hydra-antlia) : my extension of hydra for colors, geometry and interactivity.
