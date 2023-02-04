@@ -566,8 +566,7 @@ window.GIF = function () {
         window._updateChain = [() => window["update"]()];
         _hydra.sandbox.userProps = ["speed", "bpm", "fps"];
         _hydra.synth.update = (dt) => {
-            const chain = window._updateChain;
-            for (func of chain) {
+            for (func of window._updateChain) {
                 func(dt);
             }
         };
