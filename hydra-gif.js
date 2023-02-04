@@ -240,7 +240,7 @@ window.GIF = function () {
         }
         useT =
             gif.lastFrame.disposalMethod === 2 ||
-            gif.lastFrame.disposalMethod === 3
+                gif.lastFrame.disposalMethod === 3
                 ? true
                 : false;
         if (!useT) {
@@ -538,8 +538,8 @@ window.GIF = function () {
         const whereami = window.choo?.state?.hydra
             ? "editor"
             : window.atom?.packages
-            ? "atom"
-            : "idk";
+                ? "atom"
+                : "idk";
         switch (whereami) {
             case "editor":
                 return choo.state.hydra.hydra;
@@ -560,23 +560,26 @@ window.GIF = function () {
     window._hydraScope = _hydra.sandbox.makeGlobal ? window : _hydra;
 }
 
-if (!window._updateChain) {
-    window.update = window.update || ((dt)=>{});
-    window._updateChain = [() => window["update"]()];
-    _hydra.sandbox.userProps = ["speed", "bpm", "fps"];
-    _hydra.synth.update = (dt) => {
-        const chain = window._updateChain;
-        for (func of chain) {
-            func(dt);
-        }
-    };
-    _hydra.s.forEach((source) => {
-        window._updateChain.push(() => {});
-    });
+{
+    if (!window._updateChain) {
+        window.update = window.update || ((dt) => { });
+        window._updateChain = [() => window["update"]()];
+        _hydra.sandbox.userProps = ["speed", "bpm", "fps"];
+        _hydra.synth.update = (dt) => {
+            const chain = window._updateChain;
+            for (func of chain) {
+                func(dt);
+            }
+        };
+    }
 }
 
 {
     const hS = _hydra.s[0].constructor.prototype;
+
+    _hydra.s.forEach((source) => {
+        source._updateChainIndex = window._updateChain.push(() => { });
+    });
 
     hS.initGif = function (url, delay, params) {
         const self = this;
@@ -590,7 +593,7 @@ if (!window._updateChain) {
             self.gif.delay = delay ? delay : self.gif.frames[0].delay;
             self.gifCanvas.width = self.gif.width;
             self.gifCanvas.height = self.gif.height;
-            window._updateChain[1 + Number(this.label.substring(1))] = () => {
+            window._updateChain[self._updateChainIndex] = () => {
                 try {
                     self.gifCtx.clearRect(
                         0,
@@ -606,4 +609,5 @@ if (!window._updateChain) {
             self.init({ src: self.gifCanvas }, params);
         };
     };
+
 }
