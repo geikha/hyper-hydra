@@ -222,6 +222,21 @@ src(o1)
 
 ---
 
+### hydra-pip
+
+Adds a function to toggle picture-in-picture. Note that colors might look a bit washed out since this extension uses hydra's canvas' MediaStream.
+
+[url](https://hydra-extensions.glitch.me/hydra-pip.js)
+
+```js
+osc().out()
+
+hydraPictureInPicture() // alias: hydraPip()
+```
+[open in hydra](https://hydra.ojack.xyz/?code=YXdhaXQlMjBsb2FkU2NyaXB0KCUyMmh0dHBzJTNBJTJGJTJGaHlkcmEtZXh0ZW5zaW9ucy5nbGl0Y2gubWUlMkZoeWRyYS1waXhlbHMuanMlMjIpJTBBJTBBb3NjKDQwJTJDLjA5JTJDMS41KSUwQSUyMCUyMCUyMC5kaWZmKG9zYygyMCkubHVtYSgpKSUwQSUyMCUyMCUyMC5jb2xvcigxJTJDMSUyQygpJTNEJTNFMSUyQnBpeGVsJTVCMCU1RCUyRjI1NSklMEEub3V0KCklMEElMEF1cGRhdGUlMjAlM0QlMjAoKSUzRCUzRSUyMCU3QiUwQSUyMCUyMHBpeGVsJTIwJTNEJTIwbzAucmVhZCh3aWR0aCUyRjIlMkNoZWlnaHQlMkYyKSUyMCUyRiUyRiUyMGNlbnRlciUyMG9mJTIwdGhlJTIwc2NyZWVuJTBBJTdE)
+
+---
+
 ### hydra-pixels
 
 Retrieve pixel values from Hydra's outputs.
