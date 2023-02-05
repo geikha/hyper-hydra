@@ -32,5 +32,5 @@
     video.srcObject = stream;
 
     window.hydraPip = ()=> video.requestPictureInPicture();
-    window.hydraPictureInPicutre = window.hydraPip;
+    window.hydraPictureInPicture = window.hydraPip;
 }
