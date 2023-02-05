@@ -41,7 +41,7 @@ _hydraScope.srcRelMask = function (tex) {
             : 0;
     const cw = () => _hydra.canvas.clientWidth / _hydra.canvas.clientHeight;
     const ch = () => _hydra.canvas.clientHeight / _hydra.canvas.clientWidth;
-    return _hydraScope.srcRelMask(tex).mask(shape(4,1,0)).scale(
+    return _hydraScope.src(tex).mask(shape(4,1,0)).scale(
         1,
         () => {
             const _cw = cw();
@@ -56,7 +56,7 @@ _hydraScope.srcRelMask = function (tex) {
     );
 };
 
-(()=>{
+{
     const Source = _hydra.s[0].constructor;
 
     function createSource() {
@@ -131,4 +131,4 @@ _hydraScope.srcRelMask = function (tex) {
     _hydraScope.strokeFillText = function(str,config){
         return _text(str,config,true,true);
     }
-})()
+}
