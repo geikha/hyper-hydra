@@ -41,7 +41,7 @@ _hydraScope.srcRelMask = function (tex) {
             : 0;
     const cw = () => _hydra.canvas.clientWidth / _hydra.canvas.clientHeight;
     const ch = () => _hydra.canvas.clientHeight / _hydra.canvas.clientWidth;
-    return _hydraScope.mask(shape(4,1,0)).scale(
+    return _hydraScope.srcRelMask(tex).mask(shape(4,1,0)).scale(
         1,
         () => {
             const _cw = cw();
