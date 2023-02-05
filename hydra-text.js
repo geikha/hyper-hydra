@@ -46,6 +46,7 @@ async function main() {
         textAlign: "center",
         fillStyle: "white",
         strokeStyle: "white",
+        lineWidth: 8,
     };
 
     const _text = function (str, _config, fill = true, stroke = false) {

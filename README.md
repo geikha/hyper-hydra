@@ -276,6 +276,26 @@ gradient(1).gbg
 
 ---
 
+### hydra-text
+
+Adds a text generator to Hydra
+
+[docs](./doc/hydra-text.md) / [url](https://hydra-extensions.glitch.me/hydra-text.js)
+
+```js
+hydraText.font = "serif"
+hydraText.lineWidth = 10
+str = " hydra_! "
+solid(1,.2)
+	.blend(src(o0).scale(1.02).colorama(.02))
+	.layer(text(str))
+	.diff(strokeText(str).modulateScale(noise(1,1), .4))
+	.out()
+```
+[open in hydra](https://hydra.ojack.xyz/?code=YXdhaXQlMjBsb2FkU2NyaXB0KCUyMmh0dHBzJTNBJTJGJTJGaHlkcmEtZXh0ZW5zaW9ucy5nbGl0Y2gubWUlMkZoeWRyYS10ZXh0LmpzJTIyKSUwQSUwQWh5ZHJhVGV4dC5mb250JTIwJTNEJTIwJTIyc2VyaWYlMjIlMEFoeWRyYVRleHQubGluZVdpZHRoJTIwJTNEJTIwMTAlMEFzdHIlMjAlM0QlMjAlMjIlMjBoeWRyYV8hJTIwJTIyJTBBc29saWQoMSUyQy4yKSUwQSUwOS5ibGVuZChzcmMobzApLnNjYWxlKDEuMDIpLmNvbG9yYW1hKC4wMikpJTBBJTA5LmxheWVyKHRleHQoc3RyKSklMEElMDkuZGlmZihzdHJva2VUZXh0KHN0cikubW9kdWxhdGVTY2FsZShub2lzZSgxJTJDMSklMkMlMjAuNCkpJTBBJTA5Lm91dCgp)
+
+---
+
 ### hydra-vec4
 
 Adds wrapper functions that allow you to construct vec4's like you would in GLSL.
