@@ -70,13 +70,13 @@
             1,
             () => {
                 const _cw = cw();
-                const _ch = ch();
-                return _cw > _ch ? w() / _cw : 1;
+                const _w = w();
+                return _cw > _w ? _w / _cw : 1;
             },
             () => {
-                const _cw = cw();
                 const _ch = ch();
-                return _ch > _cw ? h() / _ch : 1;
+                const _h = h();
+                return _ch > _h ? _h / _ch : 1;
             }
         );
     };
@@ -100,13 +100,13 @@
             1,
             () => {
                 const _cw = cw();
-                const _ch = ch();
-                return _cw > _ch ? w() / _cw : 1;
+                const _w = w();
+                return _cw > _w ? _w / _cw : 1;
             },
             () => {
-                const _cw = cw();
                 const _ch = ch();
-                return _ch > _cw ? h() / _ch : 1;
+                const _h = h();
+                return _ch > _h ? _h / _ch : 1;
             }
         );
     };
