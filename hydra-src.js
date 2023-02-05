@@ -69,13 +69,13 @@
         return _hydraScope.src(tex).scale(
             1,
             () => {
-                _cw = cw();
-                _ch = ch();
+                const _cw = cw();
+                const _ch = ch();
                 return _cw > _ch ? w() / _cw : 1;
             },
             () => {
-                _cw = cw();
-                _ch = ch();
+                const _cw = cw();
+                const _ch = ch();
                 return _ch > _cw ? h() / _ch : 1;
             }
         );
@@ -99,13 +99,13 @@
         return _hydraScope.srcMask(tex).scale(
             1,
             () => {
-                _cw = cw();
-                _ch = ch();
+                const _cw = cw();
+                const _ch = ch();
                 return _cw > _ch ? w() / _cw : 1;
             },
             () => {
-                _cw = cw();
-                _ch = ch();
+                const _cw = cw();
+                const _ch = ch();
                 return _ch > _cw ? h() / _ch : 1;
             }
         );
