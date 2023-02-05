@@ -25,9 +25,38 @@
     window._hydraScope = _hydra.sandbox.makeGlobal ? window : _hydra;
 }
 
-async function main() {
-    await import("https://hydra-extensions.glitch.me/hydra-src.js");
+_hydraScope.srcRelMask = function (tex) {
+    if (!tex.hasOwnProperty("src")) return src(tex);
+    const w = () =>
+        tex.src?.width
+            ? tex.src?.width / tex.src?.height
+            : tex.src?.videoWidth
+            ? tex.src?.videoWidth / tex.src?.videoHeight
+            : 0;
+    const h = () =>
+        tex.src?.height
+            ? tex.src?.height / tex.src?.width
+            : tex.src?.videoHeight
+            ? tex.src?.videoHeight / tex.src?.videoWidth
+            : 0;
+    const cw = () => _hydra.canvas.clientWidth / _hydra.canvas.clientHeight;
+    const ch = () => _hydra.canvas.clientHeight / _hydra.canvas.clientWidth;
+    return _hydraScope.mask(shape(4,1,0)).scale(
+        1,
+        () => {
+            const _cw = cw();
+            const _w = w();
+            return _cw > _w ? _w / _cw : 1;
+        },
+        () => {
+            const _ch = ch();
+            const _h = h();
+            return _ch > _h ? _h / _ch : 1;
+        }
+    );
+};
 
+{
     const Source = _hydra.s[0].constructor;
 
     function createSource() {
@@ -103,4 +132,3 @@ async function main() {
         return _text(str,config,true,true);
     }
 }
-main();
