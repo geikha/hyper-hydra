@@ -56,7 +56,7 @@ _hydraScope.srcRelMask = function (tex) {
     );
 };
 
-{
+(()=>{
     const Source = _hydra.s[0].constructor;
 
     function createSource() {
@@ -131,4 +131,4 @@ _hydraScope.srcRelMask = function (tex) {
     _hydraScope.strokeFillText = function(str,config){
         return _text(str,config,true,true);
     }
-}
+})()
