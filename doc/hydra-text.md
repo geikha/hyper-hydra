@@ -10,13 +10,17 @@ A text source for Hydra
 hydraText.font = "serif";
 
 // these are the defaults:
-hydraText = {
-        font: "sans-serif",
-        fontStyle: "normal",
-        textAlign: "center",
-        fillStyle: "white",
-        strokeStyle: "white",
-        lineWidth: 8,
+window.hydraText = {
+        font: "sans-serif",     // the font-family
+        fontStyle: "normal",    // normal, bold, etc
+        fontSize: "auto",       // must be either "auto", a percentage like "90%", or pixels like "100px" 
+        textAlign: "center",    // center, left or right
+        fillStyle: "white",     // a css color, CanvasGradient or CanvasPattern
+        strokeStyle: "white",   // a css color, CanvasGradient or CanvasPattern
+        lineWidth: "2%",        // a percentage of the final fontSize
+        lineJoin: "miter",      // miter, bevel or round
+        canvasResize: 2,        // a factor by which to resize the canvas that displays the text
+        interpolation: "linear",// linear or nearest. represents the interpolation used inside hydra for the text's canvas
     };
 ```
 
@@ -38,3 +42,11 @@ Same as `text` but draws the outline of the text instead
 ## strokeFillText
 
 `strokeFillText( str, config )`
+
+Fill over stroke
+
+## fillStrokeText
+
+`fillStrokeText( str, config )`
+
+Stroke over fill

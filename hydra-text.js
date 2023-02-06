@@ -61,6 +61,18 @@ _hydraScope.srcRelMask = function (tex) {
 
 {
     const Source = _hydra.s[0].constructor;
+    window.hydraText = {
+        font: "sans-serif",
+        fontStyle: "normal",
+        fontSize: "auto",
+        textAlign: "center",
+        fillStyle: "white",
+        strokeStyle: "white",
+        lineWidth: "2%",
+        lineJoin: "miter",
+        canvasResize: 2,
+        interpolation: "linear"
+    };
 
     function createSource() {
         const s = new Source({
@@ -71,17 +83,13 @@ _hydraScope.srcRelMask = function (tex) {
         });
         return s;
     }
-
-    window.hydraText = {
-        font: "sans-serif",
-        fontStyle: "normal",
-        textAlign: "center",
-        fillStyle: "white",
-        strokeStyle: "white",
-        lineWidth: 8,
-    };
-
-    const _text = function (str, _config, fill = true, stroke = false) {
+    function isPercentage(property){
+        return String(property).endsWith("%");
+    }
+    function getPercentage(property){
+        return Number(property.substring(0,property.length-1)) / 100;
+    }
+    const _text = function (str, _config, fill = true, stroke = false, fillAfter = false) {
         const s = createSource();
         const canvas = document.createElement("canvas");
         const ctx = canvas.getContext("2d");
@@ -108,11 +116,18 @@ _hydraScope.srcRelMask = function (tex) {
         let textWidth = _hydra.width - padding;
         let fontSize = textWidth / ctx.measureText(longestLine).width;
         canvas.height = fontSize * 1.4 * lines.length;
-        canvas.width *= 2;
-        canvas.height *= 2;
-        fontSize *= 2;
-        textWidth *= 2;
-        padding *= 2;
+
+        if(isPercentage(config.fontSize)) fontSize *= getPercentage(config.fontSize);
+        else if (config.fontSize != "auto") fontSize = Number(config.fontSize.replace(/[^0-9.,]+/, ''));
+        if(isPercentage(config.lineWidth)) config.lineWidth = fontSize * getPercentage(config.lineWidth);
+        config.fontSize = undefined;
+        
+        fontSize *= config.canvasResize;
+        canvas.width *= config.canvasResize;
+        canvas.height *= config.canvasResize;
+        textWidth *= config.canvasResize;
+        padding *= config.canvasResize;
+        config.lineWidth *= config.canvasResize;
 
         config.font = fontWithSize(String(fontSize) + "px");
         Object.assign(ctx, config);
@@ -126,9 +141,10 @@ _hydraScope.srcRelMask = function (tex) {
             const y = (canvas.height / (lines.length + 1)) * (i + 1);
             if (fill) ctx.fillText(line, x, y, textWidth);
             if (stroke) ctx.strokeText(line, x, y, textWidth);
+            if (fillAfter) ctx.fillText(line, x, y, textWidth);
         });
 
-        s.init({ src: canvas }, { min: "linear", mag: "linear" });
+        s.init({ src: canvas }, { min: config.interpolation, mag: config.interpolation });
 
         return _hydraScope.srcRelMask(s);
     };
@@ -138,7 +154,10 @@ _hydraScope.srcRelMask = function (tex) {
     _hydraScope.strokeText = function (str, config) {
         return _text(str, config, false, true);
     };
+    _hydraScope.fillStrokeText = function (str, config) {
+        return _text(str, config, true, true, false);
+    };
     _hydraScope.strokeFillText = function (str, config) {
-        return _text(str, config, true, true);
+        return _text(str, config, false, true, true);
     };
 }
