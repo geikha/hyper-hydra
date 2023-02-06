@@ -82,7 +82,7 @@
     _hydraScope.oS.setMirror = function () {
         this.outputs.forEach((x) => x.setMirror());
     };
-    _hydraScope.oS.setFbos = function (x, y) {
-        this.outputs.forEach((x) => x.setFbos(x, y));
+    _hydraScope.oS.setFbos = function (_x, y) {
+        this.outputs.forEach((x) => x.setFbos(_x, y));
     };
 }
