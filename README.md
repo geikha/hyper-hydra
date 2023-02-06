@@ -299,7 +299,7 @@ Adds a text generator to Hydra
 
 ```js
 hydraText.font = "serif"
-hydraText.lineWidth = 10
+hydraText.lineWidth = "2%"
 str = " hydra_! "
 solid(1,.2)
 	.blend(src(o0).scale(1.02).colorama(.02))
@@ -307,7 +307,7 @@ solid(1,.2)
 	.diff(strokeText(str).modulateScale(noise(1,1), .4))
 	.out()
 ```
-[open in hydra](https://hydra.ojack.xyz/?code=YXdhaXQlMjBsb2FkU2NyaXB0KCUyMmh0dHBzJTNBJTJGJTJGaHlkcmEtZXh0ZW5zaW9ucy5nbGl0Y2gubWUlMkZoeWRyYS10ZXh0LmpzJTIyKSUwQSUwQWh5ZHJhVGV4dC5mb250JTIwJTNEJTIwJTIyc2VyaWYlMjIlMEFoeWRyYVRleHQubGluZVdpZHRoJTIwJTNEJTIwMTAlMEFzdHIlMjAlM0QlMjAlMjIlMjBoeWRyYV8hJTIwJTIyJTBBc29saWQoMSUyQy4yKSUwQSUwOS5ibGVuZChzcmMobzApLnNjYWxlKDEuMDIpLmNvbG9yYW1hKC4wMikpJTBBJTA5LmxheWVyKHRleHQoc3RyKSklMEElMDkuZGlmZihzdHJva2VUZXh0KHN0cikubW9kdWxhdGVTY2FsZShub2lzZSgxJTJDMSklMkMlMjAuNCkpJTBBJTA5Lm91dCgp)
+[open in hydra](https://hydra.ojack.xyz/?code=YXdhaXQlMjBsb2FkU2NyaXB0KCUyMmh0dHBzJTNBJTJGJTJGaHlkcmEtZXh0ZW5zaW9ucy5nbGl0Y2gubWUlMkZoeWRyYS10ZXh0LmpzJTIyKSUwQSUwQWh5ZHJhVGV4dC5mb250JTIwJTNEJTIwJTIyc2VyaWYlMjIlMEFoeWRyYVRleHQubGluZVdpZHRoJTIwJTNEJTIwJTIyMiUyNSUyMiUwQXN0ciUyMCUzRCUyMCUyMiUyMGh5ZHJhXyElMjAlMjIlMEFzb2xpZCgxJTJDLjIpJTBBJTA5LmJsZW5kKHNyYyhvMCkuc2NhbGUoMS4wMikuY29sb3JhbWEoLjAyKSklMEElMDkubGF5ZXIodGV4dChzdHIpKSUwQSUwOS5kaWZmKHN0cm9rZVRleHQoc3RyKS5tb2R1bGF0ZVNjYWxlKG5vaXNlKDElMkMxKSUyQyUyMC40KSklMEElMDkub3V0KCk%3D)
 
 ---
 
