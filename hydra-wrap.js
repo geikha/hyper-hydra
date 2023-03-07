@@ -31,38 +31,40 @@
 }
 
 {
-    const oP = _hydra.o[0].constructor.prototype;
-    oP.fboSettings = Array(2).fill({
-        mag: "nearest",
-        min: "nearest",
-        width: width,
-        height: height,
-        format: "rgba",
-    });
-    oP.setFbos = function (fbo0, fbo1) {
-        var colors = fbo1 ? [fbo0, fbo1] : [fbo0, fbo0];
-        this.fboSettings = colors.map((x, i) => {
-            return {
-                ...this.fboSettings[i],
-                width: width,
-                height: height,
-                ...x,
-            };
+    if (!_hydraScope.oS) {
+        const oP = _hydra.o[0].constructor.prototype;
+        oP.fboSettings = Array(2).fill({
+            mag: "nearest",
+            min: "nearest",
+            width: width,
+            height: height,
+            format: "rgba",
         });
-        this.fbos = this.fboSettings.map((x) =>
-            this.regl.framebuffer({
-                color: this.regl.texture(x),
-                depthStencil: false,
-            })
-        );
-    };
-    oP.setClamp = function () {
-        this.setFbos({ wrapS: "clamp", wrapT: "clamp" });
-    };
-    _hydraScope.oS = { outputs: window._hydra.o };
-    _hydraScope.oS.setClamp = function () {
-        this.outputs.forEach((x) => x.setClamp());
-    };
+        oP.setFbos = function (fbo0, fbo1) {
+            var colors = fbo1 ? [fbo0, fbo1] : [fbo0, fbo0];
+            this.fboSettings = colors.map((x, i) => {
+                return {
+                    ...this.fboSettings[i],
+                    width: width,
+                    height: height,
+                    ...x,
+                };
+            });
+            this.fbos = this.fboSettings.map((x) =>
+                this.regl.framebuffer({
+                    color: this.regl.texture(x),
+                    depthStencil: false,
+                })
+            );
+        };
+        oP.setClamp = function () {
+            this.setFbos({ wrapS: "clamp", wrapT: "clamp" });
+        };
+        _hydraScope.oS = { outputs: window._hydra.o };
+        _hydraScope.oS.setClamp = function () {
+            this.outputs.forEach((x) => x.setClamp());
+        };
+    }
     _hydraScope.oS.setClamp();
 }
 
