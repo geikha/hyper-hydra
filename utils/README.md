@@ -31,7 +31,7 @@ Finds hydra and assigns it to `window._hydra`. Will also get the scope of the ge
         }
     };
     window._hydra = getHydra();
-    window._hydraScope = _hydra.sandbox.makeGlobal ? window : _hydra;
+    window._hydraScope = _hydra.sandbox.makeGlobal ? window : _hydra.synth;
 }
 ```
 

@@ -26,7 +26,7 @@
         }
     };
     window._hydra = getHydra();
-    window._hydraScope = _hydra.sandbox.makeGlobal ? window : _hydra;
+    window._hydraScope = _hydra.sandbox.makeGlobal ? window : _hydra.synth;
 }
 
 {
