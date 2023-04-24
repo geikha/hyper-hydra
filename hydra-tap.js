@@ -93,24 +93,14 @@ window.BPM = BPM;
         ramp = setCurve(ramp);
         return ramp;
     }
-    
-    window.beats_ = (n = 1) => rampToFunction(() => ((time * (1 / n)) % (60 / bpm)) / (60 / bpm))
-    window.beats = (n = 1) => rampToFunction(() => ((60 / bpm) - ((time * (1 / n)) % (60 / bpm))) / (60 / bpm))
+	
+	const rampUp   = (x) => ((time * (1 / x)) % (60 / bpm)) / (60 / bpm);
+	const rampDown = (x) => ((60 / bpm) - ((time * (1 / x)) % (60 / bpm))) / (60 / bpm);
+	const rampTriUp   = (x) => ((time * (1 / x)) % (60 * 2 / bpm)) >= (60 / bpm) ? rampUp(x) : rampDown(x);
+	const rampTriDown = (x) => ((time * (1 / x)) % (60 * 2 / bpm)) >= (60 / bpm) ? rampDown(x) : rampUp(x);
+	
+	window.beats_ = (n = 1) => rampToFunction(()=>rampUp(n))
+	window.beats  = (n = 1) => rampToFunction(()=>rampDown(n))
+	window.beatsTri_  = (n = 1) => rampToFunction(()=>rampTriUp(n))
+	window.beatsTri  = (n = 1) => rampToFunction(()=>rampTriDown(n))
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
