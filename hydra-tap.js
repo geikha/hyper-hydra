@@ -91,7 +91,6 @@ window.BPM = BPM;
     function rampToFunction(ramp) {
         ramp = setRange(ramp);
         ramp = setCurve(ramp);
-        ramp.curve = setRange(ramp.curve);
         return ramp;
     }
     
