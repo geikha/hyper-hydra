@@ -1,3 +1,4 @@
+// https://github.com/bahamas10/node-bpm/blob/master/bpm.js
 if (typeof exports !== 'undefined') {
     module.exports = BPM;
     module.exports.BPM = BPM;
