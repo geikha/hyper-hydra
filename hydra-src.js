@@ -110,4 +110,11 @@
             }
         );
     };
+    
+    const gS = _hydraScope.osc().constructor.prototype;
+  	gS.rotateRel = function(...args){
+    	return this .scale(1,canvas.clientWidth/canvas.clientHeight)
+      				.rotate(...args)
+      				.scale(1,canvas.clientHeight/canvas.clientWidth)
+    }
 }
