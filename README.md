@@ -291,6 +291,26 @@ gradient(1).gbg
 
 ---
 
+### hydra-tap
+
+Adds a tap control for bpm and basic envelopes. Inspired by Resolume.
+
+[docs](./doc/hydra-tap.md) / [url](https://hydra-extensions.glitch.me/hydra-tap.js)
+
+```js
+osc(30,.01,beats(1)).out()
+
+osc().rotate(beats_(2).curve(-3)).out()
+
+osc().scale(beats(1).curve(2).range(1,2)).out()
+
+// Ctrl + Space Bar for tapping
+// Ctrl + , (Comma) for re-sync
+```
+[open in hydra](https://hydra.ojack.xyz/?code=YXdhaXQlMjBsb2FkU2NyaXB0KCUyMmh0dHBzJTNBJTJGJTJGaHlkcmEtZXh0ZW5zaW9ucy5nbGl0Y2gubWUlMkZoeWRyYS10YXAuanMlMjIpJTBBJTBBb3NjKDMwJTJDLjAxJTJDYmVhdHMoMSkpLm91dCgpJTBBJTBBb3NjKCkucm90YXRlKGJlYXRzXygyKS5jdXJ2ZSgtMykpLm91dCgpJTBBJTBBb3NjKCkuc2NhbGUoYmVhdHMoMSkuY3VydmUoMikucmFuZ2UoMSUyQzIpKS5vdXQoKSUwQSUwQSUyRiUyRiUyMEN0cmwlMjAlMkIlMjBTcGFjZSUyMEJhciUyMGZvciUyMHRhcHBpbmclMEElMkYlMkYlMjBDdHJsJTIwJTJCJTIwJTJDJTIwKENvbW1hKSUyMGZvciUyMHJlLXN5bmM%3D)
+
+---
+
 ### hydra-text
 
 Adds a text generator to Hydra
