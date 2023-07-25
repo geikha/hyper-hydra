@@ -39,6 +39,7 @@ _hydraScope.canvas.setFullscreen = function (full = true) {
     this.style.height = set;
 };
 _hydraScope.canvas.setAlign = function (align = "right") {
+    this.style.position = "relative";
     this.parentElement.style["text-align"] = align;
 };
 _hydraScope.canvas.setRelativeSize = function (ratio) {
