@@ -7,8 +7,8 @@ Extensions for [Hydra](https://github.com/ojack/hydra) focusing on usability.
 You can load extensions into Hydra with the following syntax:
 
 ```js
-await loadScript("https://hydra-extensions.glitch.me/hydra-src.js")
-await loadScript("https://hydra-extensions.glitch.me/hydra-wrap.js")
+await loadScript("https://hyper-hydra.glitch.me/hydra-src.js")
+await loadScript("https://hyper-hydra.glitch.me/hydra-wrap.js")
 
 osc().out()
 ```
