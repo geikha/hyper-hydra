@@ -189,6 +189,23 @@ glsl('vec4(sin(uv.x*i0+(time*i1*vec3(i2,i2*2.,i2*3.))),1.0)',16,2,.3)
 
 ---
 
+### hydra-gradientmap
+
+Create gradients with css colors and use them for gradient mapping.
+
+[url](https://hydra-extensions.glitch.me/hydra-gradientmap.js)
+
+```js
+const myGradient = createGradient("#000", "#0bf", "red", "white");
+ 
+osc(30,.05).kaleid(720).scale(1,()=>innerHeight/innerWidth)
+	.lookupX(myGradient)
+	.out()
+```
+[open in hydra](https://hydra.ojack.xyz/?code=YXdhaXQlMjBsb2FkU2NyaXB0KCUyMmh0dHBzJTNBJTJGJTJGaHlkcmEtZXh0ZW5zaW9ucy5nbGl0Y2gubWUlMkZoeWRyYS1ncmFkaWVudHMuanMlMjIpJTBBJTBBY29uc3QlMjBteUdyYWRpZW50JTIwJTNEJTIwY3JlYXRlR3JhZGllbnQoJTIyJTIzMDAwJTIyJTJDJTIwJTIyJTIzMGJmJTIyJTJDJTIwJTIycmVkJTIyJTJDJTIwJTIyd2hpdGUlMjIpJTNCJTBBJTIwJTBBb3NjKDMwJTJDLjA1KS5rYWxlaWQoNzIwKS5zY2FsZSgxJTJDKCklM0QlM0Vpbm5lckhlaWdodCUyRmlubmVyV2lkdGgpJTBBJTA5Lmxvb2t1cFgobXlHcmFkaWVudCklMEElMDkub3V0KCklMEElMjAlMEFzcmMobXlHcmFkaWVudCkub3V0KG8xKSUwQSUwQXJlbmRlcigp)
+
+---
+
 ### hydra-mouse
 
 Replaces Hydra's standard `mouse` object adding useful properties.
