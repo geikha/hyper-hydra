@@ -62,7 +62,7 @@
     }
 
     {
-        const singleArgument = "mod,min,max,step".split(",");
+        const singleArgument = "mod,min,max,step,pow".split(",");
 
         singleArgument.forEach((name) => {
             _hydra.synth.setFunction({
