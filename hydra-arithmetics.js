@@ -62,7 +62,7 @@
     }
 
     {
-        const singleArgument = "mod,min,max,step,pow".split(",");
+        const singleArgument = "mod,min,max,step".split(",");
 
         singleArgument.forEach((name) => {
             _hydra.synth.setFunction({
@@ -75,7 +75,7 @@
                 name: "_" + name + "_single",
                 type: "color",
                 inputs: [{ name: "_in", type: "float", default: 1 }],
-                glsl: `return ${name}(_c0,_in);`,
+                glsl: `return ${name}(_c0,vec4(_in));`,
             });
             wrapColorCombine(name, "_" + name + "_single", "_" + name);
         });
