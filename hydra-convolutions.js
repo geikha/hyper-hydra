@@ -45,7 +45,7 @@
     }
 
     function generateWeights(kernel, multiplier) {
-        const weights = kernel.flat().map(x => String(x).includes("k") ? `(${x}) * ${multiplier.toFixed(9)}` : (x * multiplier).toFixed(9));
+        const weights = kernel.flat().map(x => typeof x === 'string' ? `(${x}) * ${multiplier.toFixed(9)}` : (x * multiplier).toFixed(9));
         const hasParameters = weights.some(x => x.includes("k"));
         weights.hasParameters = hasParameters;
         return weights;
