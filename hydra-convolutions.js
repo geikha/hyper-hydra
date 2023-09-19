@@ -53,7 +53,7 @@
 
     function generateConvolutionFunction(obj, settings) {
         const name = obj.name + settings.nameSufix;
-        const { kernel, multiplier = 1, compensate = false } = obj;
+        const { kernel, multiplier = 1 } = obj;
         const [height, width] = [kernel.length, kernel[0].length];
         const weights = generateWeights(kernel, multiplier);
         const jumps = generateJumps(height, width);
