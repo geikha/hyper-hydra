@@ -58,7 +58,6 @@
         const weights = generateWeights(kernel, multiplier);
         const jumps = generateJumps(height, width);
         const hasParameters = weights.hasParameters;
-        const middleWeight = weights[Math.floor(weights.length / 2)];
 
         const { prefix, newLine, sufix } = settings;
 
