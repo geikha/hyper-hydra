@@ -130,8 +130,8 @@
             sufix: (multiplier)=> `
               vec4 outputColor = texture2D(_tex0, _st);
               vec3 yuv = outputColor.rgb * rgb2yuv;
-              yuv.x = outputY;
-              outputColor.rgb = yuv * yuv2rgb * amp * ${multiplier};
+              yuv.x = outputY * ${multiplier};
+              outputColor.rgb = yuv * yuv2rgb * amp;
               return outputColor;
             `
         };
@@ -151,8 +151,8 @@
             sufix: (multiplier) => `
               vec4 outputColor = texture2D(_tex0, _st);
               vec3 yuv = outputColor.rgb * rgb2yuv;
-              yuv.yz = outputUV;
-              outputColor.rgb = yuv * yuv2rgb * amp * ${multiplier};
+              yuv.yz = outputUV  * ${multiplier};
+              outputColor.rgb = yuv * yuv2rgb * amp;
               return outputColor;
             `
         };
@@ -172,7 +172,7 @@
             sufix: (multiplier) => `
               vec4 outputColor = texture2D(_tex0, _st);
               vec3 yiq = outputColor.rgb * rgb2yiq;
-              yiq.yz = outputIQ;
+              yiq.yz = outputIQ * ${multiplier};
               outputColor.rgb = yiq * yiq2rgb * amp  * ${multiplier};
               return outputColor;
             `
