@@ -44,8 +44,12 @@
         return jumpTable.flat();
     }
 
-    function generateWeights(kernel, multiplier) {
-        const weights = kernel.flat().map(x => typeof x === 'string' ? `(${x}) * ${multiplier.toFixed(9)}` : (x * multiplier).toFixed(9));
+    function processElement(element){
+        return (typeof element === 'string') ? `(${element})` : element.toFixed(9);
+    }
+
+    function generateWeights(kernel) {
+        const weights = kernel.flat().map(processElement);
         const hasParameters = weights.some(x => x.includes("k"));
         weights.hasParameters = hasParameters;
         return weights;
@@ -53,9 +57,10 @@
 
     function generateConvolutionFunction(obj, settings) {
         const name = obj.name + settings.nameSufix;
-        const { kernel, multiplier = 1 } = obj;
+        const kernel = obj.kernel;
+        const multiplier = processElement(obj.multiplier || 1);
         const [height, width] = [kernel.length, kernel[0].length];
-        const weights = generateWeights(kernel, multiplier);
+        const weights = generateWeights(kernel);
         const jumps = generateJumps(height, width);
         const hasParameters = weights.hasParameters;
 
@@ -70,7 +75,7 @@
             code += line + "\n";
         });
 
-        code += sufix;
+        code += sufix(multiplier);
 
         const inputs = [
             { name: '_tex0', type: 'sampler2D', default: o0 },
@@ -97,7 +102,7 @@
             nameSufix: "",
             prefix: "vec3 outputColor = vec3(0.0); vec2 res = resolution.xy;",
             newLine: (weight, jump) => `outputColor += (${weight}) * texture2D(_tex0, _st + (${jump} * jump / res)).rgb;`,
-            sufix: "return vec4(outputColor * amp, texture2D(_tex0, _st).a);"
+            sufix: (multiplier)=> `return vec4(outputColor * ${multiplier} * amp, texture2D(_tex0, _st).a);`
         };
         return generateConvolutionFunction(obj, regularSettings);
     }
@@ -107,7 +112,7 @@
             nameSufix: "Luma",
             prefix: "float outputLuma = 0.0; vec2 res = resolution.xy;",
             newLine: (weight, jump) => `outputLuma += (${weight}) * _luminance(texture2D(_tex0, _st + (${jump} * jump / res)).rgb);`,
-            sufix: "return vec4(vec3(outputLuma * amp), texture2D(_tex0, _st).a);"
+            sufix: (multiplier) => `return vec4(vec3(outputLuma * ${multiplier} * amp), texture2D(_tex0, _st).a);`
         };
         return generateConvolutionFunction(obj, ySettings);
     }
@@ -122,11 +127,11 @@
               vec2 res = resolution.xy;
             `,
             newLine: (weight, jump) => `outputY += (${weight}) * (texture2D(_tex0, _st + (${jump} * jump / res)).rgb * rgb2yuv).x;`,
-            sufix: `
+            sufix: (multiplier)=> `
               vec4 outputColor = texture2D(_tex0, _st);
               vec3 yuv = outputColor.rgb * rgb2yuv;
               yuv.x = outputY;
-              outputColor.rgb = yuv * yuv2rgb * amp;
+              outputColor.rgb = yuv * yuv2rgb * amp * ${multiplier};
               return outputColor;
             `
         };
@@ -143,11 +148,11 @@
               vec2 res = resolution.xy;
             `,
             newLine: (weight, jump) => `outputUV += (${weight}) * (texture2D(_tex0, _st + (${jump} * jump / res)).rgb * rgb2yuv).yz;`,
-            sufix: `
+            sufix: (multiplier) => `
               vec4 outputColor = texture2D(_tex0, _st);
               vec3 yuv = outputColor.rgb * rgb2yuv;
               yuv.yz = outputUV;
-              outputColor.rgb = yuv * yuv2rgb * amp;
+              outputColor.rgb = yuv * yuv2rgb * amp * ${multiplier};
               return outputColor;
             `
         };
@@ -164,11 +169,11 @@
               vec2 res = resolution.xy;
             `,
             newLine: (weight, jump) => `outputIQ += (${weight}) * (texture2D(_tex0, _st + (${jump} * jump / res)).rgb * rgb2yiq).yz;`,
-            sufix: `
+            sufix: (multiplier) => `
               vec4 outputColor = texture2D(_tex0, _st);
               vec3 yiq = outputColor.rgb * rgb2yiq;
               yiq.yz = outputIQ;
-              outputColor.rgb = yiq * yiq2rgb * amp;
+              outputColor.rgb = yiq * yiq2rgb * amp  * ${multiplier};
               return outputColor;
             `
         };
