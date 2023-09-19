@@ -173,7 +173,7 @@
               vec4 outputColor = texture2D(_tex0, _st);
               vec3 yiq = outputColor.rgb * rgb2yiq;
               yiq.yz = outputIQ * ${multiplier};
-              outputColor.rgb = yiq * yiq2rgb * amp  * ${multiplier};
+              outputColor.rgb = yiq * yiq2rgb * amp;
               return outputColor;
             `
         };
