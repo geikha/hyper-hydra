@@ -115,7 +115,7 @@
 
     function generateConvolutionFunctionForY(obj) {
         const ySettings = {
-            nameSufix: "onY",
+            nameSufix: "OnY",
             prefix: `
               mat3 rgb2yuv = mat3(0.2126, 0.7152, 0.0722, -0.09991, -0.33609, 0.43600, 0.615, -0.5586, -0.05639);
               mat3 yuv2rgb = mat3(1.0, 0.0, 1.28033, 1.0, -0.21482, -0.38059, 1.0, 2.12798, 0.0);
@@ -136,7 +136,7 @@
 
     function generateConvolutionFunctionForUV(obj) {
         const uvSettings = {
-            nameSufix: "onUV",
+            nameSufix: "OnUV",
             prefix: `
               mat3 rgb2yuv = mat3(0.2126, 0.7152, 0.0722, -0.09991, -0.33609, 0.43600, 0.615, -0.5586, -0.05639);
               mat3 yuv2rgb = mat3(1.0, 0.0, 1.28033, 1.0, -0.21482, -0.38059, 1.0, 2.12798, 0.0);
@@ -157,7 +157,7 @@
 
     function generateConvolutionFunctionForIQ(obj) {
         const iqSettings = {
-            nameSufix: "onIQ",
+            nameSufix: "OnIQ",
             prefix: `
               mat3 rgb2yiq = mat3(0.299, 0.587, 0.114, 0.5959, -0.2746, -0.3213, 0.2115, -0.5227, 0.3112);
               mat3 yiq2rgb = mat3(1.0, 0.956, 0.619, 1.0, -0.272, -0.647, 1.0, -1.106, 1.703);
