@@ -29,18 +29,18 @@
     function generateJumps(height, width) {
         const middleY = Math.floor(height / 2);
         const middleX = Math.floor(width / 2);
-
+    
         let jumpTable = Array.from({ length: height }, () => []);
-
-        for (let y = 0; y < height; y += 1) {
+    
+        for (let y = 0; y < height; y++) {
             const posY = (middleY - y).toFixed(1);
-            for (let x = 0; x < width; x += 1) {
+            for (let x = 0; x < width; x++) {
                 const posX = (middleX - x).toFixed(1);
-                const vec2 = "vec2(" + posX + "," + posY + ")";
+                const vec2 = `vec2(${posX}, ${posY})`;
                 jumpTable[y].push(vec2);
             }
         }
-
+    
         return jumpTable.flat();
     }
 
