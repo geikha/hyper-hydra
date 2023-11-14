@@ -53,7 +53,7 @@ By default this function returns only the pixel at the position specified by the
 
 ### Output.readAll()
 
-`Output.read()`
+`Output.readAll()`
 
 Returns all pixels in the output.
 
