@@ -30,7 +30,7 @@
 
     function wrapColorCombine(name, color, combine) {
         gS[name] = function (arg, ...args) {
-            isArgument =
+            let isArgument =
                 typeof arg == "number" ||
                 typeof arg == "function" ||
                 typeof arg == "string" ||
