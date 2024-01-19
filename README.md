@@ -1,4 +1,4 @@
-# hydra-extensions
+# hyper-hydra
 
 Extensions for [Hydra](https://github.com/ojack/hydra) focusing on usability.
 
@@ -23,7 +23,7 @@ Order is merely alphabetical
 
 Write very small hydra code.
 
-[source](./hydra-abbreviations.js) / [url](https://hydra-extensions.glitch.me/hydra-abbreviations.js)
+[source](./hydra-abbreviations.js) / [url](https://hyper-hydra.glitch.me/hydra-abbreviations.js)
 
 ```js
 o(10, 0.1, 1.2).bl(ns(3)).df(sh(4, 0.6).rt(0, 0.1)).out()
@@ -36,7 +36,7 @@ o(10, 0.1, 1.2).bl(ns(3)).df(sh(4, 0.6).rt(0, 0.1)).out()
 
 All the functions you needed to make complex visual arithmetics, easily.
 
-[docs](./doc/hydra-arithmetics.md) / [url](https://hydra-extensions.glitch.me/hydra-arithmetics.js)
+[docs](./doc/hydra-arithmetics.md) / [url](https://hyper-hydra.glitch.me/hydra-arithmetics.js)
 
 ```js
 osc(10,.1,2)
@@ -53,7 +53,7 @@ osc(10,.1,2)
 
 Extends the functionality of arrays in Hydra, letting you operate between different arrays and generate new ones.
 
-[docs](./doc/hydra-arrays.md) / [url](https://hydra-extensions.glitch.me/hydra-arrays.js)
+[docs](./doc/hydra-arrays.md) / [url](https://hyper-hydra.glitch.me/hydra-arrays.js)
 
 ```js
 gradient().diff(o0)
@@ -74,7 +74,7 @@ bpm = 50
 
 Adds most blending modes you know from raster image softwares. Ideal for compositing.
 
-[docs](./doc/hydra-blend.md) / [url](https://hydra-extensions.glitch.me/hydra-blend.js)
+[docs](./doc/hydra-blend.md) / [url](https://hyper-hydra.glitch.me/hydra-blend.js)
 
 ```js
 osc(30)
@@ -90,7 +90,7 @@ osc(30)
 
 Let's you easily control Hydra's canvas.
 
-[docs](./doc/hydra-canvas.md) / [url](https://hydra-extensions.glitch.me/hydra-canvas.js)
+[docs](./doc/hydra-canvas.md) / [url](https://hyper-hydra.glitch.me/hydra-canvas.js)
 
 ```js
 setResolution(256,256)
@@ -108,7 +108,7 @@ solid(1).diff(o0).scale(.5).diff(noise(2,0.4)).out()
 
 All the function you might need to work with color in different colorspaces such as CMYK, HSV, YUV, etc.
 
-[docs](./doc/hydra-colorspaces.md) / [url](https://hydra-extensions.glitch.me/hydra-colorspaces.js)
+[docs](./doc/hydra-colorspaces.md) / [url](https://hyper-hydra.glitch.me/hydra-colorspaces.js)
 
 ```js
 gradient().rgb.aSet(0)
@@ -127,7 +127,7 @@ gradient().rgb.aSet(0)
 
 Adds a `.debug()` function that allows you to easily read the fragment shader of your sketch and test changes in real time.
 
-[docs](./doc/hydra-debug.md) / [url](https://hydra-extensions.glitch.me/hydra-debug.js)
+[docs](./doc/hydra-debug.md) / [url](https://hyper-hydra.glitch.me/hydra-debug.js)
 
 ```js
 osc().rotate().debug(o0)
@@ -140,7 +140,7 @@ osc().rotate().debug(o0)
 
 Adds some functions that when feedbacked are useful for creating fractals. Thanks to [Kali](https://www.shadertoy.com/user/Kali) for the idea.
 
-[docs](./doc/hydra-fractals.md) / [url](https://hydra-extensions.glitch.me/hydra-fractals.js)
+[docs](./doc/hydra-fractals.md) / [url](https://hyper-hydra.glitch.me/hydra-fractals.js)
 
 ```js
 src(o0)
@@ -162,7 +162,7 @@ src(o0)
 
 Let's you load `.gif` files into Hydra.
 
-[docs](./doc/hydra-gif.md) / [url](https://hydra-extensions.glitch.me/hydra-gif.js)
+[docs](./doc/hydra-gif.md) / [url](https://hyper-hydra.glitch.me/hydra-gif.js)
 
 ```js
 s0.initGif('https://i.giphy.com/media/kZqbBT64ECtjy/giphy.gif')
@@ -178,7 +178,7 @@ src(s0)
 
 Write GLSL code directly in your patches.
 
-[docs](./doc/hydra-glsl.md) / [url](https://hydra-extensions.glitch.me/hydra-glsl.js)
+[docs](./doc/hydra-glsl.md) / [url](https://hyper-hydra.glitch.me/hydra-glsl.js)
 
 ```js
 glsl('vec4(sin(uv.x*i0+(time*i1*vec3(i2,i2*2.,i2*3.))),1.0)',16,2,.3)
@@ -193,7 +193,7 @@ glsl('vec4(sin(uv.x*i0+(time*i1*vec3(i2,i2*2.,i2*3.))),1.0)',16,2,.3)
 
 Create gradients with css colors and use them for gradient mapping.
 
-[url](https://hydra-extensions.glitch.me/hydra-gradientmap.js)
+[url](https://hyper-hydra.glitch.me/hydra-gradientmap.js)
 
 ```js
 const myGradient = createGradient("#000", "#0bf", "red", "white");
@@ -210,7 +210,7 @@ osc(30,.05).kaleid(720).scale(1,()=>innerHeight/innerWidth)
 
 Replaces Hydra's standard `mouse` object adding useful properties.
 
-[docs](./doc/hydra-mouse.md) / [url](https://hydra-extensions.glitch.me/hydra-mouse.js)
+[docs](./doc/hydra-mouse.md) / [url](https://hyper-hydra.glitch.me/hydra-mouse.js)
 
 ```js
 noise(1)
@@ -225,7 +225,7 @@ noise(1)
 
 Change the properties of Hydra's outputs' framebuffers. Most importantly: try linear interpolation.
 
-[docs](./doc/hydra-outputs.md) / [url](https://hydra-extensions.glitch.me/hydra-outputs.js)
+[docs](./doc/hydra-outputs.md) / [url](https://hyper-hydra.glitch.me/hydra-outputs.js)
 
 ```js
 o1.setLinear()
@@ -243,7 +243,7 @@ src(o1)
 
 Adds a function to toggle picture-in-picture. Note that colors might look a bit washed out since this extension uses hydra's canvas' MediaStream.
 
-[url](https://hydra-extensions.glitch.me/hydra-pip.js)
+[url](https://hyper-hydra.glitch.me/hydra-pip.js)
 
 ```js
 osc().out()
@@ -258,7 +258,7 @@ hydraPictureInPicture() // alias: hydraPip()
 
 Retrieve pixel values from Hydra's outputs.
 
-[docs](./doc/hydra-pixels.md) / [url](https://hydra-extensions.glitch.me/hydra-pixels.js)
+[docs](./doc/hydra-pixels.md) / [url](https://hyper-hydra.glitch.me/hydra-pixels.js)
 
 ```js
 osc(40,.09,1.5)
@@ -278,7 +278,7 @@ update = ()=> {
 
 Adds `srcAbs` and `srcRel` functions. `srcAbs` will act as `src()` but will show the source with its original width and height on screen. `scrRel` will act as `src()` but will mantain the source's aspect ratio. Works great with [hydra-wrap](#hydra-wrap). There's also `srcMask`, `srcAbsMask` and `srcAbsMark` which will mask out the wrapping.
 
-[url](https://hydra-extensions.glitch.me/hydra-src.js)
+[url](https://hyper-hydra.glitch.me/hydra-src.js)
 
 ```js
 src(o0)
@@ -296,7 +296,7 @@ src(o0)
 
 Replicates the swizzling functionality from GLSL.
 
-[docs](./doc/hydra-swizzle.md) / [url](https://hydra-extensions.glitch.me/hydra-swizzle.js)
+[docs](./doc/hydra-swizzle.md) / [url](https://hyper-hydra.glitch.me/hydra-swizzle.js)
 
 ```js
 gradient(1).gbg
@@ -312,7 +312,7 @@ gradient(1).gbg
 
 Adds a tap control for bpm and basic envelopes. Inspired by Resolume.
 
-[docs](./doc/hydra-tap.md) / [url](https://hydra-extensions.glitch.me/hydra-tap.js)
+[docs](./doc/hydra-tap.md) / [url](https://hyper-hydra.glitch.me/hydra-tap.js)
 
 ```js
 osc(30,.01,beats(1)).out()
@@ -332,7 +332,7 @@ osc().scale(beats(1).curve(2).range(1,2)).out()
 
 Adds a text generator to Hydra
 
-[docs](./doc/hydra-text.md) / [url](https://hydra-extensions.glitch.me/hydra-text.js)
+[docs](./doc/hydra-text.md) / [url](https://hyper-hydra.glitch.me/hydra-text.js)
 
 ```js
 hydraText.font = "serif"
@@ -352,7 +352,7 @@ solid(1,.2)
 
 Adds wrapper functions that allow you to construct vec4's like you would in GLSL.
 
-[docs](./doc/hydra-vec4.md) / [url](https://hydra-extensions.glitch.me/hydra-vec4.js)
+[docs](./doc/hydra-vec4.md) / [url](https://hyper-hydra.glitch.me/hydra-vec4.js)
 
 ```js
 noise()
@@ -372,7 +372,7 @@ noise()
 
 Change how Hydra wraps textures, and control the wrapping of generators.
 
-[docs](./doc/hydra-wrap.md) / [url](https://hydra-extensions.glitch.me/hydra-wrap.js)
+[docs](./doc/hydra-wrap.md) / [url](https://hyper-hydra.glitch.me/hydra-wrap.js)
 
 ```js
 hydraWrap.setMirror()
