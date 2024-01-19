@@ -59,13 +59,19 @@
         });
     }
 
+    function returnSwizzleKeepingAlpha(swizzle){
+        const containsAny = (str, chars) => [...chars].some(char => str.includes(char));
+        const alpha = containsAny(swizzle, "rgb") ? "a" : "w";
+        return `return _c0.${swizzle + alpha};`;
+    }
+
     threeComponents.forEach((swizzle) => {
         const name = "_" + swizzle;
         _hydra.synth.setFunction({
             name,
             type: "color",
             inputs: [],
-            glsl: `return _c0.${swizzle}a;`,
+            glsl: returnSwizzleKeepingAlpha(swizzle),
         });
         definePropertyFromMethod(name, swizzle);
     });
@@ -85,7 +91,7 @@
             name,
             type: "color",
             inputs: [],
-            glsl: `return _c0.${elem + elem + elem}a;`,
+            glsl: returnSwizzleKeepingAlpha(elem.repeat(3)),
         });
         definePropertyFromMethod(name, elem);
     });
