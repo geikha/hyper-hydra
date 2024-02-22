@@ -5,14 +5,14 @@
 
 {
     const getHydra = function () {
-        const whereami = window.choo?.state?.hydra
+        const whereami = window.location?.href?.includes("hydra.ojack.xyz")
             ? "editor"
             : window.atom?.packages
             ? "atom"
             : "idk";
         switch (whereami) {
             case "editor":
-                return choo.state.hydra.hydra;
+                return window.hydraSynth;
             case "atom":
                 return global.atom.packages.loadedPackages["atom-hydra"]
                     .mainModule.main.hydra;
