@@ -1,28 +1,29 @@
 {
-    const getHydra = function () {
-        const whereami = window.location?.href?.includes("hydra.ojack.xyz")
-            ? "editor"
-            : window.atom?.packages
-            ? "atom"
-            : "idk";
-        switch (whereami) {
-            case "editor":
-                return window.hydraSynth;
-            case "atom":
-                return global.atom.packages.loadedPackages["atom-hydra"]
-                    .mainModule.main.hydra;
-            case "idk":
-                let _h = undefined;
-                _h = window._hydra?.regl ? window._hydra : _h;
-                _h = window.hydra?.regl ? window.hydra : _h;
-                _h = window.h?.regl ? window.h : _h;
-                _h = window.H?.regl ? window.H : _h;
-                _h = window.hy?.regl ? window.hy : _h;
-                return _h;
-        }
-    };
-    window._hydra = getHydra();
-    window._hydraScope = _hydra.sandbox.makeGlobal ? window : _hydra.synth;
+  const getHydra = function () {
+      const whereami = window.location?.href?.includes("hydra.ojack.xyz")
+          ? "editor"
+          : window.atom?.packages
+          ? "atom"
+          : "idk";
+      if (whereami === "editor") {
+          return window.hydraSynth;
+      }
+      if (whereami === "atom") {
+          return global.atom.packages.loadedPackages["atom-hydra"]
+              .mainModule.main.hydra;
+      }
+      let _h = [
+          window.hydraSynth,
+          window._hydra,
+          window.hydra,
+          window.h,
+          window.H,
+          window.hy
+      ].find(h => h?.regl);
+      return _h;
+  };
+  window._hydra = getHydra();
+  window._hydraScope = _hydra.sandbox.makeGlobal ? window : _hydra.synth;
 }
   
   _hydra.synth.setFunction({
