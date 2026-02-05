@@ -26,26 +26,59 @@ window.hydraText = {
 
 Settings are set to a CanvasRenderingContext2D, find more about it [here](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillStyle). However note that the hydra-text `font` setting doesn't work the same as the context's `font` property. On hydra-text, `font` should only specify the font-family. This is because it needs to do some resizing and measurements of the text before writing it while the context's `font` property allows you to resize it.
 
-## text
+## Persistent text sources (recommended)
+
+For better performance and memory management, use `createText()` to create reusable text sources:
+
+```js
+t0 = createText()
+t0.text("Hello World", { font: "Consolas" })
+
+t1 = createText()
+t1.strokeFillText("Outlined!", { font: "serif", strokeStyle: "red" })
+
+// Use in your patches - wrap with srcRelMask() to correct aspect ratio
+osc().layer(srcRelMask(t0)).layer(srcRelMask(t1)).out()
+
+// Update the text anytime without creating new canvases
+t0.text("Updated text!", { font: "Arial" })
+```
+
+**Note:** Always use `srcRelMask()` when using persistent text sources to prevent vertical stretching. The one-shot functions (`text()`, `strokeText()`, etc.) do this automatically.
+
+### TextSource methods
+
+All methods return the TextSource instance, allowing you to chain or update:
+
+- `textSource.text(str, config)` - Filled text
+- `textSource.strokeText(str, config)` - Outlined text
+- `textSource.fillStrokeText(str, config)` - Stroke over fill
+- `textSource.strokeFillText(str, config)` - Fill over stroke
+
+## One-shot functions
+
+These functions create a new canvas each time they're called. Use sparingly as they can fill memory if called repeatedly:
+
+### text
 
 `text( str, config )`
 
 * str: the text you want to write
 * config: either an object with the properties you want to set, or a string with the font you want
 
-## strokeText
+### strokeText
 
 `strokeText( str, config )`
 
 Same as `text` but draws the outline of the text instead
 
-## strokeFillText
+### strokeFillText
 
 `strokeFillText( str, config )`
 
 Fill over stroke
 
-## fillStrokeText
+### fillStrokeText
 
 `fillStrokeText( str, config )`
 
