@@ -121,6 +121,24 @@ gradient().rgb.aSet(0)
 
 ---
 
+### hydra-convolutions
+
+Use different convolution operations (sharpen, blur), even create your own! Please read the documentation carefully as this is an experimental implementation.
+
+[docs](./doc/hydra-convolutions.md) / [url](https://cdn.jsdelivr.net/gh/geikha/hyper-hydra@latest/hydra-convolutions.js)
+
+```js
+voronoi()
+	.out(o1)
+
+sharpenOnY(o1,2,4)
+	.blend(blur(o0,2).scale(.9).contrast(1.1),.6)
+	.out(o0)
+```
+[open in hydra](https://hydra.ojack.xyz/?code=YXdhaXQlMjBsb2FkU2NyaXB0KCUyMmh0dHBzJTNBJTJGJTJGY2RuLmpzZGVsaXZyLm5ldCUyRmdoJTJGZ2Vpa2hhJTJGaHlwZXItaHlkcmElNDBsYXRlc3QlMkZoeWRyYS1jb252b2x1dGlvbnMuanMlMjIpJTBBJTBBdm9yb25vaSgpJTBBJTA5Lm91dChvMSklMEElMEFzaGFycGVuT25ZKG8xJTJDMiUyQzQpJTBBJTA5LmJsZW5kKGJsdXIobzAlMkMyKS5zY2FsZSguOSkuY29udHJhc3QoMS4xKSUyQy42KSUwQSUwOS5vdXQobzApJTBB)
+
+---
+
 ### hydra-debug
 
 **WARNING:** doesn't work in atom / pulsar
