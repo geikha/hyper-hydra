@@ -49,6 +49,10 @@ This extensions extends the `Output` prototype, so it adds methods to all output
 
 #### Multi-buffer framebuffers
 
+> **EXPERIMENTAL & WIP: YOU WILL RUN INTO ERRORS**
+
+> **You won't be able to do feedback inside the same output (I'm figuring out if its possible to make both multi-output and single-output feedback work using triple buffers)**
+
 By default, Hydra outputs use 2 framebuffers in a ping-pong pattern. You can increase this number to 3 or more using `setBufferCount()`:
 
 ```js
