@@ -39,10 +39,31 @@ This extensions extends the `Output` prototype, so it adds methods to all output
 |---|---|
 | o0.setLinear() | Sets the interpolation method to linear. Looks smooth. |
 | o0.setNearest()| Sets the interpolation method to nearest neighbour. Looks pixelated. |
-| o0.setFbos(fbo0, fbo1)   | Lets you set any of [the texture properties regl allows](https://github.com/regl-project/regl/blob/master/API.md#texture-constructor). If you only set fbo0, fbo1 will copy those settings. |
+| o0.clear() | Clears the output framebuffers to transparent black. Useful for resetting feedback loops. |
+| o0.setBufferCount(n) | Sets the number of framebuffers to `n` (minimum 2). Useful for avoiding period-doubling in multi-output feedback. |
+| o0.resetBuffers() | Resets to default 2 framebuffers with nearest interpolation and clamp wrapping. |
+| o0.setFbos(fbo0, fbo1)   | Lets you set texture properties like `mag`, `min`, `wrapS`, `wrapT`. If you only set fbo0, fbo1 will copy those settings. |
 
-* Remember you can change all outputs at the same time as such: `oS.setLinear()`
+* Remember you can change all outputs at the same time as such: `oS.setLinear()`, `oS.clear()`, or `oS.setBufferCount(3)`
 * You may want to use setFbos to set different interpolation methods for `mag` and `min`. For example: `oS.setFbos({ mag: 'linear', min: 'nearest' })`
+
+#### Multi-buffer framebuffers
+
+By default, Hydra outputs use 2 framebuffers in a ping-pong pattern. You can increase this number to 3 or more using `setBufferCount()`:
+
+```js
+o0.setBufferCount(3)
+```
+
+This is particularly useful for avoiding period-doubling bifurcations (strobing effects) in multi-output feedback systems where outputs depend on each other's previous frames. For more details on this issue, see [hydra-convolutions: Multiple outputs and ping-pong desync](./hydra-convolutions.md#multiple-outputs-and-ping-pong-desync).
+
+Using 3 buffers changes the feedback delay characteristics and can smooth out the visual instability that occurs with interdependent outputs. Note that this changes the system dynamics, so it may produce different visual results than the default 2-buffer configuration.
+
+To reset everything back to defaults:
+
+```js
+o0.resetBuffers()  // Back to 2 buffers, nearest interpolation, clamp wrapping
+```
 
 #### Wrapping methods
 
