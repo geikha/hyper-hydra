@@ -47,7 +47,7 @@
       },
     ],
     glsl: `
-            float lum = _luminance(_c0.rgb);
+          float lum = _luminance(_c0.rgb);
           vec2 pos = vec2(lum,yOffset);
           vec4 color = texture2D(_tex,pos);
           return mix(_c0,color,blending);
