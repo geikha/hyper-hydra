@@ -1,6 +1,6 @@
 # hydra-convolutions
 
-The hydra-convolutions extension adds image convolution functions to Hydra, allowing you to apply blur, sharpen, edge detection, and other kernel-based effects.
+The hydra-convolutions extension adds image convolution functions to Hydra, allowing you to apply blur, sharpen, edge detection, and other kernel-based effects. This is an experimental extension, so pelase read thoroughly.
 
 ## Available convolution functions
 
@@ -88,7 +88,7 @@ emboss(o0, 0.5).out(o1)    // subtle emboss
 
 ```js
 // Simple blur
-osc(30,.1,2).out(o0)
+noise(20,0).thresh(0,0).out(o0)
 blur(o0).out(o1)
 
 // Stronger blur with larger kernel
@@ -98,26 +98,29 @@ blur5(o0).out(o1)
 blur7(o0).out(o1)
 
 // Spread the blur further apart
-blur(o0, 3).out(o1)
+blur(o0, 7).out(o1)
 ```
 
 ### Sharpening
 
 ```js
 // Basic sharpen
-osc(30,.1,2).out(o0)
+osc(70,0)
+    .blend(voronoi(),.2)
+    .modulate(noise(10,.03))
+    .out(o0)
 sharpen(o0).out(o1)
 
 // Adjust sharpening strength with k parameter
 sharpen(o0, 0.5).out(o1)   // subtle
-sharpen(o0, 2).out(o1)     // strong
+sharpen(o0, 5).out(o1)     // strong
 ```
 
 ### Edge detection
 
 ```js
 // Detect vertical edges
-osc(10).out(o0)
+osc(30,-.1).kaleid().thresh(.5).out(o0)
 sobelY(o0).out(o1)
 
 // Detect horizontal edges
@@ -125,17 +128,13 @@ sobelX(o0).out(o1)
 
 // Detect all edges (Laplacian)
 edge(o0).out(o1)
-
-// Combine edge detection with original
-osc(10).out(o0)
-src(o0).add(edge(o0), 0.5).out(o1)
 ```
 
 ### Motion blur effects
 
 ```js
 // Horizontal motion blur
-osc(30).out(o0)
+osc(30,-.1).kaleid().thresh(.5).out(o0)
 horizontalBlur(o0, 2).out(o1)
 
 // Diagonal streaks
@@ -146,31 +145,33 @@ diagonalBlur(o0, 3).out(o1)
 
 ```js
 // Emboss effect
-gradient().out(o0)
-emboss(o0, 1).out(o1)
+noise(4).repeat(5).out(o0)
+emboss(o0, 2).out(o1)
 ```
 
 ### Colorspace-aware convolutions
 
 ```js
-// Blur only the luminance (keeps colors sharp)
-osc(20,.1,2).out(o0)
-blurOnY(o0).out(o1)
+// Sharpen only the luminance (analog-like sharpen)
+osc(20,.1,2).rotate().repeat(5,4).out(o0)
+sharpenOnY(o0,1,2).out(o1)
 
-// Blur only the color information (keeps edges sharp)
-blurOnUV(o0).out(o1)
-
-// Sharpen luminance only
-sharpenLuma(o0, 1).out(o1)
+// Luminance edges
+osc(20,.1,2).rotate().repeat(5,5).modulate(voronoi()).out(o0)
+edgeLuma(o0,3).out(o1)
 ```
 
 ### Chaining convolutions
 
 ```js
 // Blur then sharpen (unsharp mask-like effect)
-osc(30,.1,2).out(o0)
-blur(o0).out(o1)
-src(o0).blend(sharpen(o1, 2), 0.5).out(o2)
+
+setResolution(512,512)
+
+osc(30,-.1).kaleid().thresh(.5).mult(osc(20,.1,2)).out(o0)
+blur5(o0,2).out(o1)
+sharpen(o1, 4, 2).out(o2)
+render(o2)
 ```
 
 ---
@@ -193,6 +194,22 @@ setConvolutionFunction({
 // Now you can use it
 osc().out(o0)
 myBlur(o0).out(o1)
+```
+
+You can also get creative with them:
+
+```js
+setResolution(512,512)
+
+setConvolutionFunction({
+	name: "ringing", // https://www.avartifactatlas.com/artifacts/ringing.html
+  	kernel: [
+     	[ 0, 0, 0, 0, 0, 0, 1.8, -1, 0.75, -.75, .6, -.6, .3 ],
+    ]
+})
+
+osc(30,-.1).kaleid().thresh(.5).out(o0)
+ringing(o0,4,1).out(o1)
 ```
 
 ### Kernel definition
@@ -221,7 +238,9 @@ setConvolutionFunction({
 customSharpen(o0, 2).out(o1)  // k = 2
 ```
 
-**Note:** When you define a custom kernel, all five variants (regular, Luma, OnY, OnUV, OnIQ) are automatically generated.
+> **Note:** When you define a custom kernel, all five variants (regular, Luma, OnY, OnUV, OnIQ) are automatically generated.
+
+> **Note 2:** You can technically write any GLSL expression inside the kernels, so you can create non-sensical convolutions that depend on time or whatever you can hack into them.
 
 ---
 
