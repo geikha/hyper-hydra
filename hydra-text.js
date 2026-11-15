@@ -86,6 +86,28 @@ _hydraScope.srcRelMask = function (tex) {
         return Number(property.substring(0, property.length - 1)) / 100;
     }
 
+    // Arrays and functions change over time, plain strings don't
+    function isDynamic(value) {
+        return Array.isArray(value) || typeof value === "function";
+    }
+
+    // Turns whatever was passed to a text method into the string to draw now.
+    // Arrays step through their elements to the beat, the same way Hydra's
+    // number arrays do (respecting .fast() and .offset()).
+    function resolveText(value) {
+        if (Array.isArray(value)) {
+            if (value.length === 0) return "";
+            const time = _hydra.synth?.time ?? window.time ?? 0;
+            const bpm = _hydra.synth?.bpm ?? window.bpm ?? 30;
+            const speed = value._speed ? value._speed : 1;
+            const index = Math.floor(time * speed * (bpm / 60) + (value._offset || 0));
+            const len = value.length;
+            return String(value[((index % len) + len) % len]);
+        }
+        if (typeof value === "function") return String(value());
+        return String(value);
+    }
+
     // Core text rendering function - renders to an existing canvas context
     function renderText(ctx, canvas, str, _config, fill, stroke, fillAfter) {
         const lines = str.split("\n");
@@ -151,26 +173,50 @@ _hydraScope.srcRelMask = function (tex) {
         const canvas = document.createElement("canvas");
         const ctx = canvas.getContext("2d");
         let initialized = false;
-        
-        const createTextMethod = (fill, stroke, fillAfter) => {
-            return function(str, config) {
-                const interpolation = renderText(ctx, canvas, str, config, fill, stroke, fillAfter);
-                
-                if (!initialized) {
-                    // First time: init creates the texture
-                    source.init(
-                        { src: canvas },
-                        { min: interpolation, mag: interpolation }
-                    );
-                    source.dynamic = true;
-                    initialized = true;
-                } else {
-                    // Subsequent times: just update the texture with subimage
-                    source.tex.subimage(canvas);
+        // What was last passed to a text method, so arrays/functions can be re-checked every frame
+        let current = null;
+        let lastStr = null;
+
+        const draw = (str, config, fill, stroke, fillAfter) => {
+            const interpolation = renderText(ctx, canvas, str, config, fill, stroke, fillAfter);
+
+            if (!initialized) {
+                // First time: init creates the texture
+                source.init(
+                    { src: canvas },
+                    { min: interpolation, mag: interpolation }
+                );
+                source.dynamic = true;
+                initialized = true;
+            } else {
+                // Subsequent times: resize if the canvas changed size, then update with subimage
+                if (source.tex.width !== canvas.width || source.tex.height !== canvas.height) {
+                    source.tex.resize(canvas.width, canvas.height);
                 }
-                
+                source.tex.subimage(canvas);
+            }
+            lastStr = str;
+        };
+
+        const createTextMethod = (fill, stroke, fillAfter) => {
+            return function(value, config) {
+                current = { value, config, fill, stroke, fillAfter };
+                draw(resolveText(value), config, fill, stroke, fillAfter);
                 return source;
             };
+        };
+
+        // Hydra calls getTexture() every frame for each texture in use, so this is
+        // where arrays and functions get updated. Only redraws when the text changes.
+        const getTexture = source.getTexture.bind(source);
+        source.getTexture = function() {
+            if (current && isDynamic(current.value)) {
+                const str = resolveText(current.value);
+                if (str !== lastStr) {
+                    draw(str, current.config, current.fill, current.stroke, current.fillAfter);
+                }
+            }
+            return getTexture();
         };
 
         source.text = createTextMethod(true, false, false);
@@ -182,34 +228,25 @@ _hydraScope.srcRelMask = function (tex) {
     };
 
     // One-shot functions (original API, creates new canvas each time)
-    function createOneShot(str, config, fill, stroke, fillAfter) {
-        const source = new Source({
-            regl: _hydra.regl,
-            pb: _hydra.pb,
-            width: _hydra.width,
-            height: _hydra.height,
-        });
-        const canvas = document.createElement("canvas");
-        const ctx = canvas.getContext("2d");
-        const interpolation = renderText(ctx, canvas, str, config, fill, stroke, fillAfter);
-        source.init({ src: canvas }, { min: interpolation, mag: interpolation });
+    function createOneShot(method, str, config) {
+        const source = _hydraScope.createText()[method](str, config);
         return _hydraScope.srcRelMask(source);
     }
 
     _hydraScope.text = function(str, config) {
-        return createOneShot(str, config, true, false, false);
+        return createOneShot("text", str, config);
     };
 
     _hydraScope.strokeText = function(str, config) {
-        return createOneShot(str, config, false, true, false);
+        return createOneShot("strokeText", str, config);
     };
 
     _hydraScope.fillStrokeText = function(str, config) {
-        return createOneShot(str, config, true, true, false);
+        return createOneShot("fillStrokeText", str, config);
     };
 
     _hydraScope.strokeFillText = function(str, config) {
-        return createOneShot(str, config, false, true, true);
+        return createOneShot("strokeFillText", str, config);
     };
 
     console.log("[hydra-text] Extension loaded");

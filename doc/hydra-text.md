@@ -55,6 +55,29 @@ All methods return the TextSource instance, allowing you to chain or update:
 - `textSource.fillStrokeText(str, config)` - Stroke over fill
 - `textSource.strokeFillText(str, config)` - Fill over stroke
 
+### Arrays and functions
+
+Instead of a single string you can pass an array of strings. Just like Hydra's number arrays, the text switches to the next element on each beat, following the global `bpm` and respecting `.fast()` and `.offset()`:
+
+```js
+bpm = 120
+t0 = createText()
+t0.text(["harder", "better", "faster", "stronger"].fast(2))
+osc(4, 0.1, 1.2).mask(srcRelMask(t0)).out()
+
+// shift the timing by half a step
+t1 = createText()
+t1.strokeText(["one", "two", "three"].offset(0.5), { strokeStyle: "red" })
+```
+
+You can also pass a function that returns a string. It's checked every frame:
+
+```js
+t0.text(() => new Date().toLocaleTimeString())
+```
+
+In both cases the text is only redrawn when it actually changes. Arrays and functions work with the one-shot functions too, e.g. `text(["a", "b", "c"])`.
+
 ## One-shot functions
 
 These functions create a new canvas each time they're called. Use sparingly as they can fill memory if called repeatedly:
